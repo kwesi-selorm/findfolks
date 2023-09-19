@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace API.Models
 {
     public enum ContactMethods
@@ -11,6 +13,8 @@ namespace API.Models
 
     public class Folk
     {
+        [Key]
+        public int FolkKey { get; set; }
         public required string Name { get; set; }
         public required string HomeCountry { get; set; }
         public string? HomeCityOrTown { get; set; }
@@ -18,6 +22,6 @@ namespace API.Models
         public required string CityOrTownOfResidence { get; set; }
         public ContactMethods PreferredContactMethod { get; set; }
         public required string ContactInfo { get; set; }
-        public ICollection<string> Connections { get; set; } = new List<string>();
+        public List<string> Connections { get; set; } = new List<string>();
     }
 }

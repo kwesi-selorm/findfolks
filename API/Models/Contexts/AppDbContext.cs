@@ -16,7 +16,7 @@ namespace API.Models.Contexts
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql(_configuration["DefaultConnection"]);
+            optionsBuilder.UseNpgsql(_configuration.GetConnectionString("DefaultConnection"));
         }
     }
 }

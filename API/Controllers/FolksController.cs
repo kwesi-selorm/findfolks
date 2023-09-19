@@ -6,10 +6,13 @@ namespace API.Controllers
     [Route("api/folks")]
     public class FolksController : ControllerBase
     {
-        [HttpGet]
+        [HttpGet("/test")]
         public ActionResult<string> GetRoot()
         {
-            return Ok("API basically works");
+            return Ok("API root works!");
         }
+
+        // [HttpGet]
+        // [Route("api/folks/test")]
     }
 }
