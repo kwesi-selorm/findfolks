@@ -18,5 +18,6 @@ namespace API.Models
         public required string CityOrTownOfResidence { get; set; }
         public ContactMethods PreferredContactMethod { get; set; }
         public required string ContactInfo { get; set; }
+        public ICollection<string> Connections { get; set; } = new List<string>();
     }
 }

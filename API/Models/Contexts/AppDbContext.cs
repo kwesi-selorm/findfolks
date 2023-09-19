@@ -4,6 +4,9 @@ namespace API.Models.Contexts
 {
     public class AppDbContext : DbContext
     {
+        public DbSet<Folk> Folks { get; set; }
+        public DbSet<Request> Requests { get; set; }
+
         private readonly IConfiguration _configuration;
 
         public AppDbContext(IConfiguration configuration)
