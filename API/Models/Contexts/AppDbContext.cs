@@ -7,16 +7,6 @@ namespace API.Models.Contexts
         public DbSet<Folk> Folks { get; set; }
         public DbSet<Request> Requests { get; set; }
 
-        private readonly IConfiguration _configuration;
-
-        public AppDbContext(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseNpgsql(_configuration.GetConnectionString("DefaultConnection"));
-        }
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
     }
 }

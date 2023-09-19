@@ -1,0 +1,14 @@
+{
+	"sqltools.connections": [
+		{
+			"pgOptions": {
+				"ssl": true
+			},
+			"previewLimit": 50,
+			"server": "localhost",
+			"driver": "PostgreSQL",
+			"name": "find-folks-db-dev",
+			"connectString": "Host=ec2-52-17-31-244.eu-west-1.compute.amazonaws.com;Database=d7vn4cpgquc58q;Username=qbwkpwnsterzid;Password=ac29df00a0f1f8bc76ce7fc19d9d68cd8bb08b861fddb83ab53d3d27e4e9ef73;sslmode=Require;Trust Server Certificate=true"
+		}
+	]
+}

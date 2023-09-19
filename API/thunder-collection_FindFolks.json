@@ -1,0 +1,47 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "FindFolks",
+    "dateExported": "2023-09-19T21:10:48.129Z",
+    "version": "1.1",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "9fae4f9f-b641-4e74-8265-75eeaf68b0af",
+            "colId": "bd1a8a86-5f7b-4a12-a210-dd525c08cebc",
+            "containerId": "",
+            "name": "GetRoot",
+            "url": "http://localhost:5020/api/folks",
+            "method": "GET",
+            "sortNum": 10000,
+            "created": "2023-09-19T19:08:32.511Z",
+            "modified": "2023-09-19T19:08:58.456Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "d75fe9f0-e74d-418b-966b-d8fb1af78954",
+            "colId": "bd1a8a86-5f7b-4a12-a210-dd525c08cebc",
+            "containerId": "",
+            "name": "CreateFolk",
+            "url": "http://localhost:5020/api/folks",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2023-09-19T20:46:57.426Z",
+            "modified": "2023-09-19T21:03:38.499Z",
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n    \"name\": \"Jeffery\",\n    \"homeCountry\": \"Ghana\",\n    \"countryOfResidence\": \"Norway\",\n    \"cityOrTownOfResidence\": \"Stavanger\",\n    \"preferredContactMethod\": 0,\n    \"contactInfo\": \"38273645\"\n}",
+                "form": []
+            },
+            "tests": []
+        }
+    ]
+}
