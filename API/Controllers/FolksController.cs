@@ -1,3 +1,4 @@
+using System.Net;
 using API.Models;
 using API.Models.Contexts;
 using API.Models.Dtos;
@@ -37,7 +38,7 @@ namespace API.Controllers
             catch (Exception e)
             {
                 return Problem(
-                    title: "An error occurred while retrieving the list of folks",
+                    title: "Error getting folks",
                     detail: e.Message,
                     statusCode: StatusCodes.Status500InternalServerError
                 );
@@ -50,15 +51,18 @@ namespace API.Controllers
             try
             {
                 FolkDto? folkRecord = dbService.GetFolk(id);
-                if (folkRecord != null)
-                    return Ok(folkRecord);
-
-                return NotFound();
+                return folkRecord != null
+                    ? Ok(folkRecord)
+                    : Problem(
+                        title: "Not found",
+                        detail: $"A folk with ID {id} was not found. Try creating a new profile",
+                        statusCode: StatusCodes.Status404NotFound
+                    );
             }
             catch (Exception e)
             {
                 return Problem(
-                    title: "An error occurred while retrieving the folk's information",
+                    title: "Error retrieving folk",
                     detail: e.Message,
                     statusCode: StatusCodes.Status500InternalServerError
                 );
@@ -71,13 +75,10 @@ namespace API.Controllers
             Folk? recordWithSameName = dbContext.Folks.FirstOrDefault(f => f.Name == folk.Name);
             if (recordWithSameName != null)
             {
-                return Conflict(
-                    new ProblemDetails
-                    {
-                        Title = "Conflict",
-                        Detail = $"A folk with the name {folk.Name} already exists; try a new one",
-                        Status = StatusCodes.Status409Conflict
-                    }
+                return Problem(
+                    title: "Conflict",
+                    detail: $"A folk with the name {folk.Name} already exists; try a new one",
+                    statusCode: StatusCodes.Status409Conflict
                 );
             }
 
@@ -89,7 +90,7 @@ namespace API.Controllers
             catch (Exception e)
             {
                 return Problem(
-                    title: "An error occurred while creating a folk for you. Give it another shot soon.",
+                    title: "Error creating folk",
                     detail: e.Message,
                     statusCode: StatusCodes.Status500InternalServerError
                 );
@@ -104,7 +105,7 @@ namespace API.Controllers
             {
                 return Problem(
                     title: "Parsing failed",
-                    detail: "An error occurred while parsing the provided information.",
+                    detail: "An error occurred while parsing the provided information",
                     statusCode: StatusCodes.Status500InternalServerError
                 );
             }
@@ -116,7 +117,7 @@ namespace API.Controllers
             catch (Exception e)
             {
                 return Problem(
-                    title: "An error occurred while updating your data",
+                    title: "Error updating data",
                     detail: e.Message,
                     statusCode: StatusCodes.Status500InternalServerError
                 );

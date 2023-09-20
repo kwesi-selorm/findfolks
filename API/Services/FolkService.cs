@@ -37,9 +37,8 @@ namespace API.Services
         public FolkDto? GetFolk(int id)
         {
             Folk? folkRecord = dbContext.Folks.FirstOrDefault(f => f.Id == id);
-            if (folkRecord != null)
-            {
-                return new FolkDto
+            return folkRecord != null
+                ? new FolkDto
                 {
                     Id = folkRecord.Id,
                     Name = folkRecord.Name,
@@ -47,9 +46,8 @@ namespace API.Services
                     HomeCityOrTown = folkRecord.HomeCityOrTown,
                     CountryOfResidence = folkRecord.CountryOfResidence,
                     CityOrTownOfResidence = folkRecord.CityOrTownOfResidence
-                };
-            }
-            return null;
+                }
+                : null;
         }
 
         // CREATE A NEW FOLK
