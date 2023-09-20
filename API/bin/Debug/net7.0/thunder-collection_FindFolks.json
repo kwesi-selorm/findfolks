@@ -1,34 +1,34 @@
 {
     "client": "Thunder Client",
     "collectionName": "FindFolks",
-    "dateExported": "2023-09-19T21:10:48.129Z",
+    "dateExported": "2023-09-20T13:56:57.895Z",
     "version": "1.1",
     "folders": [],
     "requests": [
         {
-            "_id": "9fae4f9f-b641-4e74-8265-75eeaf68b0af",
-            "colId": "bd1a8a86-5f7b-4a12-a210-dd525c08cebc",
+            "_id": "8720bc11-7395-4165-a4cf-3c88681c7727",
+            "colId": "0dd39896-001b-466d-ad40-82e9bfb244ce",
             "containerId": "",
-            "name": "GetRoot",
+            "name": "GetFolks",
             "url": "http://localhost:5020/api/folks",
             "method": "GET",
             "sortNum": 10000,
-            "created": "2023-09-19T19:08:32.511Z",
-            "modified": "2023-09-19T19:08:58.456Z",
+            "created": "2023-09-20T11:04:50.730Z",
+            "modified": "2023-09-20T13:06:29.991Z",
             "headers": [],
             "params": [],
             "tests": []
         },
         {
-            "_id": "d75fe9f0-e74d-418b-966b-d8fb1af78954",
-            "colId": "bd1a8a86-5f7b-4a12-a210-dd525c08cebc",
+            "_id": "f2294c26-a894-4e2a-92cf-9e4bb5b8003a",
+            "colId": "0dd39896-001b-466d-ad40-82e9bfb244ce",
             "containerId": "",
             "name": "CreateFolk",
             "url": "http://localhost:5020/api/folks",
             "method": "POST",
             "sortNum": 20000,
-            "created": "2023-09-19T20:46:57.426Z",
-            "modified": "2023-09-19T21:03:38.499Z",
+            "created": "2023-09-20T11:04:50.732Z",
+            "modified": "2023-09-20T13:24:04.816Z",
             "headers": [
                 {
                     "name": "Content-Type",
@@ -38,9 +38,23 @@
             "params": [],
             "body": {
                 "type": "json",
-                "raw": "{\n    \"name\": \"Jeffery\",\n    \"homeCountry\": \"Ghana\",\n    \"countryOfResidence\": \"Norway\",\n    \"cityOrTownOfResidence\": \"Stavanger\",\n    \"preferredContactMethod\": 0,\n    \"contactInfo\": \"38273645\"\n}",
+                "raw": "{\n    \"name\": \"Nancy\",\n    \"homeCountry\": \"Nigeria\",\n    \"countryOfResidence\": \"Norway\",\n    \"homeCityOrTown\": \"Lagos\",\n    \"cityOrTownOfResidence\": \"Oslo\",\n    \"preferredContactMethod\": 2,\n    \"contactInfo\": \"Nancy Adekunle\"\n}",
                 "form": []
             },
+            "tests": []
+        },
+        {
+            "_id": "81b4d235-c8e2-4961-bd1f-707c9e7037ff",
+            "colId": "0dd39896-001b-466d-ad40-82e9bfb244ce",
+            "containerId": "",
+            "name": "GetFolk",
+            "url": "http://localhost:5020/api/folks/1",
+            "method": "GET",
+            "sortNum": 30000,
+            "created": "2023-09-20T11:16:15.087Z",
+            "modified": "2023-09-20T13:26:01.907Z",
+            "headers": [],
+            "params": [],
             "tests": []
         }
     ]

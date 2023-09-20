@@ -74,8 +74,19 @@ namespace API.Controllers
                 );
             }
 
-            FolkDto newFolk = dbService.AddFolk(folk);
-            return CreatedAtAction(nameof(GetFolk), new { id = newFolk.Id }, newFolk);
+            try
+            {
+                FolkDto newFolk = dbService.AddFolk(folk);
+                return CreatedAtAction(nameof(GetFolk), new { id = newFolk.Id }, newFolk);
+            }
+            catch (Exception e)
+            {
+                return Problem(
+                    title: "An error occurred while creating a folk for you. Give it another shot soon.",
+                    detail: e.Message,
+                    statusCode: StatusCodes.Status500InternalServerError
+                );
+            }
         }
     }
 }
