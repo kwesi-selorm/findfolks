@@ -84,3 +84,4 @@
 /Users/jefferyadorkor/Desktop/findfolks/API/obj/Debug/net7.0/API.pdb
 /Users/jefferyadorkor/Desktop/findfolks/API/obj/Debug/net7.0/API.genruntimeconfig.cache
 /Users/jefferyadorkor/Desktop/findfolks/API/obj/Debug/net7.0/ref/API.dll
+/Users/jefferyadorkor/Library/Mobile Documents/com~apple~CloudDocs/FindFolks/API/bin/Debug/net7.0/thunder-collection_FindFolks.json

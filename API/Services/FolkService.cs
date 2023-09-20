@@ -4,15 +4,16 @@ using API.Models.Dtos;
 
 namespace API.Services
 {
-    public class FolksService
+    public class FolkService
     {
         private readonly AppDbContext dbContext;
 
-        public FolksService(AppDbContext appDbContext)
+        public FolkService(AppDbContext appDbContext)
         {
             dbContext = appDbContext;
         }
 
+        // GET ALL FOLKS, INLCUDING CONNECTIONS AND REQUESTS
         public List<FolkDto> GetFolks()
         {
             return dbContext.Folks
@@ -31,6 +32,7 @@ namespace API.Services
                 .ToList();
         }
 
+        // GET A SINGLE FOLK
         public FolkDto? GetFolk(int id)
         {
             Folk? folkRecord = dbContext.Folks.FirstOrDefault(f => f.Id == id);
@@ -49,6 +51,7 @@ namespace API.Services
             return null;
         }
 
+        // CREATE A NEW FOLK
         public FolkDto AddFolk(Folk newFolk)
         {
             dbContext.Folks.Add(newFolk);
@@ -60,6 +63,7 @@ namespace API.Services
                 Name = newFolk.Name,
                 HomeCountry = newFolk.HomeCountry,
                 CountryOfResidence = newFolk.CountryOfResidence,
+                HomeCityOrTown = newFolk.HomeCityOrTown,
                 CityOrTownOfResidence = newFolk.CityOrTownOfResidence,
             };
         }

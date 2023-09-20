@@ -1,6 +1,6 @@
 namespace API.Models.Dtos
 {
-	public class FolkDto
+    public class FolkDto
     {
         public int Id { get; set; }
         public required string Name { get; set; }

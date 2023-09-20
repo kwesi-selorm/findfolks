@@ -6,8 +6,8 @@ namespace API.Models
     {
         [Key]
         public int RequestId { get; set; }
-        public required string SenderId { get; set; }
-        public required string RecipientId { get; set; }
+        public required int SenderId { get; set; }
+        public required int RecipientId { get; set; }
         public DateTime DateSent { get; set; }
     }
 }
