@@ -1496,11 +1496,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/jefferyadorkor/Library/Mobile Documents/com~apple~CloudDocs/FindFolks/API/API.csproj",
+      "projectUniqueName": "/Users/jefferyadorkor/Desktop/findfolks/API/API.csproj",
       "projectName": "API",
-      "projectPath": "/Users/jefferyadorkor/Library/Mobile Documents/com~apple~CloudDocs/FindFolks/API/API.csproj",
+      "projectPath": "/Users/jefferyadorkor/Desktop/findfolks/API/API.csproj",
       "packagesPath": "/Users/jefferyadorkor/.nuget/packages/",
-      "outputPath": "/Users/jefferyadorkor/Library/Mobile Documents/com~apple~CloudDocs/FindFolks/API/obj/",
+      "outputPath": "/Users/jefferyadorkor/Desktop/findfolks/API/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/jefferyadorkor/.nuget/NuGet/NuGet.Config"

@@ -2,8 +2,9 @@ using API.Models;
 using API.Models.Contexts;
 using API.Models.Dtos;
 using API.Services;
+using API.Shared;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualBasic;
+using Newtonsoft.Json;
 
 namespace API.Controllers
 {
@@ -13,11 +14,17 @@ namespace API.Controllers
     {
         private readonly FolkService dbService;
         private readonly AppDbContext dbContext;
+        private readonly ILogger<FolksController> _logger;
 
-        public FolksController(FolkService service, AppDbContext context)
+        public FolksController(
+            FolkService service,
+            AppDbContext context,
+            ILogger<FolksController> logger
+        )
         {
             dbService = service;
             dbContext = context;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -83,6 +90,33 @@ namespace API.Controllers
             {
                 return Problem(
                     title: "An error occurred while creating a folk for you. Give it another shot soon.",
+                    detail: e.Message,
+                    statusCode: StatusCodes.Status500InternalServerError
+                );
+            }
+        }
+
+        [HttpPatch("{id}")]
+        public ActionResult UpdateFolk(int id, [FromBody] PatchFolkBody update)
+        {
+            string? updateString = JsonConvert.SerializeObject(update);
+            if (updateString == null)
+            {
+                return Problem(
+                    title: "Parsing failed",
+                    detail: "An error occurred while parsing the provided information.",
+                    statusCode: StatusCodes.Status500InternalServerError
+                );
+            }
+            try
+            {
+                dbService.UpdateFolk(id, updateString);
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                return Problem(
+                    title: "An error occurred while updating your data",
                     detail: e.Message,
                     statusCode: StatusCodes.Status500InternalServerError
                 );

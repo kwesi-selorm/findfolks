@@ -1,15 +1,9 @@
 using System.ComponentModel.DataAnnotations;
+using static API.Shared.Contact;
 
 namespace API.Models
 {
-    public enum ContactMethods
-    {
-        Mobile,
-        Email,
-        Facebook,
-        Twitter,
-        Snapchat
-    }
+    
 
     public class Folk
     {

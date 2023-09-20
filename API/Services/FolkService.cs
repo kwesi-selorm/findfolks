@@ -9,7 +9,7 @@ namespace API.Services
     {
         private readonly AppDbContext dbContext;
 
-        public FolkService(AppDbContext appDbContext)
+        public FolkService(AppDbContext appDbContext, ILogger<FolkService> logger)
         {
             dbContext = appDbContext;
         }
@@ -72,19 +72,20 @@ namespace API.Services
         // UPDATE A FOLK
         public FolkDto? UpdateFolk(int folkId, string updateString)
         {
-            var updateDict = JsonConvert.DeserializeObject<Dictionary<string, object>>(
-                updateString
-            );
+            Dictionary<string, object>? updateDict = JsonConvert.DeserializeObject<
+                Dictionary<string, object>
+            >(updateString);
             if (updateDict == null)
                 return null;
 
-            var folkRecord = dbContext.Folks.Find(folkId);
-            if (folkRecord == null)
-                return null;
+            Folk? folkRecord =
+                dbContext.Folks.Find(folkId)
+                ?? throw new NullReferenceException($"No folks found with the id {folkId}");
 
-            foreach (var kvp in updateDict)
+            foreach (KeyValuePair<string, object> kvp in updateDict)
             {
-                dbContext.Entry(folkRecord).Property(kvp.Key).CurrentValue = kvp.Value;
+                if (kvp.Value != null)
+                    dbContext.Entry(folkRecord).Property(kvp.Key).CurrentValue = kvp.Value;
             }
 
             dbContext.SaveChanges();
@@ -95,6 +96,7 @@ namespace API.Services
                 Name = folkRecord.Name,
                 HomeCountry = folkRecord.HomeCountry,
                 CountryOfResidence = folkRecord.CountryOfResidence,
+                HomeCityOrTown = folkRecord.HomeCityOrTown,
                 CityOrTownOfResidence = folkRecord.CityOrTownOfResidence
             };
         }

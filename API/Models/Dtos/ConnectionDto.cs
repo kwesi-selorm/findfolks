@@ -1,11 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using static API.Shared.Contact;
 
 namespace API.Models.Dtos
 {
-    public class ConnectionDto
+	public class ConnectionDto
     {
         public int Id { get; set; }
         public required string Name { get; set; }

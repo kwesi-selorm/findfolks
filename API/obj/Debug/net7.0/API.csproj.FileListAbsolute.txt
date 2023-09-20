@@ -86,3 +86,5 @@
 /Users/jefferyadorkor/Desktop/findfolks/API/obj/Debug/net7.0/ref/API.dll
 /Users/jefferyadorkor/Library/Mobile Documents/com~apple~CloudDocs/FindFolks/API/bin/Debug/net7.0/thunder-collection_FindFolks.json
 /Users/jefferyadorkor/Library/Mobile Documents/com~apple~CloudDocs/FindFolks/API/bin/Debug/net7.0/Newtonsoft.Json.dll
+/Users/jefferyadorkor/Desktop/findfolks/API/bin/Debug/net7.0/thunder-collection_FindFolks.json
+/Users/jefferyadorkor/Desktop/findfolks/API/bin/Debug/net7.0/Newtonsoft.Json.dll
