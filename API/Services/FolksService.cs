@@ -31,6 +31,24 @@ namespace API.Services
                 .ToList();
         }
 
+        public FolkDto? GetFolk(int id)
+        {
+            Folk? folkRecord = dbContext.Folks.FirstOrDefault(f => f.Id == id);
+            if (folkRecord != null)
+            {
+                return new FolkDto
+                {
+                    Id = folkRecord.Id,
+                    Name = folkRecord.Name,
+                    HomeCountry = folkRecord.HomeCountry,
+                    HomeCityOrTown = folkRecord.HomeCityOrTown,
+                    CountryOfResidence = folkRecord.CountryOfResidence,
+                    CityOrTownOfResidence = folkRecord.CityOrTownOfResidence
+                };
+            }
+            return null;
+        }
+
         public FolkDto AddFolk(Folk newFolk)
         {
             dbContext.Folks.Add(newFolk);
