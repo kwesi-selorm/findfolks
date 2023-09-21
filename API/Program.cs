@@ -1,6 +1,7 @@
-using API.Models.Contexts;
+using API.Models.Data;
 using Microsoft.EntityFrameworkCore;
 using API.Services;
+using Microsoft.AspNetCore.Identity;
 
 WebApplicationBuilder? builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +10,7 @@ builder.Services.AddCors(
     options =>
         options.AddPolicy(
             name: AllowedOrigins,
-            policy => policy.WithOrigins("http://localhost:5173", "https://localhost:3000")
+            policy => policy.WithOrigins("http://localhost:5173", "http://localhost:3000")
         )
 );
 builder.Services.AddControllers();
@@ -19,6 +20,18 @@ builder.Services.AddDbContext<AppDbContext>(
     options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 builder.Services.AddScoped<FolkService>();
+builder.Services
+    .AddIdentityCore<IdentityUser>(options =>
+    {
+        options.SignIn.RequireConfirmedAccount = false;
+        options.User.RequireUniqueEmail = true;
+        options.Password.RequireDigit = true;
+        options.Password.RequiredLength = 8;
+        options.Password.RequireUppercase = true;
+        options.Password.RequireNonAlphanumeric = true;
+        options.Password.RequireLowercase = true;
+    })
+    .AddEntityFrameworkStores<AppDbContext>();
 
 // builder.Services.AddHttpsRedirection(options => options.HttpsPort = 5001);
 

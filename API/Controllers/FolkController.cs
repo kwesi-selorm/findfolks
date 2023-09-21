@@ -1,7 +1,6 @@
-using System.Net;
+using API.DTOs;
 using API.Models;
-using API.Models.Contexts;
-using API.Models.Dtos;
+using API.Models.Data;
 using API.Services;
 using API.Shared;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +29,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<FolkDto>>> GetFolks()
+        public async Task<ActionResult<List<FolkDTO>>> GetFolks()
         {
             try
             {
@@ -38,19 +37,19 @@ namespace API.Controllers
             }
             catch (Exception e)
             {
-                return Problem(
-                    detail: e.Message,
-                    statusCode: StatusCodes.Status500InternalServerError
+                return StatusCode(
+                    statusCode: StatusCodes.Status500InternalServerError,
+                    new { message = e.Message }
                 );
             }
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<FolkDto>> GetFolk(int id)
+        public async Task<ActionResult<FolkDTO>> GetFolk(int id)
         {
             try
             {
-                FolkDto? folkRecord = await dbService.GetFolk(id);
+                FolkDTO? folkRecord = await dbService.GetFolk(id);
                 return folkRecord != null
                     ? Ok(folkRecord)
                     : Problem(
@@ -68,7 +67,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<FolkDto>> CreateFolk([FromBody] Folk folk)
+        public async Task<ActionResult<FolkDTO>> CreateFolk([FromBody] Folk folk)
         {
             Folk? recordWithSameName = await dbContext.Folks.FirstOrDefaultAsync(
                 f => f.Name == folk.Name
@@ -76,14 +75,14 @@ namespace API.Controllers
             if (recordWithSameName != null)
             {
                 return Problem(
-                    detail: $"A folk with the name {folk.Name} already exists; try creating using a different one",
+                    detail: $"A folk with the name {folk.Name} already exists; try using a different one",
                     statusCode: StatusCodes.Status409Conflict
                 );
             }
 
             try
             {
-                FolkDto newFolk = await dbService.AddFolk(folk);
+                FolkDTO newFolk = await dbService.AddFolk(folk);
                 return CreatedAtAction(nameof(GetFolk), new { id = newFolk.Id }, newFolk);
             }
             catch (Exception e)
@@ -96,7 +95,7 @@ namespace API.Controllers
         }
 
         [HttpPatch("{id}")]
-        public async Task<ActionResult> UpdateFolk(int id, [FromBody] PatchFolkBody update)
+        public async Task<ActionResult> UpdateFolk(int id, [FromBody] UpdateFolkDTO update)
         {
             string? updateString = JsonConvert.SerializeObject(update);
             if (updateString == null)
