@@ -1,6 +1,6 @@
+using API.DTOs;
 using API.Models;
-using API.Models.Contexts;
-using API.Models.Dtos;
+using API.Models.Data;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
@@ -16,12 +16,12 @@ namespace API.Services
         }
 
         // GET ALL FOLKS, INLCUDING CONNECTIONS AND REQUESTS
-        public async Task<List<FolkDto>> GetFolks()
+        public async Task<List<FolkDTO>> GetFolks()
         {
             return await dbContext.Folks
                 .Select(
                     f =>
-                        new FolkDto
+                        new FolkDTO
                         {
                             Id = f.Id,
                             Name = f.Name,
@@ -35,11 +35,11 @@ namespace API.Services
         }
 
         // GET A SINGLE FOLK
-        public async Task<FolkDto?> GetFolk(int id)
+        public async Task<FolkDTO?> GetFolk(int id)
         {
             Folk? folkRecord = await dbContext.Folks.FirstOrDefaultAsync(f => f.Id == id);
             return folkRecord != null
-                ? new FolkDto
+                ? new FolkDTO
                 {
                     Id = folkRecord.Id,
                     Name = folkRecord.Name,
@@ -52,12 +52,12 @@ namespace API.Services
         }
 
         // CREATE A NEW FOLK
-        public async Task<FolkDto> AddFolk(Folk newFolk)
+        public async Task<FolkDTO> AddFolk(Folk newFolk)
         {
             await dbContext.Folks.AddAsync(newFolk);
             await dbContext.SaveChangesAsync();
 
-            return new FolkDto
+            return new FolkDTO
             {
                 Id = newFolk.Id,
                 Name = newFolk.Name,
@@ -69,7 +69,7 @@ namespace API.Services
         }
 
         // UPDATE A FOLK
-        public async Task<FolkDto?> UpdateFolk(int folkId, string updateString)
+        public async Task<FolkDTO?> UpdateFolk(int folkId, string updateString)
         {
             Dictionary<string, object>? updateDict = JsonConvert.DeserializeObject<
                 Dictionary<string, object>
@@ -89,7 +89,7 @@ namespace API.Services
 
             dbContext.SaveChanges();
 
-            return new FolkDto
+            return new FolkDTO
             {
                 Id = folkRecord.Id,
                 Name = folkRecord.Name,
