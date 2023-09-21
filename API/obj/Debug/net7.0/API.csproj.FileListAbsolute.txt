@@ -95,3 +95,10 @@
 /Users/jefferyadorkor/Library/Mobile Documents/com~apple~CloudDocs/FindFolks/API/bin/Debug/net7.0/Microsoft.Extensions.Identity.Stores.dll
 /Users/jefferyadorkor/Library/Mobile Documents/com~apple~CloudDocs/FindFolks/API/bin/Debug/net7.0/Microsoft.Extensions.Options.dll
 /Users/jefferyadorkor/Library/Mobile Documents/com~apple~CloudDocs/FindFolks/API/bin/Debug/net7.0/System.Security.Permissions.dll
+/Users/jefferyadorkor/Library/Mobile Documents/com~apple~CloudDocs/FindFolks/API/bin/Debug/net7.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/Users/jefferyadorkor/Library/Mobile Documents/com~apple~CloudDocs/FindFolks/API/bin/Debug/net7.0/Microsoft.IdentityModel.JsonWebTokens.dll
+/Users/jefferyadorkor/Library/Mobile Documents/com~apple~CloudDocs/FindFolks/API/bin/Debug/net7.0/Microsoft.IdentityModel.Logging.dll
+/Users/jefferyadorkor/Library/Mobile Documents/com~apple~CloudDocs/FindFolks/API/bin/Debug/net7.0/Microsoft.IdentityModel.Protocols.dll
+/Users/jefferyadorkor/Library/Mobile Documents/com~apple~CloudDocs/FindFolks/API/bin/Debug/net7.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+/Users/jefferyadorkor/Library/Mobile Documents/com~apple~CloudDocs/FindFolks/API/bin/Debug/net7.0/Microsoft.IdentityModel.Tokens.dll
+/Users/jefferyadorkor/Library/Mobile Documents/com~apple~CloudDocs/FindFolks/API/bin/Debug/net7.0/System.IdentityModel.Tokens.Jwt.dll

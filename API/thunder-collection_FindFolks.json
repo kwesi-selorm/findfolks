@@ -1,34 +1,34 @@
 {
     "client": "Thunder Client",
     "collectionName": "FindFolks",
-    "dateExported": "2023-09-20T20:51:01.039Z",
+    "dateExported": "2023-09-21T14:51:00.683Z",
     "version": "1.1",
     "folders": [],
     "requests": [
         {
-            "_id": "fdc272c6-a117-4373-921c-e16658a5d9ce",
-            "colId": "674d06aa-519a-4d65-8df5-6f98e31a4581",
+            "_id": "7849d1b7-d150-48a4-8ee1-3f99ce94f3f4",
+            "colId": "60a5336f-5f9a-4399-92d7-ab15c40b2fc8",
             "containerId": "",
             "name": "GetFolks",
             "url": "http://localhost:5020/api/folks",
             "method": "GET",
             "sortNum": 10000,
-            "created": "2023-09-20T16:28:04.147Z",
-            "modified": "2023-09-20T16:28:04.147Z",
+            "created": "2023-09-21T07:40:58.922Z",
+            "modified": "2023-09-21T07:40:58.922Z",
             "headers": [],
             "params": [],
             "tests": []
         },
         {
-            "_id": "a7e2429b-0b70-4f63-bb9e-82598d554e01",
-            "colId": "674d06aa-519a-4d65-8df5-6f98e31a4581",
+            "_id": "dbd30b2a-51a9-40d1-a7f9-2ea28c5fef50",
+            "colId": "60a5336f-5f9a-4399-92d7-ab15c40b2fc8",
             "containerId": "",
             "name": "CreateFolk",
             "url": "http://localhost:5020/api/folks",
             "method": "POST",
             "sortNum": 20000,
-            "created": "2023-09-20T16:28:04.148Z",
-            "modified": "2023-09-20T16:28:04.148Z",
+            "created": "2023-09-21T07:40:58.923Z",
+            "modified": "2023-09-21T07:42:04.637Z",
             "headers": [
                 {
                     "name": "Content-Type",
@@ -38,35 +38,35 @@
             "params": [],
             "body": {
                 "type": "json",
-                "raw": "{\n    \"name\": \"Nancy\",\n    \"homeCountry\": \"Nigeria\",\n    \"countryOfResidence\": \"Norway\",\n    \"homeCityOrTown\": \"Lagos\",\n    \"cityOrTownOfResidence\": \"Oslo\",\n    \"preferredContactMethod\": 2,\n    \"contactInfo\": \"Nancy Adekunle\"\n}",
+                "raw": "{\n    \"name\": \"Nancie\",\n    \"homeCountry\": \"Nigeria\",\n    \"countryOfResidence\": \"Norway\",\n    \"homeCityOrTown\": \"Lagos\",\n    \"cityOrTownOfResidence\": \"Oslo\",\n    \"preferredContactMethod\": 2,\n    \"contactInfo\": \"Nancy Adekunle\"\n}",
                 "form": []
             },
             "tests": []
         },
         {
-            "_id": "5139c694-e832-427d-b153-e1065ce0ce3f",
-            "colId": "674d06aa-519a-4d65-8df5-6f98e31a4581",
+            "_id": "bca1f907-1919-4ab4-9447-9c79df3219e7",
+            "colId": "60a5336f-5f9a-4399-92d7-ab15c40b2fc8",
             "containerId": "",
             "name": "GetFolk",
-            "url": "http://localhost:5020/api/folks/1",
+            "url": "http://localhost:5020/api/folks/2",
             "method": "GET",
             "sortNum": 30000,
-            "created": "2023-09-20T16:28:04.149Z",
-            "modified": "2023-09-20T20:49:21.109Z",
+            "created": "2023-09-21T07:40:58.925Z",
+            "modified": "2023-09-21T07:47:10.459Z",
             "headers": [],
             "params": [],
             "tests": []
         },
         {
-            "_id": "7e85a648-e9fa-41ce-8804-fc4c2a6537a3",
-            "colId": "674d06aa-519a-4d65-8df5-6f98e31a4581",
+            "_id": "6036ff08-c2d5-4d82-8d39-8f7e11cd08c1",
+            "colId": "60a5336f-5f9a-4399-92d7-ab15c40b2fc8",
             "containerId": "",
             "name": "UpdateFolk",
             "url": "http://localhost:5020/api/folks/1",
             "method": "PATCH",
             "sortNum": 40000,
-            "created": "2023-09-20T19:35:14.611Z",
-            "modified": "2023-09-20T20:48:55.015Z",
+            "created": "2023-09-21T07:40:58.926Z",
+            "modified": "2023-09-21T07:40:58.926Z",
             "headers": [
                 {
                     "name": "Content-Type",
@@ -77,6 +77,73 @@
             "body": {
                 "type": "json",
                 "raw": "{\n    \"homeCityOrTown\": \"Keta\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "9ef997e5-ee53-430a-93ad-1037c8fcae06",
+            "colId": "60a5336f-5f9a-4399-92d7-ab15c40b2fc8",
+            "containerId": "",
+            "name": "CreateUser",
+            "url": "http://localhost:5020/api/auth/register",
+            "method": "POST",
+            "sortNum": 50000,
+            "created": "2023-09-21T12:15:55.689Z",
+            "modified": "2023-09-21T13:42:03.131Z",
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n    \"userName\": \"Jeffery\",\n    \"email\": \"jeffery@gmail.com\",\n    \"password\": \"Jeffery*7\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "ac28b472-9084-487d-abb7-a9189cb732b7",
+            "colId": "60a5336f-5f9a-4399-92d7-ab15c40b2fc8",
+            "containerId": "",
+            "name": "GetUser",
+            "url": "http://localhost:5020/api/auth/Jeffery",
+            "method": "GET",
+            "sortNum": 60000,
+            "created": "2023-09-21T13:26:15.063Z",
+            "modified": "2023-09-21T13:52:38.451Z",
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                }
+            ],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "0c053927-d133-4714-8e40-deaaa2f4055a",
+            "colId": "60a5336f-5f9a-4399-92d7-ab15c40b2fc8",
+            "containerId": "",
+            "name": "CreateToken",
+            "url": "http://localhost:5020/api/auth/token",
+            "method": "POST",
+            "sortNum": 70000,
+            "created": "2023-09-21T14:43:36.496Z",
+            "modified": "2023-09-21T14:50:43.713Z",
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n    \"userName\": \"Jeffery\",\n    \"password\": \"Jeffery*7\"\n}",
                 "form": []
             },
             "tests": []

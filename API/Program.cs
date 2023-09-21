@@ -2,6 +2,9 @@ using API.Models.Data;
 using Microsoft.EntityFrameworkCore;
 using API.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 WebApplicationBuilder? builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +23,7 @@ builder.Services.AddDbContext<AppDbContext>(
     options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 builder.Services.AddScoped<FolkService>();
+builder.Services.AddScoped<JwtService>();
 builder.Services
     .AddIdentityCore<IdentityUser>(options =>
     {
@@ -32,6 +36,23 @@ builder.Services
         options.Password.RequireLowercase = true;
     })
     .AddEntityFrameworkStores<AppDbContext>();
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new()
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? string.Empty)
+            )
+        };
+    });
 
 // builder.Services.AddHttpsRedirection(options => options.HttpsPort = 5001);
 
@@ -49,6 +70,7 @@ if (app.Environment.IsDevelopment())
 
 // app.UseHttpsRedirection();
 app.UseCors(AllowedOrigins);
+app.UseAuthentication();
 app.UseAuthorization();
 app.UseHttpLogging();
 app.MapControllers();
