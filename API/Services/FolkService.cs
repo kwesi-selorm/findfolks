@@ -1,6 +1,7 @@
 using API.Models;
 using API.Models.Contexts;
 using API.Models.Dtos;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace API.Services
@@ -15,9 +16,9 @@ namespace API.Services
         }
 
         // GET ALL FOLKS, INLCUDING CONNECTIONS AND REQUESTS
-        public List<FolkDto> GetFolks()
+        public async Task<List<FolkDto>> GetFolks()
         {
-            return dbContext.Folks
+            return await dbContext.Folks
                 .Select(
                     f =>
                         new FolkDto
@@ -30,13 +31,13 @@ namespace API.Services
                             CityOrTownOfResidence = f.CityOrTownOfResidence
                         }
                 )
-                .ToList();
+                .ToListAsync();
         }
 
         // GET A SINGLE FOLK
-        public FolkDto? GetFolk(int id)
+        public async Task<FolkDto?> GetFolk(int id)
         {
-            Folk? folkRecord = dbContext.Folks.FirstOrDefault(f => f.Id == id);
+            Folk? folkRecord = await dbContext.Folks.FirstOrDefaultAsync(f => f.Id == id);
             return folkRecord != null
                 ? new FolkDto
                 {
@@ -51,10 +52,10 @@ namespace API.Services
         }
 
         // CREATE A NEW FOLK
-        public FolkDto AddFolk(Folk newFolk)
+        public async Task<FolkDto> AddFolk(Folk newFolk)
         {
-            dbContext.Folks.Add(newFolk);
-            dbContext.SaveChanges();
+            await dbContext.Folks.AddAsync(newFolk);
+            await dbContext.SaveChangesAsync();
 
             return new FolkDto
             {
@@ -68,7 +69,7 @@ namespace API.Services
         }
 
         // UPDATE A FOLK
-        public FolkDto? UpdateFolk(int folkId, string updateString)
+        public async Task<FolkDto?> UpdateFolk(int folkId, string updateString)
         {
             Dictionary<string, object>? updateDict = JsonConvert.DeserializeObject<
                 Dictionary<string, object>
@@ -77,7 +78,7 @@ namespace API.Services
                 return null;
 
             Folk? folkRecord =
-                dbContext.Folks.Find(folkId)
+                await dbContext.Folks.FindAsync(folkId)
                 ?? throw new NullReferenceException($"No folks found with the id {folkId}");
 
             foreach (KeyValuePair<string, object> kvp in updateDict)

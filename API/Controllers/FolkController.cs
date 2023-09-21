@@ -5,40 +5,40 @@ using API.Models.Dtos;
 using API.Services;
 using API.Shared;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace API.Controllers
 {
     [ApiController]
     [Route("api/folks")]
-    public class FolksController : ControllerBase
+    public class FolkController : ControllerBase
     {
         private readonly FolkService dbService;
         private readonly AppDbContext dbContext;
-        private readonly ILogger<FolksController> _logger;
+        private readonly ILogger<FolkController> logger;
 
-        public FolksController(
+        public FolkController(
             FolkService service,
             AppDbContext context,
-            ILogger<FolksController> logger
+            ILogger<FolkController> logger
         )
         {
             dbService = service;
             dbContext = context;
-            _logger = logger;
+            this.logger = logger;
         }
 
         [HttpGet]
-        public ActionResult<List<FolkDto>> GetFolks()
+        public async Task<ActionResult<List<FolkDto>>> GetFolks()
         {
             try
             {
-                return dbService.GetFolks();
+                return await dbService.GetFolks();
             }
             catch (Exception e)
             {
                 return Problem(
-                    title: "Error getting folks",
                     detail: e.Message,
                     statusCode: StatusCodes.Status500InternalServerError
                 );
@@ -46,15 +46,14 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<FolkDto> GetFolk(int id)
+        public async Task<ActionResult<FolkDto>> GetFolk(int id)
         {
             try
             {
-                FolkDto? folkRecord = dbService.GetFolk(id);
+                FolkDto? folkRecord = await dbService.GetFolk(id);
                 return folkRecord != null
                     ? Ok(folkRecord)
                     : Problem(
-                        title: "Not found",
                         detail: $"A folk with ID {id} was not found. Try creating a new profile",
                         statusCode: StatusCodes.Status404NotFound
                     );
@@ -62,7 +61,6 @@ namespace API.Controllers
             catch (Exception e)
             {
                 return Problem(
-                    title: "Error retrieving folk",
                     detail: e.Message,
                     statusCode: StatusCodes.Status500InternalServerError
                 );
@@ -70,27 +68,27 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public ActionResult<FolkDto> CreateFolk([FromBody] Folk folk)
+        public async Task<ActionResult<FolkDto>> CreateFolk([FromBody] Folk folk)
         {
-            Folk? recordWithSameName = dbContext.Folks.FirstOrDefault(f => f.Name == folk.Name);
+            Folk? recordWithSameName = await dbContext.Folks.FirstOrDefaultAsync(
+                f => f.Name == folk.Name
+            );
             if (recordWithSameName != null)
             {
                 return Problem(
-                    title: "Conflict",
-                    detail: $"A folk with the name {folk.Name} already exists; try a new one",
+                    detail: $"A folk with the name {folk.Name} already exists; try creating using a different one",
                     statusCode: StatusCodes.Status409Conflict
                 );
             }
 
             try
             {
-                FolkDto newFolk = dbService.AddFolk(folk);
+                FolkDto newFolk = await dbService.AddFolk(folk);
                 return CreatedAtAction(nameof(GetFolk), new { id = newFolk.Id }, newFolk);
             }
             catch (Exception e)
             {
                 return Problem(
-                    title: "Error creating folk",
                     detail: e.Message,
                     statusCode: StatusCodes.Status500InternalServerError
                 );
@@ -98,26 +96,24 @@ namespace API.Controllers
         }
 
         [HttpPatch("{id}")]
-        public ActionResult UpdateFolk(int id, [FromBody] PatchFolkBody update)
+        public async Task<ActionResult> UpdateFolk(int id, [FromBody] PatchFolkBody update)
         {
             string? updateString = JsonConvert.SerializeObject(update);
             if (updateString == null)
             {
                 return Problem(
-                    title: "Parsing failed",
                     detail: "An error occurred while parsing the provided information",
                     statusCode: StatusCodes.Status500InternalServerError
                 );
             }
             try
             {
-                dbService.UpdateFolk(id, updateString);
+                await dbService.UpdateFolk(id, updateString);
                 return NoContent();
             }
             catch (Exception e)
             {
                 return Problem(
-                    title: "Error updating data",
                     detail: e.Message,
                     statusCode: StatusCodes.Status500InternalServerError
                 );
