@@ -2,7 +2,7 @@ using API.DTOs;
 using API.Models;
 using API.Models.Data;
 using API.Services;
-using API.Shared;
+using API.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

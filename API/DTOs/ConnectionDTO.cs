@@ -1,4 +1,4 @@
-using static API.Shared.Contact;
+using static API.Utils.Constants;
 
 namespace API.DTOs
 {

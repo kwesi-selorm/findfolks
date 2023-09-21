@@ -1,6 +1,6 @@
-namespace API.Shared
+namespace API.Utils
 {
-    public class Contact
+    public class Constants
     {
         public enum ContactMethods
         {
@@ -10,5 +10,7 @@ namespace API.Shared
             Twitter,
             Snapchat
         }
+
+        public string[] permittedImageExtensions = { ".jpg", ".jpeg", ".png" };
     }
 }
