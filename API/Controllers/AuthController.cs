@@ -19,7 +19,7 @@ namespace API.Controllers
             this.userManager = userManager;
         }
 
-        [HttpPost]
+        [HttpPost("register")]
         public async Task<IActionResult> CreateUser(UserDTO user)
         {
             IdentityResult? result = await userManager.CreateAsync(
