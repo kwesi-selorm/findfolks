@@ -1,24 +1,31 @@
 using API.Models.Contexts;
 using Microsoft.EntityFrameworkCore;
 using API.Services;
-using Microsoft.AspNetCore.HttpLogging;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder? builder = WebApplication.CreateBuilder(args);
 
+string? AllowedOrigins = "AllowedOrigins";
+builder.Services.AddCors(
+    options =>
+        options.AddPolicy(
+            name: AllowedOrigins,
+            policy => policy.WithOrigins("http://localhost:5173", "https://localhost:3000")
+        )
+);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Logging.ClearProviders();
-builder.Logging.AddConsole();
-
-// builder.Services.AddHttpsRedirection(options => options.HttpsPort = 5001);
-
 builder.Services.AddDbContext<AppDbContext>(
     options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 builder.Services.AddScoped<FolkService>();
 
-var app = builder.Build();
+// builder.Services.AddHttpsRedirection(options => options.HttpsPort = 5001);
+
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+
+WebApplication? app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -28,7 +35,7 @@ if (app.Environment.IsDevelopment())
 }
 
 // app.UseHttpsRedirection();
-
+app.UseCors(AllowedOrigins);
 app.UseAuthorization();
 app.UseHttpLogging();
 app.MapControllers();
