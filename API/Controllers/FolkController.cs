@@ -3,6 +3,7 @@ using API.Models;
 using API.Models.Data;
 using API.Services;
 using API.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -28,6 +29,7 @@ namespace API.Controllers
             this.logger = logger;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<List<FolkDTO>>> GetFolks()
         {
