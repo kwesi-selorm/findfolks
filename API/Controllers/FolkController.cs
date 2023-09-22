@@ -167,6 +167,7 @@ namespace API.Controllers
                 string filePath = Path.Combine(profilePhotosPath, Guid.NewGuid().ToString() + ext);
 
                 await folkService.SaveProfilePhoto(id, filePath, input);
+                System.IO.File.Delete(filePath);
                 using (FileStream stream = System.IO.File.Create(filePath))
                 {
                     await input.CopyToAsync(stream);
