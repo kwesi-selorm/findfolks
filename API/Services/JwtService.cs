@@ -9,7 +9,7 @@ namespace API.Services
 {
     public class JwtService
     {
-        private const int TokenLifetime = 1; // 1 minute
+        private const int TokenLifetime = 24 * 60; // 1 day
         private readonly IConfiguration configuration;
 
         public JwtService(IConfiguration configuration)

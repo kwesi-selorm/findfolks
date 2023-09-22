@@ -11,6 +11,6 @@ namespace API.Utils
             Snapchat
         }
 
-        public string[] permittedImageExtensions = { ".jpg", ".jpeg", ".png" };
+        public string[] allowedExtensions = { ".jpg", ".jpeg", ".png" };
     }
 }

@@ -52,19 +52,31 @@ namespace API.Services
         }
 
         // CREATE A NEW FOLK
-        public async Task<FolkDTO> AddFolk(Folk newFolk)
+        public async Task<FolkDTO> AddFolk(CreateFolkDTO newFolk)
         {
-            await dbContext.Folks.AddAsync(newFolk);
+            Folk folkToSave =
+                new()
+                {
+                    Name = newFolk.Name,
+                    HomeCountry = newFolk.HomeCountry,
+                    CountryOfResidence = newFolk.CountryOfResidence,
+                    HomeCityOrTown = newFolk.HomeCityOrTown,
+                    CityOrTownOfResidence = newFolk.CityOrTownOfResidence,
+                    PreferredContactMethod = newFolk.PreferredContactMethod,
+                    ContactInfo = newFolk.ContactInfo
+                };
+
+            await dbContext.Folks.AddAsync(folkToSave);
             await dbContext.SaveChangesAsync();
 
             return new FolkDTO
             {
-                Id = newFolk.Id,
-                Name = newFolk.Name,
-                HomeCountry = newFolk.HomeCountry,
-                CountryOfResidence = newFolk.CountryOfResidence,
-                HomeCityOrTown = newFolk.HomeCityOrTown,
-                CityOrTownOfResidence = newFolk.CityOrTownOfResidence,
+                Id = folkToSave.Id,
+                Name = folkToSave.Name,
+                HomeCountry = folkToSave.HomeCountry,
+                CountryOfResidence = folkToSave.CountryOfResidence,
+                HomeCityOrTown = folkToSave.HomeCityOrTown,
+                CityOrTownOfResidence = folkToSave.CityOrTownOfResidence,
             };
         }
 
