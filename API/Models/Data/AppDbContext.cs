@@ -9,6 +9,7 @@ namespace API.Models.Data
     {
         public DbSet<Folk> Folks { get; set; }
         public DbSet<Request> Requests { get; set; }
+        public DbSet<ProfilePhoto> ProfilePhotos { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 

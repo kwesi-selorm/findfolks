@@ -1,3 +1,4 @@
+using System.Text;
 using API.DTOs;
 using API.Models;
 using API.Models.Data;
@@ -10,17 +11,23 @@ namespace API.Services
     {
         private readonly AppDbContext dbContext;
         private readonly ILogger<FolkService> logger;
+        private readonly ImageService imageService;
 
-        public FolkService(AppDbContext appDbContext, ILogger<FolkService> logger)
+        public FolkService(
+            AppDbContext appDbContext,
+            ILogger<FolkService> logger,
+            ImageService imageService
+        )
         {
             dbContext = appDbContext;
             this.logger = logger;
+            this.imageService = imageService;
         }
 
         // GET ALL FOLKS, INLCUDING CONNECTIONS AND REQUESTS
         public async Task<List<FolkDTO>> GetFolks()
         {
-            return await dbContext.Folks
+            List<FolkDTO> folks = await dbContext.Folks
                 .Select(
                     f =>
                         new FolkDTO
@@ -31,60 +38,61 @@ namespace API.Services
                             HomeCityOrTown = f.HomeCityOrTown,
                             CountryOfResidence = f.CountryOfResidence,
                             CityOrTownOfResidence = f.CityOrTownOfResidence,
-                            ProfilePhoto = f.ProfilePhoto
                         }
                 )
                 .ToListAsync();
+
+            foreach (FolkDTO folk in folks)
+            {
+                string? base64String = await GetBase64String(folk.Id);
+                folk.ProfilePhoto = base64String;
+            }
+            return folks;
         }
 
         // GET A SINGLE FOLK
         public async Task<FolkDTO?> GetFolk(int id)
         {
-            Folk? folkRecord = await dbContext.Folks
-                // EAGERLY MAKE SURE PHOTOS ARE POPULATED
-                .Include(f => f.ProfilePhoto)
-                .FirstOrDefaultAsync(f => f.Id == id);
-            if (folkRecord == null)
-                return null;
-            return new FolkDTO
-            {
-                Id = folkRecord.Id,
-                Name = folkRecord.Name,
-                HomeCountry = folkRecord.HomeCountry,
-                HomeCityOrTown = folkRecord.HomeCityOrTown,
-                CountryOfResidence = folkRecord.CountryOfResidence,
-                CityOrTownOfResidence = folkRecord.CityOrTownOfResidence,
-                ProfilePhoto = folkRecord.ProfilePhoto
-            };
+            Folk? folkRecord = await dbContext.Folks.FirstOrDefaultAsync(f => f.Id == id);
+            return folkRecord != null
+                ? new FolkDTO()
+                {
+                    Id = folkRecord.Id,
+                    Name = folkRecord.Name,
+                    HomeCountry = folkRecord.HomeCountry,
+                    HomeCityOrTown = folkRecord.HomeCityOrTown,
+                    CountryOfResidence = folkRecord.CountryOfResidence,
+                    CityOrTownOfResidence = folkRecord.CityOrTownOfResidence,
+                }
+                : null;
         }
 
         // CREATE A NEW FOLK
-        public async Task<ResponseFolkDTO> AddFolk(Folk createdFolk)
+        public async Task<FolkDTO> AddFolk(Folk input)
         {
-            Folk folkToSave =
+            Folk createdFolk =
                 new()
                 {
-                    Name = createdFolk.Name,
-                    HomeCountry = createdFolk.HomeCountry,
-                    CountryOfResidence = createdFolk.CountryOfResidence,
-                    HomeCityOrTown = createdFolk.HomeCityOrTown,
-                    CityOrTownOfResidence = createdFolk.CityOrTownOfResidence,
-                    PreferredContactMethod = createdFolk.PreferredContactMethod,
-                    ContactInfo = createdFolk.ContactInfo,
-                    ProfilePhoto = createdFolk.ProfilePhoto
+                    Name = input.Name,
+                    HomeCountry = input.HomeCountry,
+                    CountryOfResidence = input.CountryOfResidence,
+                    HomeCityOrTown = input.HomeCityOrTown,
+                    CityOrTownOfResidence = input.CityOrTownOfResidence,
+                    PreferredContactMethod = input.PreferredContactMethod,
+                    ContactInfo = input.ContactInfo,
                 };
 
-            await dbContext.Folks.AddAsync(folkToSave);
+            await dbContext.Folks.AddAsync(createdFolk);
             await dbContext.SaveChangesAsync();
 
-            return new ResponseFolkDTO()
+            return new FolkDTO()
             {
-                Id = folkToSave.Id,
-                Name = folkToSave.Name,
-                HomeCountry = folkToSave.HomeCountry,
-                CountryOfResidence = folkToSave.CountryOfResidence,
-                HomeCityOrTown = folkToSave.HomeCityOrTown,
-                CityOrTownOfResidence = folkToSave.CityOrTownOfResidence,
+                Id = createdFolk.Id,
+                Name = createdFolk.Name,
+                HomeCountry = createdFolk.HomeCountry,
+                CountryOfResidence = createdFolk.CountryOfResidence,
+                HomeCityOrTown = createdFolk.HomeCityOrTown,
+                CityOrTownOfResidence = createdFolk.CityOrTownOfResidence,
             };
         }
 
@@ -120,17 +128,48 @@ namespace API.Services
             };
         }
 
-        public ResponseFolkDTO CreateResponseFolkDTO(FolkDTO folkRecord)
+        public async Task<string?> GetProfilePhotoPath(int id)
         {
-            return new ResponseFolkDTO()
+            return await dbContext.ProfilePhotos
+                .Where(p => p.UserId == id)
+                .Select(p => p.FilePath)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<ProfilePhoto> SaveProfilePhoto(int id, string filePath, IFormFile input)
+        {
+            ProfilePhoto photoToSave = new();
+            ProfilePhoto? photoRecord = await dbContext.ProfilePhotos.FirstOrDefaultAsync(
+                p => p.UserId == id
+            );
+            if (photoRecord != null)
             {
-                Id = folkRecord.Id,
-                Name = folkRecord.Name,
-                HomeCountry = folkRecord.HomeCountry,
-                HomeCityOrTown = folkRecord.HomeCityOrTown,
-                CountryOfResidence = folkRecord.CountryOfResidence,
-                CityOrTownOfResidence = folkRecord.CityOrTownOfResidence
-            };
+                photoToSave.Name = input.FileName;
+                photoToSave.FilePath = filePath;
+            }
+            else
+            {
+                photoToSave = new()
+                {
+                    UserId = id,
+                    Name = input.FileName,
+                    FilePath = filePath
+                };
+                await dbContext.ProfilePhotos.AddAsync(photoToSave);
+            }
+            await dbContext.SaveChangesAsync();
+            return photoToSave;
+        }
+
+        public async Task<string?> GetBase64String(int userId)
+        {
+            string? base64String;
+            string? profilePhotoPath = await GetProfilePhotoPath(userId);
+            if (profilePhotoPath == null)
+                base64String = null;
+            else
+                base64String = await imageService.ConvertImageToBase64String(profilePhotoPath);
+            return base64String;
         }
     }
 }

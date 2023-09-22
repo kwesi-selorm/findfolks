@@ -1,6 +1,3 @@
-using API.Models;
-using API.Models.Data;
-
 namespace API.DTOs
 {
     public class FolkDTO
@@ -11,6 +8,6 @@ namespace API.DTOs
         public string? HomeCityOrTown { get; set; }
         public required string CountryOfResidence { get; set; }
         public required string CityOrTownOfResidence { get; set; }
-        public ProfilePhoto? ProfilePhoto { get; set; }
+        public string? ProfilePhoto { get; set; }
     }
 }
