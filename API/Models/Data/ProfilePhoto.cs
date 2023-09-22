@@ -1,17 +1,17 @@
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace API.Models
+namespace API.Models.Data
 {
     public class ProfilePhoto
     {
         [Key]
-        [Required]
-        public int UserId { get; set; }
-
-        [Required]
+        public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
 
-        [Required]
         public string FilePath { get; set; } = string.Empty;
     }
 }

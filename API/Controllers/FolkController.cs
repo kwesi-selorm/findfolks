@@ -7,10 +7,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+
 using static API.Utils.Constants;
-using Microsoft.AspNetCore.Http;
-using System.IO;
-using System.Net.Mime;
 
 namespace API.Controllers
 {
@@ -18,28 +16,49 @@ namespace API.Controllers
     [Route("api/folks")]
     public class FolkController : ControllerBase
     {
-        private readonly FolkService dbService;
+        private readonly FolkService folkService;
+        private readonly ImageService imageService;
         private readonly AppDbContext dbContext;
         private readonly ILogger<FolkController> logger;
 
         public FolkController(
             FolkService service,
+            ImageService service1,
             AppDbContext context,
             ILogger<FolkController> logger
         )
         {
-            dbService = service;
+            folkService = service;
+            imageService = service1;
             dbContext = context;
             this.logger = logger;
         }
 
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<List<FolkDTO>>> GetFolks()
+        public async Task<ActionResult<List<ResponseFolkDTO>>> GetFolks()
         {
             try
             {
-                return await dbService.GetFolks();
+                List<FolkDTO> folkRecords = await folkService.GetFolks();
+                List<ResponseFolkDTO> responseFolks = new();
+                foreach (FolkDTO record in folkRecords)
+                {
+                    ResponseFolkDTO responseFolk = folkService.CreateResponseFolkDTO(record);
+                    ProfilePhoto? photo = record.ProfilePhoto;
+                    if (photo == null)
+                    {
+                        responseFolk.ProfilePhoto = null;
+                        responseFolks.Add(responseFolk);
+                        continue;
+                    }
+                    string? base64String = await imageService.ConvertImageToBase64String(
+                        photo.FilePath
+                    );
+                    responseFolk.ProfilePhoto = base64String;
+                    responseFolks.Add(responseFolk);
+                }
+                return Ok(responseFolks);
             }
             catch (Exception e)
             {
@@ -51,11 +70,11 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<FolkDTO>> GetFolk(int id)
+        public async Task<ActionResult<ResponseFolkDTO>> GetFolk(int id)
         {
             try
             {
-                FolkDTO? folkRecord = await dbService.GetFolk(id);
+                FolkDTO? folkRecord = await folkService.GetFolk(id);
                 if (folkRecord == null)
                 {
                     return Problem(
@@ -63,43 +82,20 @@ namespace API.Controllers
                         statusCode: StatusCodes.Status404NotFound
                     );
                 }
-                ProfilePhoto? photo = await dbContext.ProfilePhotos.FirstOrDefaultAsync(
-                    p => p.UserId == folkRecord.Id
-                );
+                ResponseFolkDTO responseFolk = folkService.CreateResponseFolkDTO(folkRecord);
+                ProfilePhoto? photo = folkRecord.ProfilePhoto;
+                logger.LogInformation("photo: " + JsonConvert.SerializeObject(photo));
                 if (photo == null)
+                {
+                    responseFolk.ProfilePhoto = null;
                     return Ok(folkRecord);
-
-                string filePath = photo.FilePath;
-                try
-                {
-                    byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
-                    if (fileBytes.Length == 0)
-                    {
-                        return Ok(folkRecord);
-                    }
-                    string base64String = Convert.ToBase64String(fileBytes);
-
-                    return Ok(
-                        new FolkDTO()
-                        {
-                            Id = folkRecord.Id,
-                            Name = folkRecord.Name,
-                            HomeCountry = folkRecord.HomeCountry,
-                            CountryOfResidence = folkRecord.CountryOfResidence,
-                            HomeCityOrTown = folkRecord.HomeCityOrTown,
-                            CityOrTownOfResidence = folkRecord.CityOrTownOfResidence,
-                            ProfilePhoto = base64String
-                        }
-                    );
                 }
-                catch (Exception e)
-                {
-                    logger.LogInformation("{0}", e.Message);
-                    return Problem(
-                        detail: e.Message,
-                        statusCode: StatusCodes.Status500InternalServerError
-                    );
-                }
+
+                string? base64String = await imageService.ConvertImageToBase64String(
+                    photo.FilePath
+                );
+                responseFolk.ProfilePhoto = base64String;
+                return Ok(responseFolk);
             }
             catch (Exception e)
             {
@@ -112,7 +108,7 @@ namespace API.Controllers
 
         [HttpPost]
         [Consumes("multipart/form-data")]
-        public async Task<ActionResult<FolkDTO>> CreateFolk(
+        public async Task<ActionResult<ResponseFolkDTO>> CreateFolk(
             [FromForm] string name,
             [FromForm] string homeCountry,
             [FromForm] string homeCityOrTown,
@@ -123,7 +119,7 @@ namespace API.Controllers
             [FromForm] IFormFile profilePhoto
         )
         {
-            CreateFolkDTO? folk =
+            Folk createdFolk =
                 new()
                 {
                     Name = name,
@@ -133,28 +129,23 @@ namespace API.Controllers
                     CityOrTownOfResidence = cityOrTownOfResidence,
                     PreferredContactMethod = preferredContactMethod,
                     ContactInfo = contactInfo,
-                    ProfilePhoto = profilePhoto
                 };
+            ResponseFolkDTO? responseFolk = null;
 
-            string? str = JsonConvert.SerializeObject(folk);
             Folk? recordWithSameName = await dbContext.Folks.FirstOrDefaultAsync(
-                f => f.Name == folk.Name
+                f => f.Name == name
             );
             if (recordWithSameName != null)
             {
                 return Problem(
-                    detail: $"A folk with the name {folk.Name} already exists; try using a different one",
+                    detail: $"A folk with the name {name} already exists; try using a different one",
                     statusCode: StatusCodes.Status409Conflict
                 );
             }
 
             try
             {
-                // SAVE THE NEW FOLK TO THE DATABASE
-                FolkDTO newFolk = await dbService.AddFolk(folk);
-
                 // SAVE THE PROFILE PHOTO TO THE FILE SYSTEM AND DATABASE
-                string base64String = string.Empty;
                 int maxImageSize = 2 * 1024 * 1024; // 2MB
                 Constants? constants = new();
                 if (profilePhoto != null)
@@ -187,33 +178,22 @@ namespace API.Controllers
                         await profilePhoto.CopyToAsync(stream);
                     }
 
+                    // SAVE THE CREATED FOLK TO THE DATABASE
                     ProfilePhoto photo =
-                        new()
-                        {
-                            UserId = newFolk.Id,
-                            Name = profilePhoto.FileName,
-                            FilePath = filePath
-                        };
-                    dbContext.ProfilePhotos.Add(photo);
-                    await dbContext.SaveChangesAsync();
+                        new() { Name = profilePhoto.FileName, FilePath = filePath };
+                    createdFolk.ProfilePhoto = photo;
 
-                    // CONVERT THE STREAM TO A BASE64 STRING AND ADD TO THE RESPONSE
-                    byte[] bytes = await System.IO.File.ReadAllBytesAsync(filePath);
-                    base64String = Convert.ToBase64String(bytes);
+                    responseFolk = await folkService.AddFolk(createdFolk);
+
+                    // CONVERT THE IMAGE FILE TO A BASE64 STRING AND ADD TO THE RESPONSE
+                    string? base64String = await imageService.ConvertImageToBase64String(filePath);
+                    responseFolk.ProfilePhoto = base64String;
+                    return Ok(responseFolk);
                 }
-
-                return Ok(
-                    new FolkDTO()
-                    {
-                        Id = newFolk.Id,
-                        Name = newFolk.Name,
-                        HomeCountry = newFolk.HomeCountry,
-                        CountryOfResidence = newFolk.CountryOfResidence,
-                        HomeCityOrTown = newFolk.HomeCityOrTown,
-                        CityOrTownOfResidence = newFolk.CityOrTownOfResidence,
-                        ProfilePhoto = base64String
-                    }
-                );
+                else
+                {
+                    return Ok(responseFolk);
+                }
             }
             catch (Exception e)
             {
@@ -238,7 +218,7 @@ namespace API.Controllers
             }
             try
             {
-                await dbService.UpdateFolk(id, updateString);
+                await folkService.UpdateFolk(id, updateString);
                 return NoContent();
             }
             catch (Exception e)

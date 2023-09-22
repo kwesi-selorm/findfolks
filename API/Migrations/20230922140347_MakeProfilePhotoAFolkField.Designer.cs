@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using API.Models.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230922140347_MakeProfilePhotoAFolkField")]
+    partial class MakeProfilePhotoAFolkField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,27 +25,6 @@ namespace API.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("API.Models.Data.ProfilePhoto", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("FilePath")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ProfilePhoto");
-                });
 
             modelBuilder.Entity("API.Models.Folk", b =>
                 {
@@ -90,6 +72,27 @@ namespace API.Migrations
                     b.HasIndex("ProfilePhotoId");
 
                     b.ToTable("Folks");
+                });
+
+            modelBuilder.Entity("API.Models.ProfilePhoto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProfilePhoto");
                 });
 
             modelBuilder.Entity("API.Models.Request", b =>
@@ -246,7 +249,7 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Models.Folk", b =>
                 {
-                    b.HasOne("API.Models.Data.ProfilePhoto", "ProfilePhoto")
+                    b.HasOne("API.Models.ProfilePhoto", "ProfilePhoto")
                         .WithMany()
                         .HasForeignKey("ProfilePhotoId");
 

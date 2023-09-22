@@ -28,7 +28,8 @@ namespace API.Services
                             HomeCountry = f.HomeCountry,
                             HomeCityOrTown = f.HomeCityOrTown,
                             CountryOfResidence = f.CountryOfResidence,
-                            CityOrTownOfResidence = f.CityOrTownOfResidence
+                            CityOrTownOfResidence = f.CityOrTownOfResidence,
+                            ProfilePhoto = f.ProfilePhoto
                         }
                 )
                 .ToListAsync();
@@ -52,24 +53,25 @@ namespace API.Services
         }
 
         // CREATE A NEW FOLK
-        public async Task<FolkDTO> AddFolk(CreateFolkDTO newFolk)
+        public async Task<ResponseFolkDTO> AddFolk(Folk createdFolk)
         {
             Folk folkToSave =
                 new()
                 {
-                    Name = newFolk.Name,
-                    HomeCountry = newFolk.HomeCountry,
-                    CountryOfResidence = newFolk.CountryOfResidence,
-                    HomeCityOrTown = newFolk.HomeCityOrTown,
-                    CityOrTownOfResidence = newFolk.CityOrTownOfResidence,
-                    PreferredContactMethod = newFolk.PreferredContactMethod,
-                    ContactInfo = newFolk.ContactInfo
+                    Name = createdFolk.Name,
+                    HomeCountry = createdFolk.HomeCountry,
+                    CountryOfResidence = createdFolk.CountryOfResidence,
+                    HomeCityOrTown = createdFolk.HomeCityOrTown,
+                    CityOrTownOfResidence = createdFolk.CityOrTownOfResidence,
+                    PreferredContactMethod = createdFolk.PreferredContactMethod,
+                    ContactInfo = createdFolk.ContactInfo,
+                    ProfilePhoto = createdFolk.ProfilePhoto
                 };
 
             await dbContext.Folks.AddAsync(folkToSave);
             await dbContext.SaveChangesAsync();
 
-            return new FolkDTO
+            return new ResponseFolkDTO()
             {
                 Id = folkToSave.Id,
                 Name = folkToSave.Name,
@@ -108,6 +110,19 @@ namespace API.Services
                 HomeCountry = folkRecord.HomeCountry,
                 CountryOfResidence = folkRecord.CountryOfResidence,
                 HomeCityOrTown = folkRecord.HomeCityOrTown,
+                CityOrTownOfResidence = folkRecord.CityOrTownOfResidence
+            };
+        }
+
+        public ResponseFolkDTO CreateResponseFolkDTO(FolkDTO folkRecord)
+        {
+            return new ResponseFolkDTO()
+            {
+                Id = folkRecord.Id,
+                Name = folkRecord.Name,
+                HomeCountry = folkRecord.HomeCountry,
+                HomeCityOrTown = folkRecord.HomeCityOrTown,
+                CountryOfResidence = folkRecord.CountryOfResidence,
                 CityOrTownOfResidence = folkRecord.CityOrTownOfResidence
             };
         }
