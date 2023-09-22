@@ -88,24 +88,7 @@ namespace API.Controllers
                         memoryStream.Length,
                         string.Empty,
                         fileName
-                    )
-                    {
-                        ContentType = "image/png",
-                        Headers = new HeaderDictionary
-                        {
-                            {
-                                "Content-Disposition",
-                                $"form-data; name=\"file\"; filename=\"{fileName}\""
-                            }
-                        }
-                    };
-
-                    ImageFileDTO imageFile = new ImageFileDTO()
-                    {
-                        FileName = fileName,
-                        FileBytes = fileBytes,
-                        ContentType = profilePhoto.ContentType
-                    };
+                    );
 
                     return Ok(
                         new FolkDTO()
@@ -116,7 +99,7 @@ namespace API.Controllers
                             CountryOfResidence = folkRecord.CountryOfResidence,
                             HomeCityOrTown = folkRecord.HomeCityOrTown,
                             CityOrTownOfResidence = folkRecord.CityOrTownOfResidence,
-                            ProfilePhoto = imageFile
+                            ProfilePhoto = profilePhoto
                         }
                     );
                 }
@@ -165,7 +148,6 @@ namespace API.Controllers
                 };
 
             string? str = JsonConvert.SerializeObject(folk);
-            // logger.LogWarning("hi" + str);
             Folk? recordWithSameName = await dbContext.Folks.FirstOrDefaultAsync(
                 f => f.Name == folk.Name
             );
@@ -182,18 +164,18 @@ namespace API.Controllers
                 // SAVE THE NEW FOLK TO THE DATABASE
                 FolkDTO newFolk = await dbService.AddFolk(folk);
 
-                IFormFile? file = folk.ProfilePhoto;
+                FormFile? responseProfilePhoto = null;
                 int maxImageSize = 2 * 1024 * 1024; // 2MB
                 Constants? constants = new();
 
                 // SAVE THE PROFILE PHOTO TO THE FILE SYSTEM AND DATABASE
-                if (file != null)
+                if (profilePhoto != null)
                 {
-                    string? fileExt = Path.GetExtension(file.FileName).ToLowerInvariant();
+                    string ext = Path.GetExtension(profilePhoto.FileName).ToLowerInvariant();
                     if (
-                        file.Length == 0
-                        || file.Length > maxImageSize
-                        || !constants.allowedExtensions.Contains(fileExt)
+                        profilePhoto.Length == 0
+                        || profilePhoto.Length > maxImageSize
+                        || !constants.allowedExtensions.Contains(ext)
                     )
                     {
                         return Problem(
@@ -203,27 +185,58 @@ namespace API.Controllers
                         );
                     }
 
-                    string? fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-
                     string profilePhotosPath = Path.Combine(
                         Directory.GetCurrentDirectory(),
                         "ProfilePhotos"
                     );
-                    string filePath = Path.Combine(profilePhotosPath, fileName);
+                    string filePath = Path.Combine(
+                        profilePhotosPath,
+                        Guid.NewGuid().ToString() + ext
+                    );
 
-                    using FileStream stream = new(filePath, FileMode.Create);
-                    await file.CopyToAsync(stream);
+                    using FileStream stream = System.IO.File.Create(filePath);
+                    await profilePhoto.CopyToAsync(stream);
+
                     ProfilePhoto photo =
                         new()
                         {
                             UserId = newFolk.Id,
-                            Name = file.FileName,
+                            Name = profilePhoto.FileName,
                             FilePath = filePath
                         };
                     dbContext.ProfilePhotos.Add(photo);
                     await dbContext.SaveChangesAsync();
+
+                    // CONVERT THE STREAM TO A FORMFILE TO INCLUDE IN RESPONSE
+                    responseProfilePhoto = new FormFile(
+                        stream,
+                        0,
+                        stream.Length,
+                        string.Empty,
+                        profilePhoto.FileName
+                    )
+                    {
+                        Headers = new HeaderDictionary(),
+                        ContentDisposition =
+                            $"form-data; name=\"file\"; filename=\"{profilePhoto.FileName}\""
+                    };
+                    ;
                 }
-                return CreatedAtAction(nameof(GetFolk), new { id = newFolk.Id }, newFolk);
+
+                // logger.LogInformation("{0}", response);
+
+                return Ok(
+                    new
+                    {
+                        newFolk.Id,
+                        newFolk.Name,
+                        newFolk.HomeCountry,
+                        newFolk.CountryOfResidence,
+                        newFolk.HomeCityOrTown,
+                        newFolk.CityOrTownOfResidence,
+                        ProfilePhoto = responseProfilePhoto
+                    }
+                );
             }
             catch (Exception e)
             {

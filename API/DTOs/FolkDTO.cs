@@ -8,13 +8,7 @@ namespace API.DTOs
         public string? HomeCityOrTown { get; set; }
         public required string CountryOfResidence { get; set; }
         public required string CityOrTownOfResidence { get; set; }
-		public ImageFileDTO? ProfilePhoto { get; set; }
+		public FormFile? ProfilePhoto { get; set; }
     }
-	
-	public class ImageFileDTO
-{
-    public string? FileName { get; set; }
-    public byte[]? FileBytes { get; set; }
-    public string? ContentType { get; set; }
-}
+
 }
