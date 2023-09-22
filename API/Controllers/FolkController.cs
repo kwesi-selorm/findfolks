@@ -77,18 +77,7 @@ namespace API.Controllers
                     {
                         return Ok(folkRecord);
                     }
-                    MemoryStream memoryStream = new(fileBytes);
-
-                    string fileName = Path.GetFileName(filePath);
-                    string fileExtension = Path.GetExtension(filePath);
-
-                    FormFile profilePhoto = new FormFile(
-                        memoryStream,
-                        0,
-                        memoryStream.Length,
-                        string.Empty,
-                        fileName
-                    );
+                    string base64String = Convert.ToBase64String(fileBytes);
 
                     return Ok(
                         new FolkDTO()
@@ -99,7 +88,7 @@ namespace API.Controllers
                             CountryOfResidence = folkRecord.CountryOfResidence,
                             HomeCityOrTown = folkRecord.HomeCityOrTown,
                             CityOrTownOfResidence = folkRecord.CityOrTownOfResidence,
-                            ProfilePhoto = profilePhoto
+                            ProfilePhoto = base64String
                         }
                     );
                 }
@@ -164,11 +153,10 @@ namespace API.Controllers
                 // SAVE THE NEW FOLK TO THE DATABASE
                 FolkDTO newFolk = await dbService.AddFolk(folk);
 
-                FormFile? responseProfilePhoto = null;
+                // SAVE THE PROFILE PHOTO TO THE FILE SYSTEM AND DATABASE
+                string base64String = string.Empty;
                 int maxImageSize = 2 * 1024 * 1024; // 2MB
                 Constants? constants = new();
-
-                // SAVE THE PROFILE PHOTO TO THE FILE SYSTEM AND DATABASE
                 if (profilePhoto != null)
                 {
                     string ext = Path.GetExtension(profilePhoto.FileName).ToLowerInvariant();
@@ -179,8 +167,8 @@ namespace API.Controllers
                     )
                     {
                         return Problem(
-                            title: "Inlvaid image file",
-                            detail: "The image must be either of the following formats: jpg, jpeg and png, and have a maximum size limit of 2MB",
+                            title: "Invalid image format",
+                            detail: "The image must be either of the following formats: jpg, jpeg and png, and must have a maximum size limit of 2MB",
                             statusCode: StatusCodes.Status400BadRequest
                         );
                     }
@@ -194,8 +182,10 @@ namespace API.Controllers
                         Guid.NewGuid().ToString() + ext
                     );
 
-                    using FileStream stream = System.IO.File.Create(filePath);
-                    await profilePhoto.CopyToAsync(stream);
+                    using (FileStream stream = System.IO.File.Create(filePath))
+                    {
+                        await profilePhoto.CopyToAsync(stream);
+                    }
 
                     ProfilePhoto photo =
                         new()
@@ -207,34 +197,21 @@ namespace API.Controllers
                     dbContext.ProfilePhotos.Add(photo);
                     await dbContext.SaveChangesAsync();
 
-                    // CONVERT THE STREAM TO A FORMFILE TO INCLUDE IN RESPONSE
-                    responseProfilePhoto = new FormFile(
-                        stream,
-                        0,
-                        stream.Length,
-                        string.Empty,
-                        profilePhoto.FileName
-                    )
-                    {
-                        Headers = new HeaderDictionary(),
-                        ContentDisposition =
-                            $"form-data; name=\"file\"; filename=\"{profilePhoto.FileName}\""
-                    };
-                    ;
+                    // CONVERT THE STREAM TO A BASE64 STRING AND ADD TO THE RESPONSE
+                    byte[] bytes = await System.IO.File.ReadAllBytesAsync(filePath);
+                    base64String = Convert.ToBase64String(bytes);
                 }
 
-                // logger.LogInformation("{0}", response);
-
                 return Ok(
-                    new
+                    new FolkDTO()
                     {
-                        newFolk.Id,
-                        newFolk.Name,
-                        newFolk.HomeCountry,
-                        newFolk.CountryOfResidence,
-                        newFolk.HomeCityOrTown,
-                        newFolk.CityOrTownOfResidence,
-                        ProfilePhoto = responseProfilePhoto
+                        Id = newFolk.Id,
+                        Name = newFolk.Name,
+                        HomeCountry = newFolk.HomeCountry,
+                        CountryOfResidence = newFolk.CountryOfResidence,
+                        HomeCityOrTown = newFolk.HomeCityOrTown,
+                        CityOrTownOfResidence = newFolk.CityOrTownOfResidence,
+                        ProfilePhoto = base64String
                     }
                 );
             }
@@ -247,6 +224,7 @@ namespace API.Controllers
             }
         }
 
+        // TODO: ADD LOGIC TO ALSO UPDATE PROFILE PHOTOS
         [HttpPatch("{id}")]
         public async Task<ActionResult> UpdateFolk(int id, [FromBody] UpdateFolkDTO update)
         {

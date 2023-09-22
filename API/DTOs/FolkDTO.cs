@@ -8,7 +8,6 @@ namespace API.DTOs
         public string? HomeCityOrTown { get; set; }
         public required string CountryOfResidence { get; set; }
         public required string CityOrTownOfResidence { get; set; }
-		public FormFile? ProfilePhoto { get; set; }
+        public string? ProfilePhoto { get; set; }
     }
-
 }
