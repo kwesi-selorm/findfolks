@@ -9,10 +9,12 @@ namespace API.Services
     public class FolkService
     {
         private readonly AppDbContext dbContext;
+        private readonly ILogger<FolkService> logger;
 
         public FolkService(AppDbContext appDbContext, ILogger<FolkService> logger)
         {
             dbContext = appDbContext;
+            this.logger = logger;
         }
 
         // GET ALL FOLKS, INLCUDING CONNECTIONS AND REQUESTS
@@ -38,18 +40,22 @@ namespace API.Services
         // GET A SINGLE FOLK
         public async Task<FolkDTO?> GetFolk(int id)
         {
-            Folk? folkRecord = await dbContext.Folks.FirstOrDefaultAsync(f => f.Id == id);
-            return folkRecord != null
-                ? new FolkDTO
-                {
-                    Id = folkRecord.Id,
-                    Name = folkRecord.Name,
-                    HomeCountry = folkRecord.HomeCountry,
-                    HomeCityOrTown = folkRecord.HomeCityOrTown,
-                    CountryOfResidence = folkRecord.CountryOfResidence,
-                    CityOrTownOfResidence = folkRecord.CityOrTownOfResidence
-                }
-                : null;
+            Folk? folkRecord = await dbContext.Folks
+                // EAGERLY MAKE SURE PHOTOS ARE POPULATED
+                .Include(f => f.ProfilePhoto)
+                .FirstOrDefaultAsync(f => f.Id == id);
+            if (folkRecord == null)
+                return null;
+            return new FolkDTO
+            {
+                Id = folkRecord.Id,
+                Name = folkRecord.Name,
+                HomeCountry = folkRecord.HomeCountry,
+                HomeCityOrTown = folkRecord.HomeCityOrTown,
+                CountryOfResidence = folkRecord.CountryOfResidence,
+                CityOrTownOfResidence = folkRecord.CityOrTownOfResidence,
+                ProfilePhoto = folkRecord.ProfilePhoto
+            };
         }
 
         // CREATE A NEW FOLK

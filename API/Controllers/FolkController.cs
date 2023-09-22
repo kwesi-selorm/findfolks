@@ -41,6 +41,7 @@ namespace API.Controllers
             try
             {
                 List<FolkDTO> folkRecords = await folkService.GetFolks();
+                logger.LogInformation("folks: " + JsonConvert.SerializeObject(folkRecords));
                 List<ResponseFolkDTO> responseFolks = new();
                 foreach (FolkDTO record in folkRecords)
                 {
@@ -75,6 +76,7 @@ namespace API.Controllers
             try
             {
                 FolkDTO? folkRecord = await folkService.GetFolk(id);
+
                 if (folkRecord == null)
                 {
                     return Problem(
@@ -84,7 +86,6 @@ namespace API.Controllers
                 }
                 ResponseFolkDTO responseFolk = folkService.CreateResponseFolkDTO(folkRecord);
                 ProfilePhoto? photo = folkRecord.ProfilePhoto;
-                logger.LogInformation("photo: " + JsonConvert.SerializeObject(photo));
                 if (photo == null)
                 {
                     responseFolk.ProfilePhoto = null;
