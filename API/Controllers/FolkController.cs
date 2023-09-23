@@ -15,19 +15,25 @@ namespace API.Controllers
     public class FolkController : ControllerBase
     {
         private readonly FolkService folkService;
+        private readonly ProfilePhotoService profilePhotoService;
         private readonly ImageService imageService;
+        private readonly AuthService authService;
         private readonly AppDbContext dbContext;
         private readonly ILogger<FolkController> logger;
 
         public FolkController(
-            FolkService service,
-            ImageService service1,
+            FolkService folkService,
+            ProfilePhotoService profilePhotoService,
+            ImageService imageService,
+            AuthService authService,
             AppDbContext context,
             ILogger<FolkController> logger
         )
         {
-            folkService = service;
-            imageService = service1;
+            this.folkService = folkService;
+            this.profilePhotoService = profilePhotoService;
+            this.imageService = imageService;
+            this.authService = authService;
             dbContext = context;
             this.logger = logger;
         }
@@ -104,7 +110,6 @@ namespace API.Controllers
             }
         }
 
-        // TODO: ADD LOGIC TO ALSO UPDATE PROFILE PHOTOS
         [HttpPatch("{id}")]
         public async Task<ActionResult> UpdateFolk(int id, [FromBody] UpdateFolkDTO update)
         {
@@ -124,6 +129,31 @@ namespace API.Controllers
             catch (Exception e)
             {
                 return Problem(
+                    detail: e.Message,
+                    statusCode: StatusCodes.Status500InternalServerError
+                );
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteFolk(int id)
+        {
+            try
+            {
+                // DELETE FOLK, DELETE PHOTO, DELETE USER, REMOVE IMAGE FROM STORAGE
+                await folkService.RemoveFolk(id);
+                await profilePhotoService.RemoveProfilePhoto(id);
+                await authService.DeleteUser(id);
+
+                string? filePath = await profilePhotoService.GetProfilePhotoPath(id);
+                imageService.DeleteImageFromFileSystem(filePath);
+
+                return StatusCode(statusCode: StatusCodes.Status204NoContent);
+            }
+            catch (Exception e)
+            {
+                return Problem(
+                    title: "An error occurred while deleting your profile and account",
                     detail: e.Message,
                     statusCode: StatusCodes.Status500InternalServerError
                 );
@@ -167,17 +197,11 @@ namespace API.Controllers
                 string filePath = Path.Combine(profilePhotosPath, Guid.NewGuid().ToString() + ext);
 
                 // DELETE THE PREVIOUS IMAGE IF IT EXISTS
-                string? previousFilePath = await folkService.GetProfilePhotoPath(id);
-                if (
-                    !string.IsNullOrEmpty(previousFilePath)
-                    && System.IO.File.Exists(previousFilePath)
-                )
-                {
-                    System.IO.File.Delete(previousFilePath);
-                }
+                string? previousFilePath = await profilePhotoService.GetProfilePhotoPath(id);
+                imageService.DeleteImageFromFileSystem(previousFilePath);
 
                 // SAVE THE NEW PHOTO TO THE DATABASE AND FILE SYSTEM
-                await folkService.SaveProfilePhoto(id, filePath, input);
+                await profilePhotoService.AddOrUpdateProfilePhoto(id, filePath, input);
                 using (FileStream stream = System.IO.File.Create(filePath))
                 {
                     await input.CopyToAsync(stream);

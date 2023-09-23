@@ -25,6 +25,7 @@ builder.Services.AddDbContext<AppDbContext>(
 builder.Services.AddScoped<FolkService>();
 builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped<ImageService>();
+builder.Services.AddScoped<ProfilePhotoService>();
 builder.Services
     .AddIdentityCore<IdentityUser>(options =>
     {

@@ -79,5 +79,7 @@ namespace API.Controllers
             AuthResponseDTO? token = jwtService.CreateToken(user);
             return Ok(token);
         }
+
+        // Update a user, either username and password
     }
 }

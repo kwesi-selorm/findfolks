@@ -1,4 +1,3 @@
-using System.Text;
 using API.DTOs;
 using API.Models;
 using API.Models.Data;
@@ -12,19 +11,22 @@ namespace API.Services
         private readonly AppDbContext dbContext;
         private readonly ILogger<FolkService> logger;
         private readonly ImageService imageService;
+        private readonly ProfilePhotoService profilePhotoService;
 
         public FolkService(
             AppDbContext appDbContext,
             ILogger<FolkService> logger,
-            ImageService imageService
+            ImageService imageService,
+            ProfilePhotoService profilePhotoService
         )
         {
             dbContext = appDbContext;
             this.logger = logger;
             this.imageService = imageService;
+            this.profilePhotoService = profilePhotoService;
         }
 
-        // GET ALL FOLKS, INLCUDING CONNECTIONS AND REQUESTS
+        // GET ALL FOLKS
         public async Task<List<FolkDTO>> GetFolks()
         {
             List<FolkDTO> folks = await dbContext.Folks
@@ -67,7 +69,7 @@ namespace API.Services
                 : null;
         }
 
-        // CREATE A NEW FOLK
+        // ADD A NEW FOLK
         public async Task<FolkDTO> AddFolk(Folk input)
         {
             Folk createdFolk =
@@ -128,42 +130,21 @@ namespace API.Services
             };
         }
 
-        public async Task<string?> GetProfilePhotoPath(int id)
+        // DELETE A FOLK
+        public async Task RemoveFolk(int folkId)
         {
-            string? path = await dbContext.ProfilePhotos
-                .Where(p => p.UserId == id)
-                .Select(p => p.FilePath)
-                .FirstOrDefaultAsync();
-            logger.LogInformation("path: {0}", path);
-            return path;
-        }
+            Folk? folkRecord = await dbContext.Folks.FirstOrDefaultAsync(f => f.Id == folkId);
+            if (folkRecord == null)
+                throw new NullReferenceException($"No folk found with the id {folkId}");
 
-        public async Task<ProfilePhoto> SaveProfilePhoto(int id, string filePath, IFormFile input)
-        {
-            ProfilePhoto photoToSave = new();
-            ProfilePhoto? photoRecord = await dbContext.ProfilePhotos.FirstOrDefaultAsync(
-                p => p.UserId == id
-            );
-            if (photoRecord != null)
-
-                dbContext.ProfilePhotos.Remove(photoRecord);
-
-            photoToSave = new()
-            {
-                UserId = id,
-                Name = input.FileName,
-                FilePath = filePath
-            };
-            await dbContext.ProfilePhotos.AddAsync(photoToSave);
-
+            dbContext.Folks.Remove(folkRecord);
             await dbContext.SaveChangesAsync();
-            return photoToSave;
         }
 
         public async Task<string?> GetBase64String(int userId)
         {
             string? base64String;
-            string? profilePhotoPath = await GetProfilePhotoPath(userId);
+            string? profilePhotoPath = await profilePhotoService.GetProfilePhotoPath(userId);
             if (profilePhotoPath == null)
                 base64String = null;
             else
