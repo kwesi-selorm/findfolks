@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using API.DTOs;
 using API.Services;
 using Microsoft.AspNetCore.Identity;
@@ -15,29 +11,17 @@ namespace API.Controllers
     {
         private readonly UserManager<IdentityUser> userManager;
         private readonly JwtService jwtService;
+        private readonly FolkService folkService;
 
-        public AuthController(UserManager<IdentityUser> userManager, JwtService jwtService)
+        public AuthController(
+            UserManager<IdentityUser> userManager,
+            JwtService jwtService,
+            FolkService folkService
+        )
         {
             this.userManager = userManager;
             this.jwtService = jwtService;
-        }
-
-        [HttpPost("register")]
-        public async Task<IActionResult> CreateUser(UserDTO user)
-        {
-            IdentityResult? result = await userManager.CreateAsync(
-                new IdentityUser() { UserName = user.UserName, Email = user.Email },
-                user.Password
-            );
-            if (!result.Succeeded)
-            {
-                List<string>? errors = result.Errors
-                    .Select(e => e.Description.TrimEnd('.'))
-                    .ToList();
-                string detail = string.Join(", ", errors);
-                return Problem(detail: detail, statusCode: StatusCodes.Status400BadRequest);
-            }
-            return Created("", new UserDTO() { UserName = user.UserName, Email = user.Email });
+            this.folkService = folkService;
         }
 
         [HttpGet("{userName}")]
@@ -52,6 +36,24 @@ namespace API.Controllers
                 );
             }
             return Ok(new { userRecord.UserName, userRecord.Email });
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            FolkDTO? folkRecord = await folkService.GetFolk(id);
+            if (folkRecord == null)
+                return NoContent();
+            IdentityUser? userRecord = await userManager.FindByNameAsync(folkRecord.Name);
+            if (userRecord == null)
+            {
+                return Problem(
+                    detail: $"A user with id {id} was not found",
+                    statusCode: StatusCodes.Status404NotFound
+                );
+            }
+            await userManager.DeleteAsync(userRecord);
+            return NoContent();
         }
 
         [HttpPost(template: "token")]

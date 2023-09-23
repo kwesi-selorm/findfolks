@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace API.Controllers
 {
@@ -81,10 +82,9 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<FolkDTO>> CreateFolk([FromBody] Folk input)
+        public async Task<ActionResult<FolkDTO>> CreateFolk([FromBody] CreateFolkDTO input)
         {
-            FolkDTO? responseFolk = null;
-
+            FolkDTO responseFolk;
             Folk? recordWithSameName = await dbContext.Folks.FirstOrDefaultAsync(
                 f => f.Name == input.Name
             );
@@ -96,6 +96,7 @@ namespace API.Controllers
 
             try
             {
+                await authService.CreateUser(input);
                 responseFolk = await folkService.AddFolk(input);
                 string? base64String = await folkService.GetBase64String(responseFolk.Id);
                 responseFolk.ProfilePhoto = base64String;
@@ -141,12 +142,11 @@ namespace API.Controllers
             try
             {
                 // DELETE FOLK, DELETE PHOTO, DELETE USER, REMOVE IMAGE FROM STORAGE
-                await folkService.RemoveFolk(id);
-                await profilePhotoService.RemoveProfilePhoto(id);
-                await authService.DeleteUser(id);
-
                 string? filePath = await profilePhotoService.GetProfilePhotoPath(id);
                 imageService.DeleteImageFromFileSystem(filePath);
+                await authService.DeleteUser(id);
+                await profilePhotoService.RemoveProfilePhoto(id);
+                await folkService.RemoveFolk(id);
 
                 return StatusCode(statusCode: StatusCodes.Status204NoContent);
             }

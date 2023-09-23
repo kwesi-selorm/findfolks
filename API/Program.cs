@@ -26,6 +26,7 @@ builder.Services.AddScoped<FolkService>();
 builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped<ImageService>();
 builder.Services.AddScoped<ProfilePhotoService>();
+builder.Services.AddScoped<AuthService>();
 builder.Services
     .AddIdentityCore<IdentityUser>(options =>
     {
