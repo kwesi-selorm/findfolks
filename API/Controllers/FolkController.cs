@@ -166,8 +166,18 @@ namespace API.Controllers
                 );
                 string filePath = Path.Combine(profilePhotosPath, Guid.NewGuid().ToString() + ext);
 
+                // DELETE THE PREVIOUS IMAGE IF IT EXISTS
+                string? previousFilePath = await folkService.GetProfilePhotoPath(id);
+                if (
+                    !string.IsNullOrEmpty(previousFilePath)
+                    && System.IO.File.Exists(previousFilePath)
+                )
+                {
+                    System.IO.File.Delete(previousFilePath);
+                }
+
+                // SAVE THE NEW PHOTO TO THE DATABASE AND FILE SYSTEM
                 await folkService.SaveProfilePhoto(id, filePath, input);
-                System.IO.File.Delete(filePath);
                 using (FileStream stream = System.IO.File.Create(filePath))
                 {
                     await input.CopyToAsync(stream);

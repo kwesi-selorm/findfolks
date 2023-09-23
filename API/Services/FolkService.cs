@@ -130,10 +130,12 @@ namespace API.Services
 
         public async Task<string?> GetProfilePhotoPath(int id)
         {
-            return await dbContext.ProfilePhotos
+            string? path = await dbContext.ProfilePhotos
                 .Where(p => p.UserId == id)
                 .Select(p => p.FilePath)
                 .FirstOrDefaultAsync();
+            logger.LogInformation("path: {0}", path);
+            return path;
         }
 
         public async Task<ProfilePhoto> SaveProfilePhoto(int id, string filePath, IFormFile input)
@@ -143,20 +145,17 @@ namespace API.Services
                 p => p.UserId == id
             );
             if (photoRecord != null)
+
+                dbContext.ProfilePhotos.Remove(photoRecord);
+
+            photoToSave = new()
             {
-                photoToSave.Name = input.FileName;
-                photoToSave.FilePath = filePath;
-            }
-            else
-            {
-                photoToSave = new()
-                {
-                    UserId = id,
-                    Name = input.FileName,
-                    FilePath = filePath
-                };
-                await dbContext.ProfilePhotos.AddAsync(photoToSave);
-            }
+                UserId = id,
+                Name = input.FileName,
+                FilePath = filePath
+            };
+            await dbContext.ProfilePhotos.AddAsync(photoToSave);
+
             await dbContext.SaveChangesAsync();
             return photoToSave;
         }
