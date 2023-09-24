@@ -1,5 +1,6 @@
 using API.Models;
 using API.Models.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Services
 {
@@ -12,26 +13,33 @@ namespace API.Services
             dbContext = context;
         }
 
-        // CREATE NEW REQUEST
-        public Request AddNewRequest(int senderId, int recipientId)
+        // FIND SINGLE REQUEST
+        public async Task<Request?> FindSingleRequest(int id)
         {
-            Request newRequest =
-                new()
-                {
-                    SenderId = senderId,
-                    RecipientId = recipientId,
-                    DateSent = DateTime.Now
-                };
-            dbContext.Requests.Add(newRequest);
-            dbContext.SaveChanges();
-            return newRequest;
+            return await dbContext.Requests.FindAsync(id);
+        }
+
+        // FIND ALL REQUESTS
+        public async Task<List<Request>> FindRequestsForUser(int id)
+        {
+            return await dbContext.Requests
+                .Where(r => r.SenderId == id || r.RecipientId == id)
+                .ToListAsync();
+        }
+
+        // CREATE NEW REQUEST
+        public async Task<Request> AddRequest(Request createdRequest)
+        {
+            await dbContext.Requests.AddAsync(createdRequest);
+            await dbContext.SaveChangesAsync();
+            return createdRequest;
         }
 
         // DELETE REQUEST
-        public void DeleteRequest(Request request)
+        public async Task RemoveRequest(Request request)
         {
             dbContext.Requests.Remove(request);
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
         }
     }
 }

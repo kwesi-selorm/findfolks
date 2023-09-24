@@ -5,7 +5,7 @@ namespace API.Models
     public class Request
     {
         [Key]
-        public int RequestId { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public int SenderId { get; set; }
