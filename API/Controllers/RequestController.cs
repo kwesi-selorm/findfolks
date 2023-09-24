@@ -88,7 +88,8 @@ namespace API.Controllers
             catch (Exception e)
             {
                 return Problem(
-                    detail: "Something went wrong: " + e.Message,
+                    title: "Something went wrong",
+                    detail: e.Message,
                     statusCode: StatusCodes.Status500InternalServerError
                 );
             }
