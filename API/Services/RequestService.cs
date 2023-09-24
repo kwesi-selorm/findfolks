@@ -14,9 +14,11 @@ namespace API.Services
         }
 
         // FIND SINGLE REQUEST
-        public async Task<Request?> FindSingleRequest(int id)
+        public async Task<Request?> FindSingleRequest(int senderId, int recipientId)
         {
-            return await dbContext.Requests.FindAsync(id);
+            return await dbContext.Requests
+                .Where(r => r.SenderId == senderId && r.RecipientId == recipientId)
+                .FirstOrDefaultAsync();
         }
 
         // FIND ALL REQUESTS
@@ -36,9 +38,34 @@ namespace API.Services
         }
 
         // DELETE REQUEST
-        public async Task RemoveRequest(Request request)
+        public async Task RemoveRequest(int id)
         {
-            dbContext.Requests.Remove(request);
+            Request requestRecord =
+                await dbContext.Requests.Where(r => r.Id == id).FirstOrDefaultAsync()
+                ?? throw new Exception("A request with id " + id + "was not found");
+            dbContext.Requests.Remove(requestRecord);
+            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task RemoveRequest(int senderId, int recipientId)
+        {
+            Request? requestRecord = await dbContext.Requests
+                .Where(r => r.SenderId == senderId && r.RecipientId == recipientId)
+                .FirstOrDefaultAsync();
+            if (requestRecord != null)
+                dbContext.Requests.Remove(requestRecord);
+        }
+
+        public async Task RemoveRequests(int folk1Id, int folk2Id)
+        {
+            List<Request>? requests = await dbContext.Requests
+                .Where(
+                    r =>
+                        (r.SenderId == folk1Id && r.RecipientId == folk2Id)
+                        || (r.SenderId == folk2Id && r.RecipientId == folk1Id)
+                )
+                .ToListAsync();
+            dbContext.Requests.RemoveRange(requests);
             await dbContext.SaveChangesAsync();
         }
     }

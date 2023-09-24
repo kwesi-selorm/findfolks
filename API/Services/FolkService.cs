@@ -96,16 +96,22 @@ namespace API.Services
                         PreferredContactMethod = c.PreferredContactMethod,
                         ContactInfo = c.ContactInfo
                     };
-                string? filePath = await profilePhotoService.GetProfilePhotoPath(c.Id);
-                if (string.IsNullOrEmpty(filePath))
+                string? path = await profilePhotoService.GetProfilePhotoPath(c.Id);
+                if (string.IsNullOrEmpty(path))
                 {
                     connection.ProfilePhoto = null;
                     connections.Add(connection);
                     continue;
                 }
-                connection.ProfilePhoto = await imageService.ConvertImageToBase64String(filePath);
+                connection.ProfilePhoto = await imageService.ConvertImageToBase64String(path);
                 connections.Add(connection);
             }
+
+            string? base64String;
+            string? filePath = await profilePhotoService.GetProfilePhotoPath(folkRecord.Id);
+            base64String = !string.IsNullOrEmpty(filePath)
+                ? await imageService.ConvertImageToBase64String(filePath)
+                : null;
 
             return new FolkProfileDTO()
             {
@@ -117,6 +123,7 @@ namespace API.Services
                 CityOrTownOfResidence = folkRecord.CityOrTownOfResidence,
                 PreferredContactMethod = folkRecord.PreferredContactMethod,
                 ContactInfo = folkRecord.ContactInfo,
+                ProfilePhoto = base64String,
                 Connections = connections
             };
         }
@@ -203,18 +210,33 @@ namespace API.Services
                 await dbContext.Folks.FindAsync(folk2Id)
                 ?? throw new Exception("No folk found with the id " + folk2Id);
             folk1Record.Connections.Add(folk2Record);
+            await dbContext.SaveChangesAsync();
             folk2Record.Connections.Add(folk1Record);
+            await dbContext.SaveChangesAsync();
+        }
+
+        // DELETE CONNECTIONS
+        public async Task RemoveConnections(int folk1Id, int folk2Id)
+        {
+            Folk folk1Record =
+                await dbContext.Folks.FindAsync(folk1Id)
+                ?? throw new Exception("No folk found with the id " + folk1Id);
+            Folk folk2Record =
+                await dbContext.Folks.FindAsync(folk2Id)
+                ?? throw new Exception("No folk found with the id " + folk2Id);
+            folk1Record.Connections.Remove(folk2Record);
+            await dbContext.SaveChangesAsync();
+            folk1Record.Connections.Remove(folk2Record);
             await dbContext.SaveChangesAsync();
         }
 
         public async Task<string?> GetBase64String(int userId)
         {
-            string? base64String;
             string? profilePhotoPath = await profilePhotoService.GetProfilePhotoPath(userId);
-            if (profilePhotoPath == null)
-                base64String = null;
-            else
-                base64String = await imageService.ConvertImageToBase64String(profilePhotoPath);
+            string? base64String =
+                profilePhotoPath == null
+                    ? null
+                    : await imageService.ConvertImageToBase64String(profilePhotoPath);
             return base64String;
         }
     }

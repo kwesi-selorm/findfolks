@@ -21,7 +21,7 @@ namespace API.Services
                 .Where(p => p.UserId == id)
                 .Select(p => p.FilePath)
                 .FirstOrDefaultAsync();
-            logger.LogInformation("path: {0}", path);
+            // logger.LogInformation("path: {0}", path);
             return path;
         }
 

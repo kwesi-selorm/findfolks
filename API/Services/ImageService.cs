@@ -10,6 +10,9 @@ namespace API.Services
 
         public async Task<string?> ConvertImageToBase64String(string filePath)
         {
+            if (System.IO.File.Exists(filePath) == false)
+                return null;
+
             byte[] bytes = await File.ReadAllBytesAsync(filePath);
             if (bytes.Length == 0)
                 return null;
