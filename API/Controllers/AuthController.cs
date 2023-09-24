@@ -41,7 +41,7 @@ namespace API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            FolkDTO? folkRecord = await folkService.GetFolk(id);
+            FolkDTO? folkRecord = await folkService.GetSingleFolk(id);
             if (folkRecord == null)
                 return NoContent();
             IdentityUser? userRecord = await userManager.FindByNameAsync(folkRecord.Name);

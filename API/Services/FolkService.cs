@@ -27,7 +27,7 @@ namespace API.Services
         }
 
         // GET ALL FOLKS
-        public async Task<List<FolkDTO>> GetFolks()
+        public async Task<List<FolkDTO>> GetAllFolks()
         {
             List<FolkDTO> folks = await dbContext.Folks
                 .Select(
@@ -53,20 +53,71 @@ namespace API.Services
         }
 
         // GET A SINGLE FOLK
-        public async Task<FolkDTO?> GetFolk(int id)
+        public async Task<FolkDTO?> GetSingleFolk(int id)
         {
-            Folk? folkRecord = await dbContext.Folks.FirstOrDefaultAsync(f => f.Id == id);
-            return folkRecord != null
-                ? new FolkDTO()
+            Folk? folkRecord = await dbContext.Folks.Where(f => f.Id == id).FirstOrDefaultAsync();
+
+            return folkRecord == null
+                ? null
+                : new FolkDTO()
                 {
                     Id = folkRecord.Id,
                     Name = folkRecord.Name,
                     HomeCountry = folkRecord.HomeCountry,
                     HomeCityOrTown = folkRecord.HomeCityOrTown,
                     CountryOfResidence = folkRecord.CountryOfResidence,
-                    CityOrTownOfResidence = folkRecord.CityOrTownOfResidence,
+                    CityOrTownOfResidence = folkRecord.CityOrTownOfResidence
+                };
+        }
+
+        // GET FOLK PROFILE FOR A USER
+        public async Task<FolkProfileDTO?> GetFolkProfile(int id)
+        {
+            Folk? folkRecord = await dbContext.Folks
+                .Where(f => f.Id == id)
+                .Include(f => f.Connections)
+                .FirstOrDefaultAsync();
+            if (folkRecord == null)
+                return null;
+
+            List<ConnectionDTO> connections = new();
+            foreach (Folk c in folkRecord.Connections)
+            {
+                ConnectionDTO connection =
+                    new()
+                    {
+                        Id = c.Id,
+                        Name = c.Name,
+                        HomeCountry = c.HomeCountry,
+                        HomeCityOrTown = c.HomeCityOrTown,
+                        CountryOfResidence = c.CountryOfResidence,
+                        CityOrTownOfResidence = c.CityOrTownOfResidence,
+                        PreferredContactMethod = c.PreferredContactMethod,
+                        ContactInfo = c.ContactInfo
+                    };
+                string? filePath = await profilePhotoService.GetProfilePhotoPath(c.Id);
+                if (string.IsNullOrEmpty(filePath))
+                {
+                    connection.ProfilePhoto = null;
+                    connections.Add(connection);
+                    continue;
                 }
-                : null;
+                connection.ProfilePhoto = await imageService.ConvertImageToBase64String(filePath);
+                connections.Add(connection);
+            }
+
+            return new FolkProfileDTO()
+            {
+                Id = folkRecord.Id,
+                Name = folkRecord.Name,
+                HomeCountry = folkRecord.HomeCountry,
+                HomeCityOrTown = folkRecord.HomeCityOrTown,
+                CountryOfResidence = folkRecord.CountryOfResidence,
+                CityOrTownOfResidence = folkRecord.CityOrTownOfResidence,
+                PreferredContactMethod = folkRecord.PreferredContactMethod,
+                ContactInfo = folkRecord.ContactInfo,
+                Connections = connections
+            };
         }
 
         // ADD A NEW FOLK

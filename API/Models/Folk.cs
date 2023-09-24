@@ -27,6 +27,6 @@ namespace API.Models
         [Display(Name = "Contact information")]
         public required string ContactInfo { get; set; }
 
-        public List<string> Connections { get; set; } = new List<string>();
+        public List<Folk> Connections { get; set; } = new List<Folk>();
     }
 }

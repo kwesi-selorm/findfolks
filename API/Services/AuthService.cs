@@ -39,7 +39,7 @@ namespace API.Services
         public async Task DeleteUser(int id)
         {
             // id IS THE FOLK ID, USED TO FIND THE FOLK RECORD'S USERNAME
-            FolkDTO? folkRecord = await folkService.GetFolk(id);
+            FolkDTO? folkRecord = await folkService.GetSingleFolk(id);
             if (folkRecord == null)
                 return;
 

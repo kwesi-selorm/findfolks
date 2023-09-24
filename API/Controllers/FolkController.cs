@@ -41,35 +41,34 @@ namespace API.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<List<FolkDTO>>> GetFolks()
+        public async Task<ActionResult<List<FolkDTO>>> GetFolksToDiscover()
         {
             try
             {
-                List<FolkDTO> folkRecords = await folkService.GetFolks();
+                List<FolkDTO> folkRecords = await folkService.GetAllFolks();
                 return Ok(folkRecords);
             }
             catch (Exception e)
             {
-                return StatusCode(
-                    statusCode: StatusCodes.Status500InternalServerError,
-                    new { message = e.Message }
+                return Problem(
+                    detail: e.Message,
+                    statusCode: StatusCodes.Status500InternalServerError
                 );
             }
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<FolkDTO>> GetFolk(int id)
+        public async Task<ActionResult<FolkDTO>> GetUserFolkProfile(int id)
         {
             try
             {
-                FolkDTO? folkRecord = await folkService.GetFolk(id);
+                FolkProfileDTO? folkRecord = await folkService.GetFolkProfile(id);
                 if (folkRecord == null)
                     return Problem(
-                        detail: $"A folk with ID {id} was not found. Try creating a new profile",
+                        detail: $"Your profile with {id} was not found. Try creating a new profile",
                         statusCode: StatusCodes.Status404NotFound
                     );
 
-                folkRecord.ProfilePhoto = await folkService.GetBase64String(id);
                 return Ok(folkRecord);
             }
             catch (Exception e)
@@ -141,7 +140,6 @@ namespace API.Controllers
         {
             try
             {
-                // DELETE FOLK, DELETE PHOTO, DELETE USER, REMOVE IMAGE FROM STORAGE
                 string? filePath = await profilePhotoService.GetProfilePhotoPath(id);
                 imageService.DeleteImageFromFileSystem(filePath);
                 await authService.DeleteUser(id);
