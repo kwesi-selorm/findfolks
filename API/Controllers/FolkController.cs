@@ -63,13 +63,12 @@ namespace API.Controllers
             try
             {
                 FolkProfileDTO? folkRecord = await folkService.GetFolkProfile(id);
-                if (folkRecord == null)
-                    return Problem(
+                return (folkRecord == null)
+                    ? Problem(
                         detail: $"Your profile with {id} was not found. Try creating a new profile",
                         statusCode: StatusCodes.Status404NotFound
-                    );
-
-                return Ok(folkRecord);
+                    )
+                    : Ok(folkRecord);
             }
             catch (Exception e)
             {

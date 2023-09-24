@@ -16,40 +16,41 @@ namespace API.Controllers
             this.requestService = requestService;
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult> GetSingleRequest(int id)
-        {
-            try
-            {
-                Request? requestRecord = await requestService.FindSingleRequest(id);
-                return requestRecord == null
-                    ? Problem(
-                        detail: "Request not found",
-                        statusCode: StatusCodes.Status404NotFound
-                    )
-                    : Ok(requestRecord);
-            }
-            catch (Exception e)
-            {
-                return Problem(
-                    detail: "Something went wrong: " + e.Message,
-                    statusCode: StatusCodes.Status500InternalServerError
-                );
-            }
-        }
+        // [HttpGet("{id}")]
+        // public async Task<ActionResult> GetSingleRequest(int id)
+        // {
+        //     try
+        //     {
+        //         Request? requestRecord = await requestService.FindSingleRequest(id);
+        //         return requestRecord == null
+        //             ? Problem(
+        //                 detail: "Request not found",
+        //                 statusCode: StatusCodes.Status404NotFound
+        //             )
+        //             : Ok(requestRecord);
+        //     }
+        //     catch (Exception e)
+        //     {
+        //         return Problem(
+        //             detail: "Something went wrong: " + e.Message,
+        //             statusCode: StatusCodes.Status500InternalServerError
+        //         );
+        //     }
+        // }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<List<Request>>> GetRequests(int id)
+        [HttpGet("{userId}")]
+        public async Task<ActionResult<List<Request>>> GetRequests(int userId)
         {
             try
             {
-                List<Request> requests = await requestService.FindRequestsForUser(id);
+                List<Request> requests = await requestService.FindRequestsForUser(userId);
                 return Ok(requests);
             }
             catch (Exception e)
             {
                 return Problem(
-                    detail: "Something went wrong: " + e.Message,
+                    title: "Something went wrong",
+                    detail: e.Message,
                     statusCode: StatusCodes.Status500InternalServerError
                 );
             }
@@ -58,6 +59,7 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult<Request>> CreateRequest([FromBody] CreateRequestDTO input)
         {
+            // Check if the request already exists or the sender and recipient are connected
             DateTime DateSent = DateTime.UtcNow;
             Request newRequest =
                 new()

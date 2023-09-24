@@ -1,6 +1,7 @@
 using API.DTOs;
 using API.Models;
 using API.Models.Data;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
@@ -189,6 +190,20 @@ namespace API.Services
                 throw new NullReferenceException($"No folk found with the id {folkId}");
 
             dbContext.Folks.Remove(folkRecord);
+            await dbContext.SaveChangesAsync();
+        }
+
+        // ADD CONNECTION
+        public async Task AddConnections(int folk1Id, int folk2Id)
+        {
+            Folk folk1Record =
+                await dbContext.Folks.FindAsync(folk1Id)
+                ?? throw new Exception("No folk found with the id " + folk1Id);
+            Folk folk2Record =
+                await dbContext.Folks.FindAsync(folk2Id)
+                ?? throw new Exception("No folk found with the id " + folk2Id);
+            folk1Record.Connections.Add(folk2Record);
+            folk2Record.Connections.Add(folk1Record);
             await dbContext.SaveChangesAsync();
         }
 
