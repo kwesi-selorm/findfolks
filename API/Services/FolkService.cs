@@ -1,7 +1,6 @@
 using API.DTOs;
 using API.Models;
 using API.Models.Data;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
@@ -25,6 +24,38 @@ namespace API.Services
             this.logger = logger;
             this.imageService = imageService;
             this.profilePhotoService = profilePhotoService;
+        }
+
+        // GET FOLKS TO DISCOVER
+        public async Task<List<FolkDTO>> GetFolksForUser(int id)
+        {
+            Folk? folkRecord =
+                await dbContext.Folks.Where(f => f.Id == id).FirstOrDefaultAsync()
+                ?? throw new Exception("Folk not found");
+            List<Folk> connections = folkRecord.Connections;
+            List<Folk> allFolks = await dbContext.Folks.ToListAsync();
+
+            List<FolkDTO> folksToDiscover = allFolks
+                .Where(f => !connections.Contains(f))
+                .Select(
+                    f =>
+                        new FolkDTO
+                        {
+                            Id = f.Id,
+                            Name = f.Name,
+                            HomeCountry = f.HomeCountry,
+                            HomeCityOrTown = f.HomeCityOrTown,
+                            CountryOfResidence = f.CountryOfResidence,
+                            CityOrTownOfResidence = f.CityOrTownOfResidence,
+                        }
+                )
+                .ToList();
+            foreach (FolkDTO folk in folksToDiscover)
+            {
+                string? base64String = await GetBase64String(folk.Id);
+                folk.ProfilePhoto = base64String;
+            }
+            return folksToDiscover;
         }
 
         // GET ALL FOLKS

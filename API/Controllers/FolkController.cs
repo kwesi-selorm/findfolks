@@ -41,11 +41,11 @@ namespace API.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<List<FolkDTO>>> GetFolksToDiscover()
+        public async Task<ActionResult<List<FolkDTO>>> GetFolksToDiscover([FromBody] int id)
         {
             try
             {
-                List<FolkDTO> folkRecords = await folkService.GetAllFolks();
+                List<FolkDTO> folkRecords = await folkService.GetFolksForUser(id);
                 return Ok(folkRecords);
             }
             catch (Exception e)
