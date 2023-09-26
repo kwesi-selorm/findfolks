@@ -1,9 +1,9 @@
 import { NavigationContainer, ParamListBase, RouteProp } from '@react-navigation/native'
 
 import { createBottomTabNavigator, BottomTabNavigationProp } from '@react-navigation/bottom-tabs'
-import CommunityScreen from './screens/CommunityScreen'
+import CommunityScreen from './screens/community'
 import DiscoverScreen from './screens/discover'
-import AppIcon from './components/AppIcon'
+import { Icon } from '@rneui/themed'
 
 interface Route {
   route: RouteProp<ParamListBase, string>
@@ -29,7 +29,7 @@ function getScreenOptions() {
       }
 
       return (
-        <AppIcon
+        <Icon
           type="ionicon"
           name={iconName}
           size={size}
