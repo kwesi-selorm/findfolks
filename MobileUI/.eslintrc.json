@@ -1,23 +1,28 @@
 {
+	"env": {
+		"browser": true,
+		"node": true
+	},
 	"extends": [
 		"eslint:recommended",
-		"universe",
-		"universe/shared/typescript-analysis",
 		"plugin:react-hooks/recommended",
 		"prettier"
 	],
-	"overrides": [
-		{
-			"files": [
-				"*.ts",
-				"*.tsx",
-				"*.d.ts"
-			],
-			"parserOptions": {
-				"project": "./tsconfig.json"
-			}
-		}
+	"parser": "@typescript-eslint/parser",
+	"plugins": [
+		"@typescript-eslint"
 	],
+	"parserOptions": {
+		"ecmaVersion": 2018,
+		"sourceType": "module",
+		"ecmaFeatures": {
+			"jsx": true
+		}
+	},
+
+	"rules": {
+		"import/order": 0
+	},
 	"settings": {
 		"import/resolver": {
 			"typescript": {} // this loads <rootdir>/tsconfig.json to ESLint
