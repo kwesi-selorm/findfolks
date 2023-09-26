@@ -1,8 +1,10 @@
 {
 	"extends": [
+		"eslint:recommended",
 		"universe",
 		"universe/shared/typescript-analysis",
-		"plugin:react-hooks/recommended"
+		"plugin:react-hooks/recommended",
+		"prettier"
 	],
 	"overrides": [
 		{
