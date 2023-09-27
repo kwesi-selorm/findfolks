@@ -33,11 +33,11 @@ const styles = StyleSheet.create({
   centeredView: {
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center',
-    paddingTop: '25%'
+    alignItems: 'center'
+    // paddingTop: '25%'
   },
   modalView: {
-    // // margin: 20,
+    marginTop: 80
     // backgroundColor: 'white',
     // borderRadius: 20,
     // padding: 35,
