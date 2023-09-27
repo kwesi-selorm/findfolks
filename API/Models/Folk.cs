@@ -27,5 +27,8 @@ namespace API.Models
         public required string ContactInfo { get; set; }
 
         public List<Folk> Connections { get; set; } = new List<Folk>();
+
+        [MaxLength(150)]
+        public string Bio { get; set; } = string.Empty;
     }
 }

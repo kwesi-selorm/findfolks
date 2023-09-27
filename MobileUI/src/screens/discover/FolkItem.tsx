@@ -19,6 +19,7 @@ const FolkItem = ({ item }: FolkItemProps) => {
   return (
     <Pressable
       onPress={() => {
+        // Open a modal screen showing the folk's details, with the option to connect with them
         console.log({ folk: item.id })
       }}
     >

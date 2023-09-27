@@ -52,6 +52,7 @@ namespace API.Services
                             HomeCityOrTown = f.HomeCityOrTown,
                             CountryOfResidence = f.CountryOfResidence,
                             CityOrTownOfResidence = f.CityOrTownOfResidence,
+                            Bio = f.Bio,
                         }
                 )
                 .ToList();
@@ -77,6 +78,7 @@ namespace API.Services
                             HomeCityOrTown = f.HomeCityOrTown,
                             CountryOfResidence = f.CountryOfResidence,
                             CityOrTownOfResidence = f.CityOrTownOfResidence,
+                            Bio = f.Bio,
                         }
                 )
                 .ToListAsync();
@@ -103,7 +105,8 @@ namespace API.Services
                     HomeCountry = folkRecord.HomeCountry,
                     HomeCityOrTown = folkRecord.HomeCityOrTown,
                     CountryOfResidence = folkRecord.CountryOfResidence,
-                    CityOrTownOfResidence = folkRecord.CityOrTownOfResidence
+                    CityOrTownOfResidence = folkRecord.CityOrTownOfResidence,
+                    Bio = folkRecord.Bio
                 };
         }
 
@@ -130,7 +133,8 @@ namespace API.Services
                         CountryOfResidence = c.CountryOfResidence,
                         CityOrTownOfResidence = c.CityOrTownOfResidence,
                         PreferredContactMethod = c.PreferredContactMethod,
-                        ContactInfo = c.ContactInfo
+                        ContactInfo = c.ContactInfo,
+                        Bio = c.Bio
                     };
                 string? path = await profilePhotoService.GetProfilePhotoPath(c.Id);
                 if (string.IsNullOrEmpty(path))
@@ -160,12 +164,13 @@ namespace API.Services
                 PreferredContactMethod = folkRecord.PreferredContactMethod,
                 ContactInfo = folkRecord.ContactInfo,
                 ProfilePhoto = base64String,
-                Connections = connections
+                Connections = connections,
+                Bio = folkRecord.Bio
             };
         }
 
         // ADD A NEW FOLK
-        public async Task<FolkDTO> AddFolk(Folk input)
+        public async Task<FolkDTO> AddFolk(CreateFolkDTO input)
         {
             Folk createdFolk =
                 new()
@@ -177,6 +182,7 @@ namespace API.Services
                     CityOrTownOfResidence = input.CityOrTownOfResidence,
                     PreferredContactMethod = input.PreferredContactMethod,
                     ContactInfo = input.ContactInfo,
+                    Bio = input.Bio
                 };
 
             await dbContext.Folks.AddAsync(createdFolk);
@@ -190,6 +196,7 @@ namespace API.Services
                 CountryOfResidence = createdFolk.CountryOfResidence,
                 HomeCityOrTown = createdFolk.HomeCityOrTown,
                 CityOrTownOfResidence = createdFolk.CityOrTownOfResidence,
+                Bio = createdFolk.Bio
             };
         }
 

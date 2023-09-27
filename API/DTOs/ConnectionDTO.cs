@@ -12,6 +12,7 @@ namespace API.DTOs
         public required string CityOrTownOfResidence { get; set; }
         public ContactMethods PreferredContactMethod { get; set; }
         public required string ContactInfo { get; set; }
-		public string? ProfilePhoto { get; set; }
+        public string? ProfilePhoto { get; set; }
+        public string Bio { get; set; } = string.Empty;
     }
 }

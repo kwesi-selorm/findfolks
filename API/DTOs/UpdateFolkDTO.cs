@@ -21,5 +21,8 @@ namespace API.DTOs
 
         [Display(Name = "Contact information")]
         public string? ContactInfo { get; set; }
+
+        [MaxLength(150)]
+        public string? Bio { get; set; }
     }
 }

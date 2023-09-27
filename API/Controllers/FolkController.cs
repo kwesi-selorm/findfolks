@@ -182,7 +182,7 @@ namespace API.Controllers
                 {
                     return Problem(
                         title: "Invalid image format",
-                        detail: "The image must be either of the following formats: jpg, jpeg and png, and must have a maximum size limit of 2MB",
+                        detail: "The image must be either of the following formats: jpg, jpeg and png, and must have a maximum size limit of 1MB",
                         statusCode: StatusCodes.Status400BadRequest
                     );
                 }
