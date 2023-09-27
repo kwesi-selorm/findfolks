@@ -1,5 +1,6 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native'
-import { Icon } from '@rneui/themed'
+import React from 'react'
+import Icon from 'react-native-vector-icons/Ionicons'
 
 export type FolkType = {
   id: number
@@ -34,11 +35,10 @@ const FolkItem = ({ item }: FolkItemProps) => {
         <View style={styles.actions}>
           <Icon
             name="person-add"
-            type="ionicon"
             onPress={() => {
               console.log('Add friend')
             }}
-            size={20}
+            size={15}
           />
         </View>
       </View>
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-end'
+    justifyContent: 'center'
   }
 })
 

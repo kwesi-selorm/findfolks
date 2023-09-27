@@ -6,8 +6,11 @@ const ListSeparator = () => {
 
 const styles = StyleSheet.create({
   separator: {
-    height: 1,
-    backgroundColor: 'gray'
+    height: 0.5,
+    backgroundColor: 'lightgray',
+    width: '95%',
+    marginLeft: 'auto',
+    marginRight: 'auto'
   }
 })
 

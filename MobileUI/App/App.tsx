@@ -1,9 +1,11 @@
 import { NavigationContainer, ParamListBase, RouteProp } from '@react-navigation/native'
 
 import { createBottomTabNavigator, BottomTabNavigationProp } from '@react-navigation/bottom-tabs'
-import CommunityScreen from './screens/community'
-import DiscoverScreen from './screens/discover'
-import { Icon } from '@rneui/themed'
+import CommunityScreen from '../src/screens/community'
+import DiscoverScreen from '../src/screens/discover'
+import { View } from 'react-native'
+import Icon from 'react-native-vector-icons/Ionicons'
+// expo install expo-fonts
 
 interface Route {
   route: RouteProp<ParamListBase, string>
@@ -29,15 +31,16 @@ function getScreenOptions() {
       }
 
       return (
-        <Icon
-          type="ionicon"
-          name={iconName}
-          size={size}
-          color={color}
-          onPress={() => {
-            navigation.navigate(screenName)
-          }}
-        />
+        <View>
+          <Icon
+            name={iconName}
+            size={size}
+            color={color}
+            onPress={() => {
+              navigation.navigate(screenName)
+            }}
+          />
+        </View>
       )
     },
     tabBarActiveTintColor: 'black',
@@ -47,7 +50,6 @@ function getScreenOptions() {
 
 export default function App() {
   const Tab = createBottomTabNavigator()
-
   return (
     <NavigationContainer>
       <Tab.Navigator initialRouteName="DiscoverScreen" screenOptions={getScreenOptions()}>
