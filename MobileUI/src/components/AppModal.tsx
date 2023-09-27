@@ -1,6 +1,6 @@
-import { Modal, StyleSheet, View } from 'react-native'
+import {Modal, Pressable, StyleSheet, View} from 'react-native'
 import React, { SetStateAction } from 'react'
-import AppButton from './AppButton'
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 interface AppModalProps {
   children: React.ReactNode
@@ -15,13 +15,10 @@ const AppModal = ({ children, modalVisible, onDismiss }: AppModalProps) => {
       <Modal animationType="slide" visible={modalVisible} onRequestClose={onDismiss}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
+            <Pressable style={{alignSelf: 'flex-end'}}  onPress={onDismiss}>
+              <Ionicons name="close-circle-outline" color="black" size={30}/>
+            </Pressable>
             {children}
-            <AppButton
-              containerColor="gray"
-              accessibilityLabel="Close"
-              title="Close"
-              onPress={onDismiss}
-            ></AppButton>
           </View>
         </View>
       </Modal>

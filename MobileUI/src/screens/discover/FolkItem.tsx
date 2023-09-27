@@ -62,7 +62,6 @@ const FolkItem = ({ item, setModalVisible, setSelectedFolk }: FolkItemProps) => 
           <View>
             <LocationInfo item={item} />
           </View>
-          <Text style={styles.bioText}>{item.bio}</Text>
         </View>
 
         <View style={styles.actions}>

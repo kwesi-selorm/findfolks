@@ -1,4 +1,4 @@
-import { Button, ButtonProps, StyleSheet, View } from 'react-native'
+import {Button, ButtonProps,  StyleSheet, View} from 'react-native'
 
 interface AppButtonProps extends ButtonProps {
   color?: string
@@ -11,7 +11,7 @@ const AppButton = ({
   title,
   onPress,
   containerColor,
-  accessibilityLabel
+  accessibilityLabel,
 }: AppButtonProps) => {
   const styles = StyleSheet.create({
     container: {

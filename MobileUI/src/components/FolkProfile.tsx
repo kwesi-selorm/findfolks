@@ -22,20 +22,21 @@ const FolkProfile = ({ folk }: FolkProfileProps) => {
       <View style={styles.info}>
         <View style={styles.iconAndText}>
           <Ionicons name="home-outline" size={10} />
-          <Text>
+          <Text style={styles.text}>
             From {folk.homeCityOrTown ? `${folk.homeCityOrTown}, ` : ''}
             {folk.homeCountry}
           </Text>
         </View>
         <View style={styles.iconAndText}>
           <Ionicons name="location-outline" size={10} />
-          <Text>
+          <Text style={styles.text}>
             Living in {folk.cityOrTownOfResidence ? `${folk.cityOrTownOfResidence}, ` : ''}
             {folk.countryOfResidence}
           </Text>
         </View>
-        <View style={styles.bio}>
-          <Text>'{folk.bio}'</Text>
+        <View style={styles.iconAndText}>
+          <Ionicons name="chatbubble-outline" size={10} />
+          <Text style={styles.text}>{folk.bio}</Text>
         </View>
       </View>
     </View>
@@ -48,7 +49,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 50
+    marginBottom: 50,
+    width: '80%'
   },
   photo: {
     width: 200,
@@ -64,6 +66,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column'
   },
   iconAndText: { display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10 },
+  text:{fontFamily: 'Bricolage Grotesque'},
   bio: {
     maxWidth: 150,
     textAlign: 'center',
