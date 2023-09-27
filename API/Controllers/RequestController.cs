@@ -27,13 +27,12 @@ namespace API.Controllers
             this.logger = logger;
         }
 
-        [HttpGet("{userId}")]
-        public async Task<ActionResult<string>> GetRequests(int userId)
+        [HttpGet("{folkId}")]
+        public async Task<ActionResult<string>> GetRequests(int folkId)
         {
             try
             {
-                RequestsDTO? requests = await requestService.FindRequestsForUser(userId);
-                logger.LogInformation("Requests: {0}", JsonConvert.SerializeObject(requests));
+                RequestsDTO? requests = await requestService.FindRequestsForUser(folkId);
                 return Ok(JsonConvert.SerializeObject(requests));
             }
             catch (Exception e)

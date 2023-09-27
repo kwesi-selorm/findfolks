@@ -32,21 +32,26 @@ namespace API.Services
         }
 
         // FIND ALL REQUESTS
-        public async Task<RequestsDTO> FindRequestsForUser(int id)
+        public async Task<RequestsDTO> FindRequestsForUser(int folkId)
         {
-            List<int> senderIds = new();
-            List<int> recipientIds = new();
-            List<Request> allRequests = await dbContext.Requests.ToListAsync();
+            List<SentRequestInfo> recipientInfos = new();
+            List<ReceivedRequestInfo> senderInfos = new();
 
+            List<Request> allRequests = await dbContext.Requests.ToListAsync();
             foreach (Request r in allRequests)
             {
-                if (r.SenderId == id)
-                    recipientIds.Add(r.RecipientId);
-                else if (r.RecipientId == id)
-                    senderIds.Add(r.SenderId);
+                if (r.SenderId == folkId)
+                    recipientInfos.Add(
+                        new SentRequestInfo { recipientId = r.RecipientId, dateSent = r.DateSent }
+                    );
+                else if (r.RecipientId == folkId)
+                    senderInfos.Add(
+                        new ReceivedRequestInfo { senderId = r.SenderId, dateReceived = r.DateSent }
+                    );
             }
 
-            RequestsDTO requests = new() { senderIds = senderIds, recipientIds = recipientIds };
+            RequestsDTO requests =
+                new() { sentRequests = recipientInfos, receivedRequests = senderInfos };
             return requests;
         }
 
