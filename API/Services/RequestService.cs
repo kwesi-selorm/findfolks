@@ -1,16 +1,26 @@
+using API.DTOs;
 using API.Models;
 using API.Models.Data;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace API.Services
 {
     public class RequestService
     {
         private readonly AppDbContext dbContext;
+        private readonly FolkService folkService;
+        private readonly ILogger<RequestService> logger;
 
-        public RequestService(AppDbContext context)
+        public RequestService(
+            AppDbContext context,
+            FolkService folkService,
+            ILogger<RequestService> logger
+        )
         {
             dbContext = context;
+            this.folkService = folkService;
+            this.logger = logger;
         }
 
         // FIND SINGLE REQUEST
@@ -22,11 +32,22 @@ namespace API.Services
         }
 
         // FIND ALL REQUESTS
-        public async Task<List<Request>> FindRequestsForUser(int id)
+        public async Task<RequestsDTO> FindRequestsForUser(int id)
         {
-            return await dbContext.Requests
-                .Where(r => r.SenderId == id || r.RecipientId == id)
-                .ToListAsync();
+            List<int> senderIds = new();
+            List<int> recipientIds = new();
+            List<Request> allRequests = await dbContext.Requests.ToListAsync();
+
+            foreach (Request r in allRequests)
+            {
+                if (r.SenderId == id)
+                    recipientIds.Add(r.RecipientId);
+                else if (r.RecipientId == id)
+                    senderIds.Add(r.SenderId);
+            }
+
+            RequestsDTO requests = new() { senderIds = senderIds, recipientIds = recipientIds };
+            return requests;
         }
 
         // CREATE NEW REQUEST

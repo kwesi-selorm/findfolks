@@ -5,7 +5,6 @@ using API.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using System.Linq;
 
 namespace API.Controllers
 {
@@ -29,12 +28,13 @@ namespace API.Controllers
         }
 
         [HttpGet("{userId}")]
-        public async Task<ActionResult<List<Request>>> GetRequests(int userId)
+        public async Task<ActionResult<string>> GetRequests(int userId)
         {
             try
             {
-                List<Request> requests = await requestService.FindRequestsForUser(userId);
-                return Ok(requests);
+                RequestsDTO? requests = await requestService.FindRequestsForUser(userId);
+                logger.LogInformation("Requests: {0}", JsonConvert.SerializeObject(requests));
+                return Ok(JsonConvert.SerializeObject(requests));
             }
             catch (Exception e)
             {
@@ -79,7 +79,10 @@ namespace API.Controllers
                         c => c.Id == input.RecipientId
                     );
                     if (existingConnection != null)
-                        return NoContent();
+                        return Problem(
+                            detail: "You are already connected",
+                            statusCode: StatusCodes.Status409Conflict
+                        );
                 }
 
                 await requestService.AddRequest(newRequest);
