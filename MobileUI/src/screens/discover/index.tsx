@@ -1,8 +1,6 @@
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
-import { useState } from 'react'
 import { StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useFonts } from 'expo-font'
 
 import FolkList from './FolkList'
 import { FolkType } from './FolkItem'
@@ -17,6 +15,7 @@ const data = [
     name: 'Stanley',
     countryOfResidence: 'USA',
     cityOrTownOfResidence: 'New York',
+    homeCountry: 'Ghana',
     profilePhoto: 'https://reactnative.dev/img/tiny_logo.png'
   },
   {
@@ -24,6 +23,8 @@ const data = [
     name: 'Bob',
     countryOfResidence: 'Norway',
     cityOrTownOfResidence: 'Bergen',
+    homeCountry: 'Togo',
+    homeCityOrTown: 'Lomé',
     profilePhoto: 'https://reactnative.dev/img/tiny_logo.png'
   }
 ] as FolkType[]

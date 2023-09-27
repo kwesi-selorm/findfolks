@@ -1,6 +1,6 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import Icon from 'react-native-vector-icons/Ionicons'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
 export type FolkType = {
   id: number
@@ -28,12 +28,14 @@ const FolkItem = ({ item }: FolkItemProps) => {
         </View>
         <View style={styles.nameContainer}>
           <Text style={[styles.nameText]}>{item.name}</Text>
-          <Text style={styles.residenceText}>
-            {item.cityOrTownOfResidence}, {item.countryOfResidence}
+          <Text style={styles.detailsText}>
+            {item.homeCityOrTown ? `${item.homeCityOrTown}, ${item.homeCountry}` : item.homeCountry}{' '}
+            | {item.cityOrTownOfResidence}, {item.countryOfResidence}
           </Text>
         </View>
+
         <View style={styles.actions}>
-          <Icon
+          <Ionicons
             name="person-add"
             onPress={() => {
               console.log('Add friend')
@@ -75,7 +77,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Bricolage Grotesque Bold'
   },
-  residenceText: {
+  detailsText: {
     fontSize: 10,
     fontFamily: 'Bricolage Grotesque'
   },
