@@ -20,7 +20,7 @@ function getScreenOptions() {
       let iconName = ''
       let screenName = ''
       if (route.name === 'Discover') {
-        iconName = focused ? 'location' : 'location-outline'
+        iconName = focused ? 'search-sharp' : 'search-outline'
         screenName = 'Discover'
       } else if (route.name === 'Community') {
         iconName = focused ? 'people-sharp' : 'people-outline'
