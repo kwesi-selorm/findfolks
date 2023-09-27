@@ -1,25 +1,22 @@
-import { NavigationContainer, ParamListBase, RouteProp } from '@react-navigation/native'
+import { NavigationContainer } from '@react-navigation/native'
 
-import { createBottomTabNavigator, BottomTabNavigationProp } from '@react-navigation/bottom-tabs'
-import CommunityScreen from '../src/screens/community'
-import DiscoverScreen from '../src/screens/discover'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { View } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
-// expo install expo-fonts
+import DiscoverScreen from './src/screens/discover'
+import CommunityScreen from './src/screens/community'
+import { useFonts } from 'expo-font'
+// expo install expo-font
 
-interface Route {
-  route: RouteProp<ParamListBase, string>
-  navigation: BottomTabNavigationProp<ParamListBase, string>
-}
-interface TabBarIconProps {
-  focused: boolean
-  color: string
-  size: number
+let customFonts = {
+  'Bricolage Grotesque': require('./assets/fonts/BricolageGrotesque-Regular.ttf'),
+  'Bricolage Grotesque Bold': require('./assets/fonts/BricolageGrotesque-Bold.ttf'),
+  'Bricolage Grotesque Medium': require('./assets/fonts/BricolageGrotesque-Medium.ttf')
 }
 
 function getScreenOptions() {
-  return ({ route, navigation }: Route) => ({
-    tabBarIcon: ({ focused, color, size }: TabBarIconProps) => {
+  return ({ route, navigation }) => ({
+    tabBarIcon: ({ focused, color, size }) => {
       let iconName = ''
       let screenName = ''
       if (route.name === 'Discover') {
@@ -49,6 +46,11 @@ function getScreenOptions() {
 }
 
 export default function App() {
+  const [fontsLoaded] = useFonts(customFonts)
+  if (!fontsLoaded) {
+    return null
+  }
+
   const Tab = createBottomTabNavigator()
   return (
     <NavigationContainer>

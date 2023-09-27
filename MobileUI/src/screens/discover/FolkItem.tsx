@@ -27,7 +27,7 @@ const FolkItem = ({ item }: FolkItemProps) => {
           <Image style={styles.photo} source={{ uri: item.profilePhoto }} />
         </View>
         <View style={styles.nameContainer}>
-          <Text style={styles.nameText}>{item.name}</Text>
+          <Text style={[styles.nameText]}>{item.name}</Text>
           <Text style={styles.residenceText}>
             {item.cityOrTownOfResidence}, {item.countryOfResidence}
           </Text>
@@ -72,10 +72,12 @@ const styles = StyleSheet.create({
   },
   nameText: {
     fontWeight: 'bold',
-    fontSize: 12
+    fontSize: 12,
+    fontFamily: 'Bricolage Grotesque Bold'
   },
   residenceText: {
-    fontSize: 10
+    fontSize: 10,
+    fontFamily: 'Bricolage Grotesque'
   },
   actions: {
     display: 'flex',
