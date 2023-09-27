@@ -36,7 +36,12 @@ namespace API.Services
             List<Folk> allFolks = await dbContext.Folks.ToListAsync();
 
             List<FolkDTO> folksToDiscover = allFolks
-                .Where(f => !connections.Contains(f))
+                .Where(
+                    f =>
+                        !connections.Contains(f)
+                        && f.HomeCountry == folkRecord.HomeCountry
+                        && f.Id != folkRecord.Id
+                )
                 .Select(
                     f =>
                         new FolkDTO

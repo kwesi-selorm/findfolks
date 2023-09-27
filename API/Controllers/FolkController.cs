@@ -39,9 +39,9 @@ namespace API.Controllers
             this.logger = logger;
         }
 
-        [Authorize]
-        [HttpGet]
-        public async Task<ActionResult<List<FolkDTO>>> GetFolksToDiscover([FromBody] int id)
+        // [Authorize]
+        [HttpGet("discover/{id}")]
+        public async Task<ActionResult<List<FolkDTO>>> GetFolksToDiscover(int id)
         {
             try
             {
@@ -168,7 +168,7 @@ namespace API.Controllers
                     statusCode: StatusCodes.Status400BadRequest
                 );
             }
-            int maxImageSize = 2 * 1024 * 1024; // 2MB
+            int maxImageSize = 1 * 1024 * 1024; // 2MB
             Constants? constants = new();
 
             try
