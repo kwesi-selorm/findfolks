@@ -1,5 +1,5 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { SetStateAction } from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
 export type FolkType = {
@@ -14,9 +14,12 @@ export type FolkType = {
 }
 type FolkItemProps = {
   item: FolkType
+  modalVisible: boolean
+  setModalVisible: React.Dispatch<SetStateAction<boolean>>
+  setSelectedFolk: React.Dispatch<SetStateAction<FolkType | null>>
 }
 
-const LocationInfo = ({ item }: FolkItemProps) => {
+const LocationInfo = ({ item }: { item: FolkType }) => {
   return (
     <View style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
       <View style={styles.iconTextContainer}>
@@ -35,14 +38,14 @@ const LocationInfo = ({ item }: FolkItemProps) => {
   )
 }
 
-const FolkItem = ({ item }: FolkItemProps) => {
+const FolkItem = ({ item, setModalVisible, setSelectedFolk }: FolkItemProps) => {
+  function OnFolkPress() {
+    setModalVisible((prevState) => !prevState)
+    setSelectedFolk(item)
+  }
+
   return (
-    <Pressable
-      onPress={() => {
-        // Open a modal screen showing the folk's details, with the option to connect with them
-        console.log({ folk: item.id })
-      }}
-    >
+    <Pressable onPress={OnFolkPress}>
       <View style={styles.container}>
         <View style={styles.photoContainer}>
           {item.profilePhoto !== null && item.profilePhoto != '' ? (
