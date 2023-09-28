@@ -1,6 +1,6 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native'
 import { Connection, ContactMethod } from '../../@types'
-import { appFont } from '../../styles'
+import { appFont, colors } from '../../styles'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import React from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome5'
@@ -38,7 +38,12 @@ const ConnectionCard = ({ connection }: ConnectionCardProps) => {
           source={{ uri: `data:image/png;base64,${connection.profilePhoto}` }}
         />
       ) : (
-        <Ionicons name="person-circle-outline" size={100} color="black" style={styles.photo} />
+        <Ionicons
+          name="person-circle-outline"
+          size={100}
+          color={colors.grey}
+          style={styles.photo}
+        />
       )}
 
       {/*Contact Info*/}
@@ -52,21 +57,24 @@ const ConnectionCard = ({ connection }: ConnectionCardProps) => {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: 'lightblue',
     paddingTop: 10,
     marginBottom: 10,
     marginHorizontal: 5,
     width: 180,
     textAlign: 'center',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderColor: colors.darkBlue,
     borderRadius: 15
   },
   name: {
     fontFamily: appFont.extraBold,
     marginBottom: 5,
-    fontSize: 18
+    fontSize: 18,
+    color: colors.darkBlue
   },
   text: {
-    color: 'black',
+    // color: 'white',
     fontFamily: appFont.regular,
     alignSelf: 'center'
   },
@@ -85,14 +93,18 @@ const styles = StyleSheet.create({
     gap: 5,
     padding: 5,
     marginTop: 10,
-    backgroundColor: 'white',
+    color: colors.darkBlue,
+    backgroundColor: colors.darkBlue,
     width: '100%',
     borderStyle: 'solid',
-    borderWidth: 1,
-    borderColor: 'lightblue'
+    borderTopWidth: 1,
+    borderColor: colors.darkBlue,
+    borderBottomEndRadius: 10,
+    borderBottomStartRadius: 10
   },
   contactInfo: {
-    fontSize: 12
+    fontSize: 12,
+    color: 'white'
   }
 })
 
