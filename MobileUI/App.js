@@ -7,6 +7,7 @@ import DiscoverScreen from './src/screens/discover'
 import CommunityScreen from './src/screens/community'
 import { useFonts } from 'expo-font'
 import { customFonts } from './src/styles'
+import RequestsScreen from './src/screens/requests'
 // expo install expo-font
 
 function getScreenOptions() {
@@ -20,6 +21,9 @@ function getScreenOptions() {
       } else if (route.name === 'Community') {
         iconName = focused ? 'people-sharp' : 'people-outline'
         screenName = 'Community'
+      } else if (route.name === 'Requests') {
+        iconName = focused ? 'chatbox-ellipses-sharp' : 'chatbox-ellipses-outline'
+        screenName = 'Requests'
       }
 
       return (
@@ -52,6 +56,7 @@ export default function App() {
       <Tab.Navigator initialRouteName="DiscoverScreen" screenOptions={getScreenOptions()}>
         <Tab.Screen name="Discover" component={DiscoverScreen} />
         <Tab.Screen name="Community" component={CommunityScreen} />
+        <Tab.Screen name="Requests" component={RequestsScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   )

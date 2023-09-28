@@ -17,8 +17,8 @@ const CommunityScreen = ({ navigation }: CommunityScreenProps) => {
         data={connections}
         renderItem={({ item }) => <ConnectionCard connection={item} />}
         keyExtractor={(item) => item.id.toString()}
-        // numColumns={2}
-        // horizontal={false}
+        horizontal={false}
+        numColumns={2}
         extraData={selectedConnectionId}
         contentContainerStyle={styles.list}
       />
@@ -36,16 +36,13 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     backgroundColor: '#fff',
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'column',
     height: '100%',
-    // gap: 10,
     maxWidth: '100%',
-    justifyContent: 'center',
-    flexWrap: 'wrap'
+    alignItems: 'center'
   },
   text: {
     fontWeight: 'bold',
-    // alignSelf: 'center',
     color: 'red'
   }
 })
