@@ -1,6 +1,6 @@
 import { Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native'
 import React from 'react'
-import { fontFamily } from '../styles'
+import { appFont } from '../styles'
 
 interface AppButtonProps {
   icon?: React.ReactNode
@@ -60,7 +60,7 @@ const AppButton = ({
     },
     text: {
       color: color ?? '#fff',
-      fontFamily: fontFamily.regular,
+      fontFamily: appFont.regular,
       fontSize: fontSize
     }
   })
