@@ -6,7 +6,7 @@ A social app where individuals living in the diaspora can find, connect, and mee
 
 ### Frontend
 
-Mobile: React Native
+Mobile: React Native with Typescript
 
 ### Backend
 
