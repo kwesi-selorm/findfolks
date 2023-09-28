@@ -15,10 +15,10 @@ const AppModal = ({ children, modalVisible, onDismiss }: AppModalProps) => {
       <Modal animationType="slide" visible={modalVisible} onRequestClose={onDismiss}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Pressable style={{ alignSelf: 'flex-end' }} onPress={onDismiss}>
-              <Ionicons name="close-circle-outline" color="black" size={30} />
-            </Pressable>
             {children}
+            <Pressable style={{ alignSelf: 'center' }} onPress={onDismiss}>
+              <Ionicons name="close-circle-outline" color="black" size={35} />
+            </Pressable>
           </View>
         </View>
       </Modal>
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     width: '100%'
   },
   modalView: {
-    marginTop: 80
+    marginTop: 150
   }
 })
 
