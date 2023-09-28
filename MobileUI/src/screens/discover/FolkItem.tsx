@@ -1,7 +1,7 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native'
 import React, { SetStateAction } from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { colors } from '../../styles'
+import { appFont, colors } from '../../styles'
 
 export type FolkType = {
   id: number
@@ -22,18 +22,15 @@ type FolkItemProps = {
 
 const LocationInfo = ({ item }: { item: FolkType }) => {
   return (
-    <View style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+    <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 8 }}>
       <View style={styles.iconTextContainer}>
         <Ionicons name="home-outline" size={10} color={colors.darkBlue} />
-        <Text style={styles.detailsText}>
-          {item.homeCityOrTown ? `${item.homeCityOrTown}, ${item.homeCountry}` : item.homeCountry}
-        </Text>
+        <Text style={styles.detailsText}>{item.homeCountry}</Text>
       </View>
+      <Text style={{ color: colors.darkBlue }}>|</Text>
       <View style={styles.iconTextContainer}>
         <Ionicons name="location-outline" size={10} color={colors.darkBlue} />
-        <Text style={styles.detailsText}>
-          {item.cityOrTownOfResidence}, {item.countryOfResidence}
-        </Text>
+        <Text style={styles.detailsText}>{item.countryOfResidence}</Text>
       </View>
     </View>
   )
@@ -49,6 +46,7 @@ const FolkItem = ({ item, setModalVisible, setSelectedFolk }: FolkItemProps) => 
     <Pressable onPress={OnFolkPress} style={({ pressed }) => pressed && styles.folkPressed}>
       <View style={styles.container}>
         <View style={styles.photoContainer}>
+          {/*Profile Photo*/}
           {item.profilePhoto !== null && item.profilePhoto != '' ? (
             <Image
               style={styles.photo}
@@ -59,7 +57,10 @@ const FolkItem = ({ item, setModalVisible, setSelectedFolk }: FolkItemProps) => 
           )}
         </View>
         <View style={styles.detailsContainer}>
+          {/*Name*/}
           <Text style={[styles.nameText]}>{item.name}</Text>
+
+          {/*Location info*/}
           <View>
             <LocationInfo item={item} />
           </View>
@@ -85,9 +86,9 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   photo: {
-    width: 30,
-    height: 30,
-    borderRadius: 15
+    width: 35,
+    height: 35,
+    borderRadius: 18
   },
   detailsContainer: {
     display: 'flex',
@@ -99,7 +100,8 @@ const styles = StyleSheet.create({
   nameText: {
     fontWeight: 'bold',
     fontSize: 12,
-    fontFamily: 'Bricolage Grotesque Bold'
+    fontFamily: appFont.bold,
+    marginBottom: 5
   },
   iconTextContainer: {
     display: 'flex',
@@ -109,11 +111,11 @@ const styles = StyleSheet.create({
   },
   detailsText: {
     fontSize: 11,
-    fontFamily: 'Bricolage Grotesque'
+    fontFamily: appFont.regular
   },
   bioText: {
     fontSize: 10,
-    fontFamily: 'Bricolage Grotesque'
+    fontFamily: appFont.regular
   },
   actions: {
     display: 'flex',
