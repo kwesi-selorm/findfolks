@@ -20,7 +20,6 @@ const DiscoverScreen = ({ navigation }: DiscoverScreenProps) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
-    // textAlign: 'center',
     height: '100%'
   }
 })
