@@ -4,16 +4,20 @@ import { appFont } from '../../styles'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import React from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome5'
+import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 type ConnectionCardProps = {
   connection: Connection
 }
 
 const contactMethods = [
-  { icon: <Icon name="envelope" size={20} color="black" />, mode: ContactMethod.Email },
-  { icon: <Icon name="facebook-square" size={20} color="black" />, mode: ContactMethod.Facebook },
-  { icon: <Icon name="snapchat" size={20} color="black" />, mode: ContactMethod.Snapchat },
-  { icon: <Icon name="twitter" size={20} color="black" />, mode: ContactMethod.Twitter },
+  {
+    icon: <MCIcon name="email" size={20} color="#DB4437" />,
+    mode: ContactMethod.Email
+  },
+  { icon: <Icon name="facebook-square" size={20} color="#4267B2" />, mode: ContactMethod.Facebook },
+  { icon: <Icon name="snapchat" size={20} color="#FFFC00" />, mode: ContactMethod.Snapchat },
+  { icon: <Icon name="twitter" size={20} color="#26a7de" />, mode: ContactMethod.Twitter },
   { icon: <Icon name="mobile" size={20} color="black" />, mode: ContactMethod.Mobile }
 ]
 
@@ -49,7 +53,7 @@ const ConnectionCard = ({ connection }: ConnectionCardProps) => {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: 'lightblue',
-    padding: 10,
+    paddingTop: 10,
     marginBottom: 10,
     marginHorizontal: 5,
     width: 180,
@@ -79,7 +83,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 5,
-    marginTop: 10
+    padding: 5,
+    marginTop: 10,
+    backgroundColor: 'white',
+    width: '100%',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderColor: 'lightblue'
   },
   contactInfo: {
     fontSize: 12
