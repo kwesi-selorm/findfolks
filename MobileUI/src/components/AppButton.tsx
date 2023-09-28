@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native'
 import React from 'react'
 import { fontFamily } from '../styles'
 
@@ -10,6 +10,7 @@ interface AppButtonProps {
   accessibilityLabel: string
   onPress: () => void
   size?: 'small' | 'medium' | 'large'
+  style?: StyleProp<ViewStyle>
 }
 
 const AppButton = ({
@@ -19,7 +20,8 @@ const AppButton = ({
   onPress,
   backgroundColor,
   accessibilityLabel,
-  size
+  size,
+  style
 }: AppButtonProps) => {
   let fontSize, width
   switch (size) {
@@ -64,7 +66,7 @@ const AppButton = ({
   })
 
   return (
-    <View style={styles.container}>
+    <View style={style ? [styles.container, style] : [styles.container]}>
       <Pressable accessibilityLabel={accessibilityLabel} onPress={onPress} style={styles.button}>
         {icon ?? null}
         <Text style={styles.text}>{text}</Text>
