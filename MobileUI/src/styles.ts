@@ -7,7 +7,7 @@ let customFonts = {
   'Bricolage Grotesque ExtraBold': require('../assets/fonts/BricolageGrotesque-ExtraBold.ttf')
 }
 
-const fontFamily = {
+const appFont = {
   light: 'Bricolage Grotesque Light',
   regular: 'Bricolage Grotesque',
   medium: 'Bricolage Grotesque Medium',
@@ -16,4 +16,4 @@ const fontFamily = {
   extraBold: 'Bricolage Grotesque ExtraBold'
 }
 
-export { fontFamily, customFonts }
+export { appFont, customFonts }
