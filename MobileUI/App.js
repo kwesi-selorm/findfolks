@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import DiscoverScreen from './src/screens/discover'
 import CommunityScreen from './src/screens/community'
 import { useFonts } from 'expo-font'
-import { customFonts } from './src/styles'
+import { colors, customFonts } from './src/styles'
 import RequestsScreen from './src/screens/requests'
 // expo install expo-font
 
@@ -39,7 +39,7 @@ function getScreenOptions() {
         </View>
       )
     },
-    tabBarActiveTintColor: 'black',
+    tabBarActiveTintColor: colors.darkBlue,
     tabBarInactiveTintColor: 'gray'
   })
 }
