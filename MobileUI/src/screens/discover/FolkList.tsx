@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native'
+import { FlatList, StyleSheet, View } from 'react-native'
 import FolkItem, { FolkType } from './FolkItem'
 import ListSeparator from '../../components/ListSeparator'
 import React from 'react'
