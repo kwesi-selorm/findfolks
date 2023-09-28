@@ -45,7 +45,7 @@ const FolkItem = ({ item, setModalVisible, setSelectedFolk }: FolkItemProps) => 
   }
 
   return (
-    <Pressable onPress={OnFolkPress}>
+    <Pressable onPress={OnFolkPress} style={({ pressed }) => pressed && styles.folkPressed}>
       <View style={styles.container}>
         <View style={styles.photoContainer}>
           {item.profilePhoto !== null && item.profilePhoto != '' ? (
@@ -62,16 +62,6 @@ const FolkItem = ({ item, setModalVisible, setSelectedFolk }: FolkItemProps) => 
           <View>
             <LocationInfo item={item} />
           </View>
-        </View>
-
-        <View style={styles.actions}>
-          <Ionicons
-            name="person-add"
-            onPress={() => {
-              console.log('Add friend')
-            }}
-            size={15}
-          />
         </View>
       </View>
     </Pressable>
@@ -129,6 +119,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  folkPressed: {
+    backgroundColor: 'lightgray'
   }
 })
 
