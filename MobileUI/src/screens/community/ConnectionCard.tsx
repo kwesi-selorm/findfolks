@@ -70,11 +70,9 @@ const styles = StyleSheet.create({
   name: {
     fontFamily: appFont.extraBold,
     marginBottom: 5,
-    fontSize: 18,
-    color: colors.darkBlue
+    fontSize: 18
   },
   text: {
-    // color: 'white',
     fontFamily: appFont.regular,
     alignSelf: 'center'
   },

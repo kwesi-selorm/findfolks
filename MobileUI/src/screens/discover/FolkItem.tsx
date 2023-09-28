@@ -1,6 +1,7 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native'
 import React, { SetStateAction } from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import { colors } from '../../styles'
 
 export type FolkType = {
   id: number
@@ -23,13 +24,13 @@ const LocationInfo = ({ item }: { item: FolkType }) => {
   return (
     <View style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
       <View style={styles.iconTextContainer}>
-        <Ionicons name="home-outline" size={10} />
+        <Ionicons name="home-outline" size={10} color={colors.darkBlue} />
         <Text style={styles.detailsText}>
           {item.homeCityOrTown ? `${item.homeCityOrTown}, ${item.homeCountry}` : item.homeCountry}
         </Text>
       </View>
       <View style={styles.iconTextContainer}>
-        <Ionicons name="location-outline" size={10} />
+        <Ionicons name="location-outline" size={10} color={colors.darkBlue} />
         <Text style={styles.detailsText}>
           {item.cityOrTownOfResidence}, {item.countryOfResidence}
         </Text>
@@ -54,7 +55,7 @@ const FolkItem = ({ item, setModalVisible, setSelectedFolk }: FolkItemProps) => 
               source={{ uri: `data:image/png;base64,${item.profilePhoto}` }}
             />
           ) : (
-            <Ionicons name="person-circle-outline" size={35} color="black" />
+            <Ionicons name="person-circle-outline" size={35} color="gray" />
           )}
         </View>
         <View style={styles.detailsContainer}>

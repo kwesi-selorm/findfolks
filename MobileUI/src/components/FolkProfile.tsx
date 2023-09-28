@@ -3,7 +3,7 @@ import { Alert, Image, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import AppButton from './AppButton'
-import { appFont } from '../styles'
+import { appFont, colors } from '../styles'
 
 type FolkProfileProps = {
   folk: FolkType | null
@@ -30,7 +30,7 @@ const FolkProfile = ({ folk }: FolkProfileProps) => {
           source={{ uri: `data:image/png;base64,${folk.profilePhoto}` }}
         />
       ) : (
-        <Ionicons name="person-circle-outline" size={150} color="black" />
+        <Ionicons name="person-circle-outline" size={150} color={colors.grey} />
       )}
 
       {/*Name*/}
@@ -40,9 +40,9 @@ const FolkProfile = ({ folk }: FolkProfileProps) => {
       <View style={styles.info}>
         {/*Home country and city*/}
         <View style={styles.iconAndText}>
-          <Ionicons name="home-outline" size={10} />
+          <Ionicons name="home-outline" size={10} color={colors.darkBlue} />
           <Text style={styles.text}>
-            <Text style={{ fontFamily: appFont.bold }}>From</Text>{' '}
+            <Text style={{ fontFamily: appFont.bold, color: colors.darkBlue }}>From</Text>{' '}
             {folk.homeCityOrTown ? `${folk.homeCityOrTown}, ` : ''}
             {folk.homeCountry}
           </Text>
@@ -50,9 +50,9 @@ const FolkProfile = ({ folk }: FolkProfileProps) => {
 
         {/*Residence country and city*/}
         <View style={styles.iconAndText}>
-          <Ionicons name="location-outline" size={10} />
+          <Ionicons name="location-outline" size={10} color={colors.darkBlue} />
           <Text style={styles.text}>
-            <Text style={{ fontFamily: appFont.bold }}>Living in</Text>{' '}
+            <Text style={{ fontFamily: appFont.bold, color: colors.darkBlue }}>Living in</Text>{' '}
             {folk.cityOrTownOfResidence ? `${folk.cityOrTownOfResidence}, ` : ''}
             {folk.countryOfResidence}
           </Text>
@@ -66,7 +66,7 @@ const FolkProfile = ({ folk }: FolkProfileProps) => {
 
       {/*Connect button*/}
       <AppButton
-        backgroundColor="darkgreen"
+        backgroundColor={colors.darkBlue}
         onPress={onConnectButtonPress}
         accessibilityLabel="Connect button"
         icon={<Ionicons name="person-add-outline" size={20} color="white" />}
