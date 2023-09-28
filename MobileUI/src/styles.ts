@@ -16,4 +16,10 @@ const appFont = {
   extraBold: 'Bricolage Grotesque ExtraBold'
 }
 
-export { appFont, customFonts }
+const colors = {
+  blue: '#3085C3',
+  darkBlue: '#1D5D9B',
+  grey: '#61677A'
+}
+
+export { appFont, customFonts, colors }
