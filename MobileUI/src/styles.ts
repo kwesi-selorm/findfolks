@@ -16,10 +16,18 @@ const appFont = {
   extraBold: 'Bricolage Grotesque ExtraBold'
 }
 
-const colors = {
+const appColors = {
   blue: '#3085C3',
   darkBlue: '#1D5D9B',
-  grey: '#61677A'
+  grey: '#61677A',
+  green: '#539165',
+  white: '#fff',
+  black: '#000',
+  red: '#C63D2F'
 }
 
-export { appFont, customFonts, colors }
+const radius = {
+  cardRadius: 10
+}
+
+export { appFont, customFonts, appColors, radius }

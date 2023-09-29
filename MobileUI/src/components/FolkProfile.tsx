@@ -3,7 +3,7 @@ import { Alert, Image, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import AppButton from './AppButton'
-import { appFont, colors } from '../styles'
+import { appFont, appColors } from '../styles'
 
 type FolkProfileProps = {
   folk: FolkType | null
@@ -23,6 +23,9 @@ const FolkProfile = ({ folk }: FolkProfileProps) => {
 
   return folk == null ? null : (
     <View style={styles.container}>
+      {/*Name*/}
+      <Text style={styles.name}>{folk.name}</Text>
+
       {/*Profile photo*/}
       {folk.profilePhoto !== null && folk.profilePhoto != '' ? (
         <Image
@@ -30,19 +33,16 @@ const FolkProfile = ({ folk }: FolkProfileProps) => {
           source={{ uri: `data:image/png;base64,${folk.profilePhoto}` }}
         />
       ) : (
-        <Ionicons name="person-circle-outline" size={150} color={colors.grey} />
+        <Ionicons name="person-circle-outline" size={150} color={appColors.grey} />
       )}
-
-      {/*Name*/}
-      <Text style={styles.name}>{folk.name}</Text>
 
       {/*Info*/}
       <View style={styles.info}>
         {/*Home country and city*/}
         <View style={styles.iconAndText}>
-          <Ionicons name="home-outline" size={10} color={colors.darkBlue} />
+          <Ionicons name="home" size={10} color={appColors.darkBlue} />
           <Text style={styles.text}>
-            <Text style={{ fontFamily: appFont.bold, color: colors.darkBlue }}>From</Text>{' '}
+            <Text style={{ fontFamily: appFont.bold, color: appColors.darkBlue }}>From</Text>{' '}
             {folk.homeCityOrTown ? `${folk.homeCityOrTown}, ` : ''}
             {folk.homeCountry}
           </Text>
@@ -50,9 +50,9 @@ const FolkProfile = ({ folk }: FolkProfileProps) => {
 
         {/*Residence country and city*/}
         <View style={styles.iconAndText}>
-          <Ionicons name="location-outline" size={10} color={colors.darkBlue} />
+          <Ionicons name="location" size={10} color={appColors.darkBlue} />
           <Text style={styles.text}>
-            <Text style={{ fontFamily: appFont.bold, color: colors.darkBlue }}>Living in</Text>{' '}
+            <Text style={{ fontFamily: appFont.bold, color: appColors.darkBlue }}>Living in</Text>{' '}
             {folk.cityOrTownOfResidence ? `${folk.cityOrTownOfResidence}, ` : ''}
             {folk.countryOfResidence}
           </Text>
@@ -66,10 +66,10 @@ const FolkProfile = ({ folk }: FolkProfileProps) => {
 
       {/*Connect button*/}
       <AppButton
-        backgroundColor={colors.darkBlue}
+        backgroundColor={appColors.green}
         onPress={onConnectButtonPress}
         accessibilityLabel="Connect button"
-        icon={<Ionicons name="person-add-outline" size={20} color="white" />}
+        icon={<Ionicons name="person-add" size={20} color={appColors.white} />}
         text="Connect"
         color="white"
         size="medium"

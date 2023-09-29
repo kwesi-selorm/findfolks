@@ -1,5 +1,5 @@
 import { FolkType } from '../screens/discover/FolkItem'
-import { stacyProfilePhoto, stanleyProfilePhoto } from './bas64strings'
+import { linProfilePhoto, stacyProfilePhoto, stanleyProfilePhoto } from './bas64strings'
 
 const folksToDiscover = [
   {
@@ -31,6 +31,16 @@ const folksToDiscover = [
     homeCityOrTown: 'Gothenburg',
     profilePhoto: stacyProfilePhoto,
     bio: 'Happy to be on this app. I hope to meet others to build a community here in Norway'
+  },
+  {
+    id: 4,
+    name: 'Lin',
+    countryOfResidence: 'Norway',
+    cityOrTownOfResidence: 'Bergen',
+    homeCountry: 'China',
+    homeCityOrTown: 'Shanghai',
+    profilePhoto: linProfilePhoto,
+    bio: 'New in Norway straight from China. Hoping to make friends from China and everywhere else in the world too! 😁'
   }
 ] as FolkType[]
 

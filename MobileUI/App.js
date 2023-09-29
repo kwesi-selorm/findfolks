@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import DiscoverScreen from './src/screens/discover'
 import CommunityScreen from './src/screens/community'
 import { useFonts } from 'expo-font'
-import { colors, customFonts } from './src/styles'
+import { appColors, customFonts } from './src/styles'
 import RequestsScreen from './src/screens/requests'
 // expo install expo-font
 
@@ -22,7 +22,7 @@ function getScreenOptions() {
         iconName = focused ? 'people-sharp' : 'people-outline'
         screenName = 'Community'
       } else if (route.name === 'Requests') {
-        iconName = focused ? 'chatbox-ellipses-sharp' : 'chatbox-ellipses-outline'
+        iconName = focused ? 'person-add' : 'person-add-outline'
         screenName = 'Requests'
       }
 
@@ -39,8 +39,8 @@ function getScreenOptions() {
         </View>
       )
     },
-    tabBarActiveTintColor: colors.darkBlue,
-    tabBarInactiveTintColor: 'gray'
+    tabBarActiveTintColor: appColors.darkBlue,
+    tabBarInactiveTintColor: appColors.grey
   })
 }
 

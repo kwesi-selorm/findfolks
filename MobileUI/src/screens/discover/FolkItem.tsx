@@ -1,7 +1,7 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native'
 import React, { SetStateAction } from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { appFont, colors } from '../../styles'
+import { appFont, appColors } from '../../styles'
 
 export type FolkType = {
   id: number
@@ -24,12 +24,12 @@ const LocationInfo = ({ item }: { item: FolkType }) => {
   return (
     <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 8 }}>
       <View style={styles.iconTextContainer}>
-        <Ionicons name="home-outline" size={10} color={colors.darkBlue} />
+        <Ionicons name="home" size={10} color={appColors.darkBlue} />
         <Text style={styles.detailsText}>{item.homeCountry}</Text>
       </View>
-      <Text style={{ color: colors.darkBlue }}>|</Text>
+      <Text style={{ color: appColors.grey }}>|</Text>
       <View style={styles.iconTextContainer}>
-        <Ionicons name="location-outline" size={10} color={colors.darkBlue} />
+        <Ionicons name="location" size={10} color={appColors.darkBlue} />
         <Text style={styles.detailsText}>{item.countryOfResidence}</Text>
       </View>
     </View>

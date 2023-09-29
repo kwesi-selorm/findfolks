@@ -1,4 +1,4 @@
-import { stacyProfilePhoto, stanleyProfilePhoto } from './bas64strings'
+import { linProfilePhoto, stacyProfilePhoto, stanleyProfilePhoto } from './bas64strings'
 import { Connection, ContactMethod } from '../@types'
 
 const connections = [
@@ -37,6 +37,18 @@ const connections = [
     bio: 'Happy to be on this app. I hope to meet others to build a community here in Norway',
     preferredContactMethod: ContactMethod.Snapchat,
     contactInfo: 'stacee'
+  },
+  {
+    id: 4,
+    name: 'Lin',
+    countryOfResidence: 'Norway',
+    cityOrTownOfResidence: 'Bergen',
+    homeCountry: 'China',
+    homeCityOrTown: 'Shanghai',
+    profilePhoto: linProfilePhoto,
+    bio: 'New in Norway straight from China. Hoping to make friends from China and everywhere else in the world too! 😁',
+    preferredContactMethod: ContactMethod.Facebook,
+    contactInfo: 'Lin Zhang'
   }
 ] as Connection[]
 

@@ -1,6 +1,7 @@
 import { Modal, Pressable, StyleSheet, View } from 'react-native'
 import React, { SetStateAction } from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import { appColors } from '../styles'
 
 interface AppModalProps {
   children: React.ReactNode
@@ -17,7 +18,7 @@ const AppModal = ({ children, modalVisible, onDismiss }: AppModalProps) => {
           <View style={styles.modalView}>
             {children}
             <Pressable style={{ alignSelf: 'center' }} onPress={onDismiss}>
-              <Ionicons name="close-circle-outline" color="black" size={35} />
+              <Ionicons name="close-circle-outline" color={appColors.red} size={35} />
             </Pressable>
           </View>
         </View>
