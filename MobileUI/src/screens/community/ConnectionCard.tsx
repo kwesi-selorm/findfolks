@@ -45,7 +45,7 @@ const ConnectionCard = ({ connection }: ConnectionCardProps) => {
           <Ionicons
             name="person-circle-outline"
             size={100}
-            color={appColors.black}
+            color={appColors.grey}
             style={styles.photo}
           />
         )}
@@ -81,7 +81,8 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     fontSize: 18,
     textAlign: 'center',
-    paddingVertical: 5
+    paddingVertical: 5,
+    color: appColors.darkBlue
   },
   text: {
     fontFamily: appFont.regular,
