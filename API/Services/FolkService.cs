@@ -110,6 +110,26 @@ namespace API.Services
                 };
         }
 
+        public async Task<FolkDTO?> GetSingleFolk(string username)
+        {
+            Folk? folkRecord = await dbContext.Folks
+                .Where(f => f.Name == username)
+                .FirstOrDefaultAsync();
+
+            return folkRecord == null
+                ? null
+                : new FolkDTO()
+                {
+                    Id = folkRecord.Id,
+                    Name = folkRecord.Name,
+                    HomeCountry = folkRecord.HomeCountry,
+                    HomeCityOrTown = folkRecord.HomeCityOrTown,
+                    CountryOfResidence = folkRecord.CountryOfResidence,
+                    CityOrTownOfResidence = folkRecord.CityOrTownOfResidence,
+                    Bio = folkRecord.Bio
+                };
+        }
+
         // GET FOLK PROFILE FOR A USER
         public async Task<FolkProfileDTO?> GetFolkProfile(int id)
         {

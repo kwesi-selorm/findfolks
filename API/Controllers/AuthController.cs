@@ -1,4 +1,5 @@
 using API.DTOs;
+using API.Models;
 using API.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -57,8 +58,16 @@ namespace API.Controllers
         }
 
         [HttpPost(template: "token")]
-        public async Task<IActionResult> CreateToken(AuthRequestDTO loginRequest)
+        public async Task<ActionResult<LoggedInUserDTO>> LogIn(AuthRequestDTO loginRequest)
         {
+            FolkDTO? folkRecord = await folkService.GetSingleFolk(loginRequest.UserName);
+            if (folkRecord == null)
+            {
+                return Problem(
+                    detail: $"A folk with username {loginRequest.UserName} was not found",
+                    statusCode: StatusCodes.Status404NotFound
+                );
+            }
             IdentityUser? user = await userManager.FindByNameAsync(loginRequest.UserName);
             if (user == null)
             {
@@ -79,7 +88,15 @@ namespace API.Controllers
                 );
             }
             AuthResponseDTO? token = jwtService.CreateToken(user);
-            return Ok(token);
+            return Ok(
+                new LoggedInUserDTO()
+                {
+                    Id = folkRecord.Id,
+                    Username = user.UserName,
+                    Token = token.Token,
+                    Expiration = token.Expiration
+                }
+            );
         }
 
         // Update a user, either username and password
