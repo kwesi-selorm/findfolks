@@ -1,13 +1,15 @@
 import React from 'react'
-import { Text } from 'react-native'
+import { Text, View } from 'react-native'
 import { RequestType } from './index'
 
 const EmptyComponent = ({ requestType }: { requestType: RequestType }) => {
   return (
-    <Text>
-      No requests {requestType == RequestType.RECEIVED ? RequestType.RECEIVED : RequestType.SENT}
-      yet
-    </Text>
+    <View>
+      <Text>
+        No requests {requestType == RequestType.RECEIVED ? RequestType.RECEIVED : RequestType.SENT}
+        yet
+      </Text>
+    </View>
   )
 }
 
