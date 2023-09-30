@@ -1,7 +1,7 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native'
 import React, { SetStateAction } from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { appFont, appColors } from '../../styles'
+import { appFont, appColors } from '../styles'
 
 export type FolkType = {
   id: number
@@ -10,7 +10,7 @@ export type FolkType = {
   homeCityOrTown?: string
   countryOfResidence: string
   cityOrTownOfResidence: string
-  profilePhoto: string
+  profilePhoto: string | null
   bio: string
 }
 type FolkItemProps = {
@@ -75,12 +75,11 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     gap: 3,
-    width: '100%',
     justifyContent: 'center',
     marginVertical: 10
   },
   photoContainer: {
-    width: '10%',
+    width: '15%',
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center'
