@@ -1,6 +1,6 @@
 type LoggedInUser = {
   id: number
-  username: string
+  username: string | null
   token: string
   expiration: Date
 }
@@ -21,6 +21,12 @@ interface Connection extends Folk {
   contactInfo: string
 }
 
+interface Profile extends Folk {
+  preferredContactMethod: ContactMethod
+  contactInfo: string
+  connections: Array<Connection>
+}
+
 type Request = {
   senderId: number
   recipientId: number
@@ -35,4 +41,4 @@ enum ContactMethod {
   Snapchat
 }
 
-export { type LoggedInUser, type Connection, type Folk, type Request, ContactMethod }
+export { type LoggedInUser, type Connection, type Folk, type Profile, type Request, ContactMethod }

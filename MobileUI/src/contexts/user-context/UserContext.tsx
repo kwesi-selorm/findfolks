@@ -1,13 +1,14 @@
 import { createContext } from 'react'
+import { LoggedInUser } from '../../@types'
 
 type UserContext = {
-  username: string
-  token: string
+  loggedInUser: LoggedInUser | null
+  setLoggedInUser: (loggedInUser: LoggedInUser | null) => void
 }
 
 const initialState: UserContext = {
-  username: '',
-  token: ''
+  loggedInUser: null,
+  setLoggedInUser: (loggedInUser: LoggedInUser | null) => {}
 }
 
 const userContext = createContext<UserContext>(initialState)
