@@ -1,3 +1,10 @@
+type LoggedInUser = {
+  id: number
+  username: string
+  token: string
+  expiration: Date
+}
+
 interface Folk {
   id: number
   name: string
@@ -28,4 +35,4 @@ enum ContactMethod {
   Snapchat
 }
 
-export { type Connection, type Folk, type Request, ContactMethod }
+export { type LoggedInUser, type Connection, type Folk, type Request, ContactMethod }
