@@ -1,6 +1,7 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native'
 import React, { SetStateAction } from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import { appFont, appColors } from '../styles'
 
 export type FolkType = {
   id: number
@@ -9,7 +10,7 @@ export type FolkType = {
   homeCityOrTown?: string
   countryOfResidence: string
   cityOrTownOfResidence: string
-  profilePhoto: string
+  profilePhoto: string | null
   bio: string
 }
 type FolkItemProps = {
@@ -21,18 +22,15 @@ type FolkItemProps = {
 
 const LocationInfo = ({ item }: { item: FolkType }) => {
   return (
-    <View style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+    <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 8 }}>
       <View style={styles.iconTextContainer}>
-        <Ionicons name="home-outline" size={10} />
-        <Text style={styles.detailsText}>
-          {item.homeCityOrTown ? `${item.homeCityOrTown}, ${item.homeCountry}` : item.homeCountry}
-        </Text>
+        <Ionicons name="home" size={10} color={appColors.darkBlue} />
+        <Text style={styles.detailsText}>{item.homeCountry}</Text>
       </View>
+      <Text style={{ color: appColors.grey }}>|</Text>
       <View style={styles.iconTextContainer}>
-        <Ionicons name="location-outline" size={10} />
-        <Text style={styles.detailsText}>
-          {item.cityOrTownOfResidence}, {item.countryOfResidence}
-        </Text>
+        <Ionicons name="location" size={10} color={appColors.darkBlue} />
+        <Text style={styles.detailsText}>{item.countryOfResidence}</Text>
       </View>
     </View>
   )
@@ -45,34 +43,27 @@ const FolkItem = ({ item, setModalVisible, setSelectedFolk }: FolkItemProps) => 
   }
 
   return (
-    <Pressable onPress={OnFolkPress}>
+    <Pressable onPress={OnFolkPress} style={({ pressed }) => pressed && styles.folkPressed}>
       <View style={styles.container}>
         <View style={styles.photoContainer}>
+          {/*Profile Photo*/}
           {item.profilePhoto !== null && item.profilePhoto != '' ? (
             <Image
               style={styles.photo}
               source={{ uri: `data:image/png;base64,${item.profilePhoto}` }}
             />
           ) : (
-            <Ionicons name="person-circle-outline" size={35} color="black" />
+            <Ionicons name="person-circle-outline" size={35} color="gray" />
           )}
         </View>
         <View style={styles.detailsContainer}>
+          {/*Name*/}
           <Text style={[styles.nameText]}>{item.name}</Text>
+
+          {/*Location info*/}
           <View>
             <LocationInfo item={item} />
           </View>
-          <Text style={styles.bioText}>{item.bio}</Text>
-        </View>
-
-        <View style={styles.actions}>
-          <Ionicons
-            name="person-add"
-            onPress={() => {
-              console.log('Add friend')
-            }}
-            size={15}
-          />
         </View>
       </View>
     </Pressable>
@@ -84,20 +75,19 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     gap: 3,
-    width: '100%',
     justifyContent: 'center',
     marginVertical: 10
   },
   photoContainer: {
-    width: '10%',
+    width: '15%',
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center'
   },
   photo: {
-    width: 30,
-    height: 30,
-    borderRadius: 15
+    width: 35,
+    height: 35,
+    borderRadius: 18
   },
   detailsContainer: {
     display: 'flex',
@@ -109,7 +99,8 @@ const styles = StyleSheet.create({
   nameText: {
     fontWeight: 'bold',
     fontSize: 12,
-    fontFamily: 'Bricolage Grotesque Bold'
+    fontFamily: appFont.bold,
+    marginBottom: 5
   },
   iconTextContainer: {
     display: 'flex',
@@ -119,17 +110,20 @@ const styles = StyleSheet.create({
   },
   detailsText: {
     fontSize: 11,
-    fontFamily: 'Bricolage Grotesque'
+    fontFamily: appFont.regular
   },
   bioText: {
     fontSize: 10,
-    fontFamily: 'Bricolage Grotesque'
+    fontFamily: appFont.regular
   },
   actions: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  folkPressed: {
+    backgroundColor: 'lightgray'
   }
 })
 

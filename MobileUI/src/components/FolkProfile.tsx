@@ -1,7 +1,8 @@
-import { FolkType } from '../screens/discover/FolkItem'
+import { FolkType } from './FolkItem'
 import { Image, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import { appFont, appColors } from '../styles'
 
 type FolkProfileProps = {
   folk: FolkType | null
@@ -10,32 +11,44 @@ type FolkProfileProps = {
 const FolkProfile = ({ folk }: FolkProfileProps) => {
   return folk == null ? null : (
     <View style={styles.container}>
+      {/*Name*/}
+      <Text style={styles.name}>{folk.name}</Text>
+
+      {/*Profile photo*/}
       {folk.profilePhoto !== null && folk.profilePhoto != '' ? (
         <Image
           style={styles.photo}
           source={{ uri: `data:image/png;base64,${folk.profilePhoto}` }}
         />
       ) : (
-        <Ionicons name="person-circle-outline" size={200} color="black" />
+        <Ionicons name="person-circle-outline" size={150} color={appColors.grey} />
       )}
-      <Text style={styles.name}>{folk.name}</Text>
+
+      {/*Info*/}
       <View style={styles.info}>
+        {/*Home country and city*/}
         <View style={styles.iconAndText}>
-          <Ionicons name="home-outline" size={10} />
-          <Text>
-            From {folk.homeCityOrTown ? `${folk.homeCityOrTown}, ` : ''}
+          <Ionicons name="home" size={10} color={appColors.darkBlue} />
+          <Text style={styles.text}>
+            <Text style={{ fontFamily: appFont.bold, color: appColors.darkBlue }}>From</Text>{' '}
+            {folk.homeCityOrTown ? `${folk.homeCityOrTown}, ` : ''}
             {folk.homeCountry}
           </Text>
         </View>
+
+        {/*Residence country and city*/}
         <View style={styles.iconAndText}>
-          <Ionicons name="location-outline" size={10} />
-          <Text>
-            Living in {folk.cityOrTownOfResidence ? `${folk.cityOrTownOfResidence}, ` : ''}
+          <Ionicons name="location" size={10} color={appColors.darkBlue} />
+          <Text style={styles.text}>
+            <Text style={{ fontFamily: appFont.bold, color: appColors.darkBlue }}>Living in</Text>{' '}
+            {folk.cityOrTownOfResidence ? `${folk.cityOrTownOfResidence}, ` : ''}
             {folk.countryOfResidence}
           </Text>
         </View>
+
+        {/*Bio*/}
         <View style={styles.bio}>
-          <Text>'{folk.bio}'</Text>
+          <Text style={[styles.text, styles.bioText]}>{folk.bio}</Text>
         </View>
       </View>
     </View>
@@ -48,7 +61,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 50
+    marginBottom: 50,
+    width: '80%'
   },
   photo: {
     width: 200,
@@ -57,19 +71,39 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 40,
-    fontFamily: 'Bricolage Grotesque Bold'
+    fontFamily: appFont.extraBold
   },
   info: {
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    marginTop: 20
   },
-  iconAndText: { display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10 },
-  bio: {
-    maxWidth: 150,
-    textAlign: 'center',
-    marginLeft: 'auto',
-    marginRight: 'auto',
+  iconAndText: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginBottom: 5,
     justifyContent: 'center'
+  },
+  text: { fontFamily: appFont.regular },
+  bio: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: 10,
+    marginBottom: 10,
+    marginTop: 30,
+    justifyContent: 'center',
+    width: '80%',
+    marginLeft: 'auto',
+    marginRight: 'auto'
+  },
+  bioText: {
+    textAlign: 'center'
+  },
+  connectButton: {
+    marginTop: 50
   }
 })
 

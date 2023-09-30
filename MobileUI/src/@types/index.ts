@@ -1,3 +1,10 @@
+type LoggedInUser = {
+  id: number
+  username: string
+  token: string
+  expiration: Date
+}
+
 interface Folk {
   id: number
   name: string
@@ -6,6 +13,7 @@ interface Folk {
   countryOfResidence: string
   cityOrTownOfResidence: string
   profilePhoto: string | null
+  bio?: string
 }
 
 interface Connection extends Folk {
@@ -20,10 +28,11 @@ type Request = {
 }
 
 enum ContactMethod {
-  mobile,
-  email,
+  Mobile = 0,
+  Email,
   Facebook,
-  'Twitter/X'
+  Twitter,
+  Snapchat
 }
 
-export { ContactMethod, type Connection, type Folk, type Request }
+export { type LoggedInUser, type Connection, type Folk, type Request, ContactMethod }

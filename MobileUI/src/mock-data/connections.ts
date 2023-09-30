@@ -1,7 +1,7 @@
-import { FolkType } from '../components/FolkItem'
 import { linProfilePhoto, stacyProfilePhoto, stanleyProfilePhoto } from './bas64strings'
+import { Connection, ContactMethod } from '../@types'
 
-const folksToDiscover = [
+const connections = [
   {
     id: 1,
     name: 'Stanley',
@@ -10,7 +10,9 @@ const folksToDiscover = [
     homeCountry: 'Ghana',
     homeCityOrTown: 'Tema',
     profilePhoto: stanleyProfilePhoto,
-    bio: 'Looking forward to meeting new peeps!'
+    bio: 'Looking forward to meeting new peeps!',
+    preferredContactMethod: ContactMethod.Email,
+    contactInfo: 'stanley@example.com'
   },
   {
     id: 2,
@@ -20,7 +22,9 @@ const folksToDiscover = [
     homeCountry: 'Togo',
     homeCityOrTown: 'Lomé',
     profilePhoto: null,
-    bio: 'Any other Togolese out there to meetup with?'
+    bio: 'Any other Togolese out there to meetup with?',
+    preferredContactMethod: ContactMethod.Twitter,
+    contactInfo: '@BoB'
   },
   {
     id: 3,
@@ -30,7 +34,9 @@ const folksToDiscover = [
     homeCountry: 'Sweden',
     homeCityOrTown: 'Gothenburg',
     profilePhoto: stacyProfilePhoto,
-    bio: 'Happy to be on this app. I hope to meet others to build a community here in Norway'
+    bio: 'Happy to be on this app. I hope to meet others to build a community here in Norway',
+    preferredContactMethod: ContactMethod.Snapchat,
+    contactInfo: 'stacee'
   },
   {
     id: 4,
@@ -40,8 +46,10 @@ const folksToDiscover = [
     homeCountry: 'China',
     homeCityOrTown: 'Shanghai',
     profilePhoto: linProfilePhoto,
-    bio: 'New in Norway straight from China. Hoping to make friends from China and everywhere else in the world too! 😁'
+    bio: 'New in Norway straight from China. Hoping to make friends from China and everywhere else in the world too! 😁',
+    preferredContactMethod: ContactMethod.Facebook,
+    contactInfo: 'Lin Zhang'
   }
-] as FolkType[]
+] as Connection[]
 
-export { folksToDiscover }
+export { connections }

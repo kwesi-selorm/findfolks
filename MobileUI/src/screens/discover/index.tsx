@@ -1,6 +1,5 @@
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
-import { StyleSheet } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { StyleSheet, View } from 'react-native'
 
 import FolkList from './FolkList'
 import { folksToDiscover } from '../../mock-data/folks-to-discover'
@@ -11,16 +10,15 @@ type DiscoverScreenProps = {
 
 const DiscoverScreen = ({ navigation }: DiscoverScreenProps) => {
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <FolkList data={folksToDiscover} />
-    </SafeAreaView>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
-    // textAlign: 'center',
     height: '100%'
   }
 })

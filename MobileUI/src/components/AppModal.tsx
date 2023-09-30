@@ -1,6 +1,7 @@
-import { Modal, StyleSheet, View } from 'react-native'
+import { Modal, Pressable, StyleSheet, View } from 'react-native'
 import React, { SetStateAction } from 'react'
-import AppButton from './AppButton'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { appColors } from '../styles'
 
 interface AppModalProps {
   children: React.ReactNode
@@ -16,12 +17,9 @@ const AppModal = ({ children, modalVisible, onDismiss }: AppModalProps) => {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             {children}
-            <AppButton
-              containerColor="gray"
-              accessibilityLabel="Close"
-              title="Close"
-              onPress={onDismiss}
-            ></AppButton>
+            <Pressable style={{ alignSelf: 'center', marginTop: 100 }} onPress={onDismiss}>
+              <Ionicons name="close-circle-outline" color={appColors.red} size={35} />
+            </Pressable>
           </View>
         </View>
       </Modal>
@@ -33,25 +31,11 @@ const styles = StyleSheet.create({
   centeredView: {
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center'
-    // paddingTop: '25%'
+    alignItems: 'center',
+    width: '100%'
   },
   modalView: {
-    marginTop: 80
-    // backgroundColor: 'white',
-    // borderRadius: 20,
-    // padding: 35,
-    // alignItems: 'center',
-    // shadowColor: '#000',
-    // shadowOffset: {
-    //   width: 0,
-    //   height: 2
-    // },
-    // shadowOpacity: 0.25,
-    // shadowRadius: 4,
-    // elevation: 5,
-    // width: '80%',
-    // height: '80%'
+    marginTop: 150
   }
 })
 
