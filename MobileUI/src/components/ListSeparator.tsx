@@ -8,9 +8,10 @@ const styles = StyleSheet.create({
   separator: {
     height: 0.5,
     backgroundColor: 'lightgray',
-    width: '95%',
+    width: '85%',
     marginLeft: 'auto',
-    marginRight: 'auto'
+    marginRight: 'auto',
+    marginBottom: 8
   }
 })
 

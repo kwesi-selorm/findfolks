@@ -1,8 +1,7 @@
-import { FolkType } from '../screens/discover/FolkItem'
-import { Alert, Image, StyleSheet, Text, View } from 'react-native'
+import { FolkType } from './FolkItem'
+import { Image, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import AppButton from './AppButton'
 import { appFont, appColors } from '../styles'
 
 type FolkProfileProps = {
@@ -10,17 +9,6 @@ type FolkProfileProps = {
 }
 
 const FolkProfile = ({ folk }: FolkProfileProps) => {
-  function onConnectButtonPress() {
-    Alert.alert('', 'Would you like to send a connection request to ' + folk?.name + '?', [
-      {
-        text: 'Cancel',
-        onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel'
-      },
-      { text: 'OK', onPress: () => console.log('OK Pressed') }
-    ])
-  }
-
   return folk == null ? null : (
     <View style={styles.container}>
       {/*Name*/}
@@ -63,18 +51,6 @@ const FolkProfile = ({ folk }: FolkProfileProps) => {
           <Text style={[styles.text, styles.bioText]}>{folk.bio}</Text>
         </View>
       </View>
-
-      {/*Connect button*/}
-      <AppButton
-        backgroundColor={appColors.green}
-        onPress={onConnectButtonPress}
-        accessibilityLabel="Connect button"
-        icon={<Ionicons name="person-add" size={20} color={appColors.white} />}
-        text="Connect"
-        color="white"
-        size="medium"
-        style={styles.connectButton}
-      />
     </View>
   )
 }

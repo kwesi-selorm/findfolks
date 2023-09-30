@@ -19,7 +19,7 @@ const appFont = {
 const appColors = {
   blue: '#3085C3',
   darkBlue: '#1D5D9B',
-  grey: '#61677A',
+  grey: '#D1D1D1',
   green: '#539165',
   white: '#fff',
   black: '#000',

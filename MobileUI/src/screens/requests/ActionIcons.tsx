@@ -2,7 +2,7 @@ import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import FeatherIcon from 'react-native-vector-icons/Feather'
 import React from 'react'
 import { Alert, StyleSheet, View } from 'react-native'
-import { FolkType } from '../discover/FolkItem'
+import { FolkType } from '../../components/FolkItem'
 import { RequestType } from './index'
 import { appColors } from '../../styles'
 

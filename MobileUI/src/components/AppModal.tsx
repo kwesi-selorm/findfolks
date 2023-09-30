@@ -17,7 +17,7 @@ const AppModal = ({ children, modalVisible, onDismiss }: AppModalProps) => {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             {children}
-            <Pressable style={{ alignSelf: 'center' }} onPress={onDismiss}>
+            <Pressable style={{ alignSelf: 'center', marginTop: 100 }} onPress={onDismiss}>
               <Ionicons name="close-circle-outline" color={appColors.red} size={35} />
             </Pressable>
           </View>

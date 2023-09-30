@@ -1,7 +1,7 @@
 import { FlatList, SafeAreaView, StyleSheet, View } from 'react-native'
 import AppButton from '../../components/AppButton'
 import { appColors } from '../../styles'
-import FolkItem, { FolkType } from '../discover/FolkItem'
+import FolkItem, { FolkType } from '../../components/FolkItem'
 import React, { useEffect } from 'react'
 import requests from '../../mock-data/requests'
 import AppModal from '../../components/AppModal'

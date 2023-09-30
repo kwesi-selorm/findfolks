@@ -1,4 +1,4 @@
-import { FolkType } from '../screens/discover/FolkItem'
+import { FolkType } from '../components/FolkItem'
 import { linProfilePhoto, stacyProfilePhoto, stanleyProfilePhoto } from './bas64strings'
 
 const folksToDiscover = [
