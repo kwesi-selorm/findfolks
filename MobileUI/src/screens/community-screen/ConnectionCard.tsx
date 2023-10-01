@@ -16,7 +16,7 @@ const contactMethods = [
     mode: ContactMethod.Email
   },
   {
-    icon: <Icon name="facebook-square" size={20} color={appColors.white} />,
+    icon: <Icon name="facebook-square" size={20} color="#4267B2" />,
     mode: ContactMethod.Facebook
   },
   { icon: <Icon name="snapchat" size={20} color="#FFFC00" />, mode: ContactMethod.Snapchat },
@@ -33,7 +33,9 @@ const ConnectionCard = ({ connection }: ConnectionCardProps) => {
     <View style={styles.container}>
       <Pressable key={connection.id} style={styles.card}>
         {/*Name*/}
-        <Text style={[styles.text, styles.name]}>{connection.name}</Text>
+        <View style={styles.nameContainer}>
+          <Text style={[styles.text, styles.name]}>{connection.name}</Text>
+        </View>
 
         {/*Profile photo*/}
         {connection.profilePhoto !== null && connection.profilePhoto != '' ? (
@@ -66,23 +68,29 @@ const styles = StyleSheet.create({
     marginHorizontal: 5
   },
   card: {
-    paddingTop: 10,
     textAlign: 'center',
     borderStyle: 'solid',
     borderWidth: 1,
     borderColor: appColors.darkBlue,
     borderTopRightRadius: radius.cardRadius,
     borderTopLeftRadius: radius.cardRadius,
+    borderBottomWidth: 0,
     borderBottomRightRadius: 0,
     borderBottomLeftRadius: 0
   },
+  nameContainer: {
+    borderTopRightRadius: radius.cardRadius - 2,
+    borderTopLeftRadius: radius.cardRadius - 2,
+    width: '100%',
+    backgroundColor: appColors.darkBlue,
+    textAlign: 'center',
+    marginBottom: 5
+  },
   name: {
     fontFamily: appFont.extraBold,
-    marginBottom: 5,
     fontSize: 18,
-    textAlign: 'center',
     paddingVertical: 5,
-    color: appColors.darkBlue
+    color: appColors.white
   },
   text: {
     fontFamily: appFont.regular,
@@ -103,7 +111,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 5,
     padding: 5,
-    backgroundColor: appColors.darkBlue,
+    // backgroundColor: appColors.darkBlue,
     width: '100%',
     borderStyle: 'solid',
     borderWidth: 1,
@@ -113,8 +121,8 @@ const styles = StyleSheet.create({
     borderBottomStartRadius: radius.cardRadius
   },
   contactInfo: {
-    fontSize: 12,
-    color: appColors.white
+    fontSize: 12
+    // color: appColors.white
   }
 })
 
