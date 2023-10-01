@@ -1,5 +1,5 @@
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
-import { FlatList, SafeAreaView, StatusBar, StyleSheet, Text } from 'react-native'
+import { FlatList, SafeAreaView, StatusBar, StyleSheet } from 'react-native'
 import ConnectionCard from './ConnectionCard'
 import { connections } from '../../mock-data/connections'
 import React from 'react'
