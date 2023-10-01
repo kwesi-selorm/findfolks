@@ -1,4 +1,4 @@
-import { FlatList, SafeAreaView, StyleSheet, View } from 'react-native'
+import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import AppButton from '../../components/AppButton'
 import { appColors } from '../../styles'
 import FolkItem, { FolkType } from '../../components/FolkItem'
@@ -8,7 +8,6 @@ import AppModal from '../../components/AppModal'
 import FolkProfile from '../../components/FolkProfile'
 import ActionIcons from './ActionIcons'
 import ListSeparator from '../../components/ListSeparator'
-import EmptyComponent from './EmptyComponent'
 
 export enum RequestType {
   RECEIVED = 'received',
@@ -79,7 +78,13 @@ const RequestsScreen = () => {
             </View>
           )}
           keyExtractor={(item) => item.id.toString()}
-          ListEmptyComponent={EmptyComponent}
+          ListEmptyComponent={
+            <Text>
+              No requests{' '}
+              {requestType == RequestType.RECEIVED ? RequestType.RECEIVED : RequestType.SENT}
+              yet
+            </Text>
+          }
           ItemSeparatorComponent={ListSeparator}
         />
       </View>
