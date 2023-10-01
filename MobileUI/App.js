@@ -8,6 +8,8 @@ import CommunityScreen from './src/screens/community'
 import { useFonts } from 'expo-font'
 import { appColors, customFonts } from './src/styles'
 import RequestsScreen from './src/screens/requests'
+import HeaderPhoto from './src/components/HeaderPhoto'
+import HeaderTitle from './src/components/HeaderTitle'
 // expo install expo-font
 
 function getScreenOptions() {
@@ -32,6 +34,7 @@ function getScreenOptions() {
             name={iconName}
             size={size}
             color={color}
+            style={{ marginTop: 5 }}
             onPress={() => {
               navigation.navigate(screenName)
             }}
@@ -44,6 +47,14 @@ function getScreenOptions() {
   })
 }
 
+function getPhoto() {
+  return () => <HeaderPhoto />
+}
+
+function getTitle(title) {
+  return () => <HeaderTitle title={title} />
+}
+
 export default function App() {
   const [fontsLoaded] = useFonts(customFonts)
   if (!fontsLoaded) {
@@ -54,9 +65,28 @@ export default function App() {
   return (
     <NavigationContainer>
       <Tab.Navigator initialRouteName="DiscoverScreen" screenOptions={getScreenOptions()}>
-        <Tab.Screen name="Discover" component={DiscoverScreen} />
-        <Tab.Screen name="Community" component={CommunityScreen} />
-        <Tab.Screen name="Requests" component={RequestsScreen} />
+        <Tab.Screen
+          name="Discover"
+          component={DiscoverScreen}
+          options={{
+            headerTitle: getTitle('Discover'),
+            headerRight: getPhoto()
+          }}
+        />
+        <Tab.Screen
+          name="Community"
+          component={CommunityScreen}
+          options={{
+            headerTitle: getTitle('Community')
+          }}
+        />
+        <Tab.Screen
+          name="Requests"
+          component={RequestsScreen}
+          options={{
+            headerTitle: getTitle('Requests')
+          }}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   )
