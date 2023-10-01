@@ -3,12 +3,12 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { View } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
-import DiscoverScreen from './src/screens/discover'
-import CommunityScreen from './src/screens/community'
+import DiscoverStackScreen from './src/screens/discover-stack-screen'
+import CommunityScreen from './src/screens/community-screen'
 import { useFonts } from 'expo-font'
 import { appColors, customFonts } from './src/styles'
-import RequestsScreen from './src/screens/requests'
-import HeaderPhoto from './src/components/HeaderPhoto'
+import RequestsScreen from './src/screens/requests-screen'
+import HeaderPhotoButton from './src/components/HeaderPhotoButton'
 import HeaderTitle from './src/components/HeaderTitle'
 // expo install expo-font
 
@@ -47,11 +47,13 @@ function getScreenOptions() {
   })
 }
 
-function getPhoto() {
-  return () => <HeaderPhoto />
-}
-
 function getTitle(title) {
+  return () => <HeaderTitle title={title} />
+}
+function createHeaderRightValue(navigation) {
+  return () => <HeaderPhotoButton onPress={() => navigation.navigate('Profile')} />
+}
+function createHeaderTitleValue(title) {
   return () => <HeaderTitle title={title} />
 }
 
@@ -64,14 +66,11 @@ export default function App() {
   const Tab = createBottomTabNavigator()
   return (
     <NavigationContainer>
-      <Tab.Navigator initialRouteName="DiscoverScreen" screenOptions={getScreenOptions()}>
+      <Tab.Navigator initialRouteName="DiscoverStackScreen" screenOptions={getScreenOptions()}>
         <Tab.Screen
           name="Discover"
-          component={DiscoverScreen}
-          options={{
-            headerTitle: getTitle('Discover'),
-            headerRight: getPhoto()
-          }}
+          component={DiscoverStackScreen}
+          options={{ headerShown: false }}
         />
         <Tab.Screen
           name="Community"
