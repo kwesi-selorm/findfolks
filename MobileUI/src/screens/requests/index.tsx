@@ -22,7 +22,7 @@ const RequestsScreen = () => {
   const [list, setList] = React.useState<FolkType[]>([])
 
   useEffect(() => {
-    setList(requests[requestType as 'sent' | 'received'])
+    setList(requests[requestType])
   }, [requestType])
 
   return (
