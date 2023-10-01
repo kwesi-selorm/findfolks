@@ -47,13 +47,7 @@ function getScreenOptions() {
   })
 }
 
-function getTitle(title) {
-  return () => <HeaderTitle title={title} />
-}
-function createHeaderRightValue(navigation) {
-  return () => <HeaderPhotoButton onPress={() => navigation.navigate('Profile')} />
-}
-function createHeaderTitleValue(title) {
+function createHeaderTitle(title) {
   return () => <HeaderTitle title={title} />
 }
 
@@ -76,14 +70,14 @@ export default function App() {
           name="Community"
           component={CommunityScreen}
           options={{
-            headerTitle: getTitle('Community')
+            headerTitle: createHeaderTitle('Community')
           }}
         />
         <Tab.Screen
           name="Requests"
           component={RequestsScreen}
           options={{
-            headerTitle: getTitle('Requests')
+            headerTitle: createHeaderTitle('Requests')
           }}
         />
       </Tab.Navigator>

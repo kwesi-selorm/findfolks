@@ -11,12 +11,10 @@ export type RootStackParamList = {
   Discover: undefined
   Profile: undefined
 }
-function createHeaderRightValue(
-  navigation: NativeStackNavigationProp<RootStackParamList, 'Discover'>
-) {
+function createHeaderRight(navigation: NativeStackNavigationProp<RootStackParamList, 'Discover'>) {
   return () => <HeaderPhotoButton onPress={() => navigation.navigate('Profile')} />
 }
-function createHeaderTitleValue(title: string) {
+function createHeaderTitle(title: string) {
   return () => <HeaderTitle title={title} />
 }
 
@@ -29,8 +27,8 @@ const DiscoverStackScreen = () => {
         name="Discover"
         component={DiscoverScreen}
         options={({ navigation }) => ({
-          headerTitle: createHeaderTitleValue('Discover'),
-          headerRight: createHeaderRightValue(navigation)
+          headerTitle: createHeaderTitle('Discover'),
+          headerRight: createHeaderRight(navigation)
         })}
       />
       <DiscoverStack.Screen name="Profile" component={ProfileScreen} />
