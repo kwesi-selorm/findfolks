@@ -8,7 +8,6 @@ import CommunityScreen from './src/screens/community-screen'
 import { useFonts } from 'expo-font'
 import { appColors, customFonts } from './src/styles'
 import RequestsScreen from './src/screens/requests-screen'
-import HeaderPhotoButton from './src/components/HeaderPhotoButton'
 import HeaderTitle from './src/components/HeaderTitle'
 // expo install expo-font
 
@@ -17,9 +16,9 @@ function getScreenOptions() {
     tabBarIcon: ({ focused, color, size }) => {
       let iconName = ''
       let screenName = ''
-      if (route.name === 'Discover') {
+      if (route.name === 'DiscoverStack') {
         iconName = focused ? 'search-sharp' : 'search-outline'
-        screenName = 'Discover'
+        screenName = 'DiscoverStack'
       } else if (route.name === 'Community') {
         iconName = focused ? 'people-sharp' : 'people-outline'
         screenName = 'Community'
@@ -62,7 +61,7 @@ export default function App() {
     <NavigationContainer>
       <Tab.Navigator initialRouteName="DiscoverStackScreen" screenOptions={getScreenOptions()}>
         <Tab.Screen
-          name="Discover"
+          name="DiscoverStack"
           component={DiscoverStackScreen}
           options={{ headerShown: false }}
         />

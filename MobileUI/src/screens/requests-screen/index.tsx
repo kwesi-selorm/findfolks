@@ -8,11 +8,7 @@ import AppModal from '../../components/AppModal'
 import FolkProfile from '../../components/FolkProfile'
 import ActionIcons from './ActionIcons'
 import ListSeparator from '../../components/ListSeparator'
-
-export enum RequestType {
-  RECEIVED = 'received',
-  SENT = 'sent'
-}
+import { RequestType } from '../../@types'
 
 const RequestsScreen = () => {
   const [requestType, setRequestType] = React.useState<RequestType>(RequestType.RECEIVED)

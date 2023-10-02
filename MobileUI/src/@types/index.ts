@@ -41,4 +41,17 @@ enum ContactMethod {
   Snapchat
 }
 
-export { type LoggedInUser, type Connection, type Folk, type Profile, type Request, ContactMethod }
+enum RequestType {
+  RECEIVED = 'received',
+  SENT = 'sent'
+}
+
+export {
+  type LoggedInUser,
+  type Connection,
+  type Folk,
+  type Profile,
+  type Request,
+  ContactMethod,
+  RequestType
+}

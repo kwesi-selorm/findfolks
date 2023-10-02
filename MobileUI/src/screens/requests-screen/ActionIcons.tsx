@@ -3,8 +3,8 @@ import FeatherIcon from 'react-native-vector-icons/Feather'
 import React from 'react'
 import { Alert, StyleSheet, View } from 'react-native'
 import { FolkType } from '../../components/FolkItem'
-import { RequestType } from './index'
 import { appColors } from '../../styles'
+import { RequestType } from '../../@types'
 
 type ActionIconsProps = {
   requestType: RequestType
