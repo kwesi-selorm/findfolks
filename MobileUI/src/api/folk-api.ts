@@ -11,3 +11,5 @@ async function getProfile(id: number) {
   const response = await API.get<Profile | null>('' + id)
   return response.data
 }
+
+export { getFolksToDiscover, getProfile }
