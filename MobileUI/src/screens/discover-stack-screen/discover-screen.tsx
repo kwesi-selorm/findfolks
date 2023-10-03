@@ -10,7 +10,7 @@ type DiscoverScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Discover'>
 }
 
-const DiscoverScreen: FC<DiscoverScreenProps> = ({ navigation }: DiscoverScreenProps) => {
+const DiscoverScreen: FC<DiscoverScreenProps> = ({ navigation }) => {
   useEffect(() => {
     function navigateToProfileScreen() {
       navigation.navigate('Profile')
