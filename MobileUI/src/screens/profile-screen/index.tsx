@@ -1,27 +1,23 @@
-import { Alert, SafeAreaView, StyleSheet, Text } from 'react-native'
-import React, { useEffect } from 'react'
-import { createCityPickerItems } from '../../util/csv-reader'
-import { Picker } from '@react-native-picker/picker'
+import React from 'react'
+import { Alert, FlatList, SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native'
 import AppButton from '../../components/AppButton'
-import { appColors } from '../../styles'
 import profile from '../../mock-data/profile'
+import { appColors, appFont } from '../../styles'
 
-type CityItem = {
-  label: string
-  value: string
-}
+import { City } from '../../@types'
+import cities from '../../mock-data/cities'
+import CityItem from './CityItem'
 
 const ProfileScreen = () => {
-  const [cityItems, setCityItems] = React.useState<CityItem[]>([])
-  const [selectedCity, setSelectedCity] = React.useState('')
+  const [cityItems, setCityItems] = React.useState<City[]>([])
+  const [selectedCity, setSelectedCity] = React.useState<City | null>(null)
 
-  useEffect(() => {
-    async function createCityItems() {
-      const items = await createCityPickerItems()
-      setCityItems(items ?? [])
-    }
-    createCityItems().then()
-  }, [])
+  function filterCities(searchText: string) {
+    const matches = cities.filter((item) =>
+      item.value.toLowerCase().includes(searchText.toLowerCase())
+    )
+    setCityItems(matches)
+  }
 
   return (
     <SafeAreaView>
@@ -33,7 +29,9 @@ const ProfileScreen = () => {
           Alert.alert('Edit profile')
         }}
         outline
-        size="small"
+        size="medium"
+        color={appColors.black}
+        style={styles.editButton}
       />
       <Text>{profile.name}</Text>
       <Text>{profile.bio}</Text>
@@ -45,25 +43,33 @@ const ProfileScreen = () => {
       connected with 'n' folks, and with buttons to navigate to those screens
       Clicking on edit profile will either open a modal or a new edit screen*/}
 
-      <Picker
-        selectedValue={selectedCity}
-        onValueChange={(itemValue) => {
-          setSelectedCity(itemValue)
-        }}
-        enabled={true}
-        prompt={'Select a city'}
-        style={styles.picker}
-      >
-        {cityItems.map((item) => (
-          <Picker.Item label={item.label} value={item.value} key={item.value} />
-        ))}
-      </Picker>
+      <View style={styles.cityInput}>
+        <TextInput
+          placeholder="Which city do you live in?"
+          value={selectedCity?.value}
+          onChangeText={(text) => {
+            text === '' ? setCityItems([]) : filterCities(text)
+          }}
+        />
+      </View>
+      <FlatList
+        data={cityItems}
+        renderItem={({ item }) => (
+          <CityItem item={item} key={item.id} setSelectedCity={setSelectedCity} />
+        )}
+      />
     </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
-  picker: {
+  editButton: {
+    alignSelf: 'flex-end'
+  },
+  name: {
+    fontFamily: appFont.extraBold
+  },
+  cityInput: {
     // width: 'auto',
     // marginRight: 'auto',
     // marginLeft: 'auto'

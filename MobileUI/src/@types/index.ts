@@ -1,8 +1,25 @@
-type LoggedInUser = {
+enum ContactMethod {
+  Mobile = 0,
+  Email,
+  Facebook,
+  Twitter,
+  Snapchat
+}
+
+enum RequestType {
+  RECEIVED = 'received',
+  SENT = 'sent'
+}
+
+type City = {
   id: number
-  username: string | null
-  token: string
-  expiration: Date
+  label: string
+  value: string
+}
+
+interface Connection extends Folk {
+  preferredContactMethod: ContactMethod
+  contactInfo: string
 }
 
 interface Folk {
@@ -16,9 +33,11 @@ interface Folk {
   bio?: string
 }
 
-interface Connection extends Folk {
-  preferredContactMethod: ContactMethod
-  contactInfo: string
+type LoggedInUser = {
+  id: number
+  username: string | null
+  token: string
+  expiration: Date
 }
 
 interface Profile extends Folk {
@@ -33,25 +52,13 @@ type Request = {
   dateSent: Date
 }
 
-enum ContactMethod {
-  Mobile = 0,
-  Email,
-  Facebook,
-  Twitter,
-  Snapchat
-}
-
-enum RequestType {
-  RECEIVED = 'received',
-  SENT = 'sent'
-}
-
 export {
-  type LoggedInUser,
+  ContactMethod,
+  RequestType,
+  type City,
   type Connection,
   type Folk,
+  type LoggedInUser,
   type Profile,
-  type Request,
-  ContactMethod,
-  RequestType
+  type Request
 }
