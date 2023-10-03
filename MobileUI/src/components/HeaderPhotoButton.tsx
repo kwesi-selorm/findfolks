@@ -29,7 +29,8 @@ const styles = StyleSheet.create({
   photo: {
     width: 35,
     height: 35,
-    borderRadius: 18
+    borderRadius: 18,
+    marginRight: 15
   }
 })
 
