@@ -1,5 +1,5 @@
-import { Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native'
 import React from 'react'
+import { Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native'
 import { appColors, appFont } from '../styles'
 
 interface AppButtonProps {
@@ -29,7 +29,7 @@ const AppButton = ({
   switch (size) {
     case 'small':
       fontSize = 12
-      width = 120
+      width = 130
       break
     case 'medium':
       fontSize = 16
@@ -41,7 +41,7 @@ const AppButton = ({
       break
     default:
       fontSize = 16
-      width = 100
+      width = 180
   }
 
   const styles = StyleSheet.create({
@@ -49,7 +49,7 @@ const AppButton = ({
       backgroundColor: outline ? 'none' : backgroundColor,
       width: width,
       borderRadius: 10,
-      borderWidth: outline ? 1 : 0,
+      borderWidth: outline ? 2 : 0,
       borderColor: outline ? appColors.darkBlue : 'none'
     },
     button: {
