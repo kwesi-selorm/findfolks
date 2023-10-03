@@ -3,12 +3,14 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { View } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
-import DiscoverStackScreen from './src/screens/discover-stack-screen'
+import DiscoverScreen from './src/screens/discover-screen'
 import CommunityScreen from './src/screens/community-screen'
 import { useFonts } from 'expo-font'
 import { appColors, customFonts } from './src/styles'
 import RequestsScreen from './src/screens/requests-screen'
 import HeaderTitle from './src/components/HeaderTitle'
+import ProfileScreen from './src/screens/profile-screen'
+import HeaderPhotoButton from './src/components/HeaderPhotoButton'
 // expo install expo-font
 
 function getScreenOptions() {
@@ -16,15 +18,23 @@ function getScreenOptions() {
     tabBarIcon: ({ focused, color, size }) => {
       let iconName = ''
       let screenName = ''
-      if (route.name === 'DiscoverStack') {
-        iconName = focused ? 'search-sharp' : 'search-outline'
-        screenName = 'DiscoverStack'
-      } else if (route.name === 'Community') {
-        iconName = focused ? 'people-sharp' : 'people-outline'
-        screenName = 'Community'
-      } else if (route.name === 'Requests') {
-        iconName = focused ? 'person-add' : 'person-add-outline'
-        screenName = 'Requests'
+
+      switch (route.name) {
+        case 'Discover':
+          iconName = focused ? 'search-sharp' : 'search-outline'
+          screenName = 'Discover'
+          break
+        case 'Community':
+          iconName = focused ? 'people-sharp' : 'people-outline'
+          screenName = 'Community'
+          break
+        case 'Requests':
+          iconName = focused ? 'person-add' : 'person-add-outline'
+          screenName = 'Requests'
+          break
+        case 'Profile':
+          iconName = focused ? 'person-sharp' : 'person-outline'
+          screenName = 'Profile'
       }
 
       return (
@@ -49,6 +59,15 @@ function getScreenOptions() {
 function createHeaderTitle(title) {
   return () => <HeaderTitle title={title} />
 }
+function createHeaderRight(navigation) {
+  return () => (
+    <HeaderPhotoButton
+      onPress={() => {
+        navigation.navigate('Profile')
+      }}
+    />
+  )
+}
 
 export default function App() {
   const [fontsLoaded] = useFonts(customFonts)
@@ -59,11 +78,14 @@ export default function App() {
   const Tab = createBottomTabNavigator()
   return (
     <NavigationContainer>
-      <Tab.Navigator initialRouteName="DiscoverStackScreen" screenOptions={getScreenOptions()}>
+      <Tab.Navigator initialRouteName="DiscoverScreen" screenOptions={getScreenOptions()}>
         <Tab.Screen
-          name="DiscoverStack"
-          component={DiscoverStackScreen}
-          options={{ headerShown: false }}
+          name="Discover"
+          component={DiscoverScreen}
+          options={({ navigation }) => ({
+            headerTitle: createHeaderTitle('Discover'),
+            headerRight: createHeaderRight(navigation)
+          })}
         />
         <Tab.Screen
           name="Community"
@@ -77,6 +99,13 @@ export default function App() {
           component={RequestsScreen}
           options={{
             headerTitle: createHeaderTitle('Requests')
+          }}
+        />
+        <Tab.Screen
+          name="Profile"
+          component={ProfileScreen}
+          options={{
+            headerTitle: createHeaderTitle('Profile')
           }}
         />
       </Tab.Navigator>

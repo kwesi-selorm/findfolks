@@ -15,3 +15,5 @@ const profile: Profile = {
   contactInfo: '',
   connections: connections
 }
+
+export default profile
