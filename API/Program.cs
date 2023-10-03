@@ -28,6 +28,7 @@ builder.Services.AddScoped<ImageService>();
 builder.Services.AddScoped<ProfilePhotoService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<RequestService>();
+builder.Services.AddScoped<DataService>();
 builder.Services
     .AddIdentityCore<IdentityUser>(options =>
     {
