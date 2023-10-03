@@ -1,6 +1,6 @@
 import { Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native'
 import React from 'react'
-import { appFont } from '../styles'
+import { appColors, appFont } from '../styles'
 
 interface AppButtonProps {
   icon?: React.ReactNode
@@ -11,6 +11,7 @@ interface AppButtonProps {
   onPress: () => void
   size?: 'small' | 'medium' | 'large'
   style?: StyleProp<ViewStyle>
+  outline?: boolean
 }
 
 const AppButton = ({
@@ -21,7 +22,8 @@ const AppButton = ({
   backgroundColor,
   accessibilityLabel,
   size,
-  style
+  style,
+  outline
 }: AppButtonProps) => {
   let fontSize, width
   switch (size) {
@@ -44,9 +46,11 @@ const AppButton = ({
 
   const styles = StyleSheet.create({
     container: {
-      backgroundColor: backgroundColor,
+      backgroundColor: outline ? 'none' : backgroundColor,
       width: width,
-      borderRadius: 10
+      borderRadius: 10,
+      borderWidth: outline ? 1 : 0,
+      borderColor: outline ? appColors.darkBlue : 'none'
     },
     button: {
       display: 'flex',
