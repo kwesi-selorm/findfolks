@@ -1,13 +1,13 @@
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import HeaderPhotoButton from '../../components/HeaderPhotoButton'
+import { FC, useEffect } from 'react'
 import { StyleSheet, View } from 'react-native'
 import FolkList from './FolkList'
 import { folksToDiscover } from '../../mock-data/folks-to-discover'
-import HeaderPhotoButton from '../../components/HeaderPhotoButton'
-import { FC, useEffect } from 'react'
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { RootStackParamList } from './index'
+import { ParamListBase } from '@react-navigation/native'
 
 type DiscoverScreenProps = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'Discover'>
+  navigation: NativeStackNavigationProp<ParamListBase>
 }
 
 const DiscoverScreen: FC<DiscoverScreenProps> = ({ navigation }) => {
