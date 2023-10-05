@@ -25,6 +25,22 @@ const cities: City[] = [
     id: 5,
     label: 'Copenhagen, Denmark',
     value: 'Copenhagen'
+  },
+
+  {
+    id: 6,
+    label: 'Berlin, Germany',
+    value: 'Berlin'
+  },
+  {
+    id: 7,
+    label: 'Paris, France',
+    value: 'Paris'
+  },
+  {
+    id: 8,
+    label: 'Lome, Togo',
+    value: 'Lome'
   }
 ]
 

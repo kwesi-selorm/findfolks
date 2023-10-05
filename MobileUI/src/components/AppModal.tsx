@@ -1,19 +1,24 @@
+import React from 'react'
 import { Modal, Pressable, StyleSheet, View } from 'react-native'
-import React, { SetStateAction } from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { appColors } from '../styles'
 
 interface AppModalProps {
+  animationType?: 'slide' | 'fade' | 'none'
   children: React.ReactNode
   modalVisible: boolean
-  setModalVisible: React.Dispatch<SetStateAction<boolean>>
   onDismiss: () => void
 }
 
-const AppModal = ({ children, modalVisible, onDismiss }: AppModalProps) => {
+const AppModal = ({
+  animationType = 'slide',
+  children,
+  modalVisible,
+  onDismiss
+}: AppModalProps) => {
   return (
     <View style={styles.centeredView}>
-      <Modal animationType="slide" visible={modalVisible} onRequestClose={onDismiss}>
+      <Modal animationType={animationType} visible={modalVisible} onRequestClose={onDismiss}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             {children}

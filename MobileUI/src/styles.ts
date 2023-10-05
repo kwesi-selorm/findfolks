@@ -30,4 +30,8 @@ const radius = {
   cardRadius: 10
 }
 
-export { appFont, customFonts, appColors, radius }
+const widths = {
+  formWidth: 300
+}
+
+export { appColors, appFont, customFonts, radius, widths }

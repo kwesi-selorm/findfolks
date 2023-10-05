@@ -1,21 +1,18 @@
 import React, { Dispatch, SetStateAction } from 'react'
 import { Pressable, StyleSheet, Text } from 'react-native'
-import { City, EditProfileFormValues } from '../../@types'
+import { Country, EditProfileFormValues } from '../../@types'
 import { appColors, appFont } from '../../styles'
 
-type CityItemProps = {
-  item: City
+type CountryItemProps = {
+  item: Country
   setValues: Dispatch<SetStateAction<EditProfileFormValues>>
-  setCityItems: Dispatch<SetStateAction<City[]>>
+  setCountryItems: Dispatch<SetStateAction<Country[]>>
 }
 
-const CityItem: React.FC<CityItemProps> = ({ item, setValues, setCityItems }) => {
-  const city = item.value
-  const country = item.label.split(', ')[1]
-
-  function onSelectCity(cityItem: City) {
-    setValues((prev) => ({ ...prev, cityOfResidence: cityItem.value }))
-    setCityItems([])
+const CountryItem: React.FC<CountryItemProps> = ({ item, setValues, setCountryItems }) => {
+  function onSelectCountry(countryItem: Country) {
+    setValues((prev) => ({ ...prev, homeCountry: countryItem.value }))
+    setCountryItems([])
   }
 
   return (
@@ -23,12 +20,10 @@ const CityItem: React.FC<CityItemProps> = ({ item, setValues, setCityItems }) =>
       style={styles.container}
       key={item.id}
       onPress={() => {
-        onSelectCity(item)
+        onSelectCountry(item)
       }}
     >
-      <Text style={styles.text}>
-        {city} ({country})
-      </Text>
+      <Text style={styles.text}>{item.value}</Text>
     </Pressable>
   )
 }
@@ -49,4 +44,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default CityItem
+export default CountryItem

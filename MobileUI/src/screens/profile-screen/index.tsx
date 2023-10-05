@@ -1,42 +1,33 @@
 import React from 'react'
-import {
-  Alert,
-  FlatList,
-  Image,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View
-} from 'react-native'
+import { Image, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { City } from '../../@types'
+
 import AppButton from '../../components/AppButton'
-import cities from '../../mock-data/cities'
+import AppModal from '../../components/AppModal'
+
 import profile from '../../mock-data/profile'
 import { appColors, appFont } from '../../styles'
-import CityItem from './CityItem'
+import EditProfileForm from './EditProfileForm'
 
 const ProfileScreen = () => {
-  const [cityItems, setCityItems] = React.useState<City[]>([])
-  const [selectedCity, setSelectedCity] = React.useState<City | null>(null)
+  const [modalVisible, setModalVisible] = React.useState(false)
 
-  function filterCities(searchText: string) {
-    const matches = cities.filter((item) =>
-      item.value.toLowerCase().includes(searchText.toLowerCase())
-    )
-    setCityItems(matches)
+  function handleModalDismiss() {
+    setModalVisible(false)
   }
 
   return (
     <SafeAreaView>
+      <AppModal modalVisible={modalVisible} onDismiss={handleModalDismiss}>
+        <EditProfileForm />
+      </AppModal>
       <AppButton
         text="Edit profile"
         backgroundColor={appColors.darkBlue}
         accessibilityLabel="Edit profile"
         onPress={() => {
-          Alert.alert('Edit profile')
+          setModalVisible(true)
         }}
         outline
         size="small"
@@ -70,22 +61,6 @@ const ProfileScreen = () => {
         {/*Maybe a list of number of sent requests, received requests (Under requests),
       connected with 'n' folks, and with buttons to navigate to those screens
       Clicking on edit profile will either open a modal or a new edit screen*/}
-
-        <View style={styles.cityInput}>
-          <TextInput
-            placeholder="Which city do you live in?"
-            value={selectedCity?.value}
-            onChangeText={(text) => {
-              text === '' ? setCityItems([]) : filterCities(text)
-            }}
-          />
-        </View>
-        <FlatList
-          data={cityItems}
-          renderItem={({ item }) => (
-            <CityItem item={item} key={item.id} setSelectedCity={setSelectedCity} />
-          )}
-        />
       </View>
     </SafeAreaView>
   )

@@ -1,6 +1,6 @@
-import { Profile } from '../@types'
-import { connections } from './connections'
+import { ContactMethod, Profile } from '../@types'
 import { torProfilePhoto } from './bas64strings'
+import { connections } from './connections'
 
 const profile: Profile = {
   id: 1,
@@ -11,8 +11,8 @@ const profile: Profile = {
   cityOrTownOfResidence: 'Stavanger',
   profilePhoto: torProfilePhoto,
   bio: 'Hi there',
-  preferredContactMethod: 0,
-  contactInfo: '',
+  preferredContactMethod: ContactMethod.Facebook,
+  contactInfo: 'Tor Anresson',
   connections: connections
 }
 
