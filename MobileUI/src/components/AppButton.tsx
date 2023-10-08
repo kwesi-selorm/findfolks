@@ -50,7 +50,7 @@ const AppButton = ({
       width: width,
       borderRadius: 10,
       borderWidth: outline ? 2 : 0,
-      borderColor: outline ? appColors.darkBlue : 'none'
+      borderColor: outline ? backgroundColor ?? appColors.darkBlue : 'none'
     },
     button: {
       display: 'flex',

@@ -20,7 +20,7 @@ const ProfileScreen = () => {
   return (
     <SafeAreaView>
       <AppModal modalVisible={modalVisible} onDismiss={handleModalDismiss}>
-        <EditProfileForm />
+        <EditProfileForm setModalVisible={setModalVisible} />
       </AppModal>
       <AppButton
         text="Edit profile"

@@ -1,14 +1,21 @@
 import React, { FC } from 'react'
+import { StyleSheet, View } from 'react-native'
 import { City, ContactMethod, Country, EditProfileFormValues } from '../../@types'
+import AppButton from '../../components/AppButton'
 import SearchList from '../../components/SearchList'
 import Form from '../../components/form'
 import AppInput from '../../components/form/AppInput'
 import FormItem from '../../components/form/FormItem'
 import cities from '../../mock-data/cities'
 import profile from '../../mock-data/profile'
+import { appColors } from '../../styles'
 import CityItem from './CityItem'
 import ContactMethodsList from './ContactMethodsList'
 import CountryItem from './CountryItem'
+
+type EditProfileFormProps = {
+  setModalVisible: React.Dispatch<React.SetStateAction<boolean>>
+}
 
 export type Contact = {
   icon: React.JSX.Element
@@ -26,7 +33,7 @@ const initialValues: EditProfileFormValues = {
   bio: profile.bio
 }
 
-const EditProfileForm: FC = () => {
+const EditProfileForm: FC<EditProfileFormProps> = ({ setModalVisible }) => {
   const [values, setValues] = React.useState<EditProfileFormValues>(initialValues)
   const [cityItems, setCityItems] = React.useState<City[]>([])
   const [countryItems, setCountryItems] = React.useState<Country[]>([])
@@ -56,6 +63,11 @@ const EditProfileForm: FC = () => {
   function handleHomeCountryReset() {
     setCountryItems([])
     setValues((prev) => ({ ...prev, homeCountry: '' }))
+  }
+
+  function handleOnCancel() {
+    setValues(initialValues)
+    setModalVisible(false)
   }
 
   return (
@@ -112,8 +124,38 @@ const EditProfileForm: FC = () => {
       <FormItem label="Contact information">
         <AppInput placeholder="Contact info" value={values.contactInfo} />
       </FormItem>
+
+      {/* Buttons */}
+
+      <View style={styles.buttons}>
+        <AppButton
+          text="Cancel"
+          onPress={handleOnCancel}
+          backgroundColor={appColors.red}
+          accessibilityLabel="Cancel button"
+          color={appColors.black}
+          outline
+        />
+        <AppButton
+          text="Save"
+          onPress={() => {
+            console.log('Saving')
+          }}
+          backgroundColor={appColors.green}
+          accessibilityLabel="Save button"
+        />
+      </View>
     </Form>
   )
 }
+
+const styles = StyleSheet.create({
+  buttons: {
+    display: 'flex',
+    gap: 10,
+    flexDirection: 'row',
+    marginTop: '30%'
+  }
+})
 
 export default EditProfileForm
