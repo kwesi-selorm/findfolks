@@ -19,7 +19,8 @@ type EditProfileFormProps = {
 
 export type Contact = {
   icon: React.JSX.Element
-  name: ContactMethod
+  name: string
+  index: ContactMethod
 }
 
 const initialValues: EditProfileFormValues = {
@@ -139,7 +140,7 @@ const EditProfileForm: FC<EditProfileFormProps> = ({ setModalVisible }) => {
         <AppButton
           text="Save"
           onPress={() => {
-            console.log('Saving')
+            console.log({ values })
           }}
           backgroundColor={appColors.green}
           accessibilityLabel="Save button"

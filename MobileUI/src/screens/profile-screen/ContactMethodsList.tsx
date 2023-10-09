@@ -5,6 +5,7 @@ import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { ContactMethod, EditProfileFormValues } from '../../@types'
 import profile from '../../mock-data/profile'
 import { appColors, appFont } from '../../styles'
+import { contactMethodNames } from '../../util/constants'
 import { Contact } from './EditProfileForm'
 
 type ContacMethodsListProps = {
@@ -14,27 +15,41 @@ type ContacMethodsListProps = {
 
 type ContactMethodItemProps = {
   item: Contact
-  preferredContactMethod: ContactMethod
-  contactMethodRef: MutableRefObject<ContactMethod | undefined>
+  preferredContactMethod: number
+  contactMethodRef: MutableRefObject<number>
   setValues: Dispatch<SetStateAction<EditProfileFormValues>>
 }
 
 export const contactMethods: Contact[] = [
   {
     icon: <MCIcon name="email" size={20} color="#DB4437" />,
-    name: ContactMethod.Email
+    name: contactMethodNames[ContactMethod.Email],
+    index: ContactMethod.Email
   },
   {
     icon: <Icon name="facebook-square" size={20} color="#4267B2" />,
-    name: ContactMethod.Facebook
+    name: contactMethodNames[ContactMethod.Facebook],
+    index: ContactMethod.Facebook
   },
-  { icon: <Icon name="snapchat" size={20} color="#FFFC00" />, name: ContactMethod.Snapchat },
-  { icon: <Icon name="twitter" size={20} color="#26a7de" />, name: ContactMethod.Twitter },
-  { icon: <Icon name="mobile" size={20} color={appColors.grey} />, name: ContactMethod.Mobile }
+  {
+    icon: <Icon name="snapchat" size={20} color="#FFFC00" />,
+    name: contactMethodNames[ContactMethod.Snapchat],
+    index: ContactMethod.Snapchat
+  },
+  {
+    icon: <Icon name="twitter" size={20} color="#26a7de" />,
+    name: contactMethodNames[ContactMethod.Twitter],
+    index: ContactMethod.Twitter
+  },
+  {
+    icon: <Icon name="mobile" size={20} color={appColors.grey} />,
+    name: contactMethodNames[ContactMethod.Mobile],
+    index: ContactMethod.Mobile
+  }
 ]
 
 const ContactMethodsList: FC<ContacMethodsListProps> = ({ initialValues, setValues }) => {
-  const contactMethodRef = useRef<ContactMethod | undefined>(initialValues.preferredContactMethod)
+  const contactMethodRef = useRef<number>(initialValues.preferredContactMethod)
 
   return (
     <FlatList
@@ -54,11 +69,11 @@ const ContactMethodsList: FC<ContacMethodsListProps> = ({ initialValues, setValu
 }
 
 const ContactMethodItem = ({ item, contactMethodRef, setValues }: ContactMethodItemProps) => {
-  const isSelectedMethod = item.name === contactMethodRef?.current
+  const isSelectedMethod = item.index === contactMethodRef.current
 
   function handleOnPressContactItem() {
-    contactMethodRef.current = item.name
-    setValues((prev) => ({ ...prev, preferredContactMethod: item.name }))
+    contactMethodRef.current = item.index
+    setValues((prev) => ({ ...prev, preferredContactMethod: item.index }))
   }
 
   const styles = StyleSheet.create({

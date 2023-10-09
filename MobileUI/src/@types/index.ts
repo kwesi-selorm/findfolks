@@ -1,9 +1,9 @@
 enum ContactMethod {
-  Mobile = 'mobile',
-  Email = 'email',
-  Facebook = 'facebook',
-  Twitter = 'twitter',
-  Snapchat = 'snapchat'
+  Mobile = 1,
+  Email,
+  Facebook,
+  Twitter,
+  Snapchat
 }
 
 enum RequestType {
@@ -27,14 +27,16 @@ type Country = {
   value: string
 }
 
+type EditProfileRequest = Partial<EditProfileFormValues>
+
 type EditProfileFormValues = {
-  name?: string
-  homeCountry?: string
+  name: string
+  homeCountry: string
   homeCityOrTown?: string
-  cityOfResidence?: string
-  countryOfResidence?: string
-  preferredContactMethod?: ContactMethod
-  contactInfo?: string
+  cityOfResidence: string
+  countryOfResidence: string
+  preferredContactMethod: number
+  contactInfo: string
   bio?: string
 }
 
@@ -75,6 +77,7 @@ export {
   type Connection,
   type Country,
   type EditProfileFormValues,
+  type EditProfileRequest,
   type Folk,
   type LoggedInUser,
   type Profile,
