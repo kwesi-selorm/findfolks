@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: appColors.grey,
     padding: 5,
-    maxWidth: '80%',
+    maxWidth: '100%',
     minWidth: widths.formWidth
   }
 })

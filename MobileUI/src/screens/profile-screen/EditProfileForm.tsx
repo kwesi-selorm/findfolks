@@ -66,6 +66,10 @@ const EditProfileForm: FC<EditProfileFormProps> = ({ setModalVisible }) => {
     setValues((prev) => ({ ...prev, homeCountry: '' }))
   }
 
+  function updateForm({ name, value }: { name: string; value: string | number }) {
+    setValues((prev) => ({ ...prev, [name]: value }))
+  }
+
   function handleOnCancel() {
     setValues(initialValues)
     setModalVisible(false)
@@ -75,7 +79,13 @@ const EditProfileForm: FC<EditProfileFormProps> = ({ setModalVisible }) => {
     <Form>
       {/* Name */}
       <FormItem label="Name">
-        <AppInput placeholder="Username" value={values.name} />
+        <AppInput
+          placeholder="Username"
+          value={values.name}
+          onChangeText={(text) => {
+            updateForm({ name: 'name', value: text })
+          }}
+        />
       </FormItem>
 
       {/* Home country */}
@@ -100,7 +110,12 @@ const EditProfileForm: FC<EditProfileFormProps> = ({ setModalVisible }) => {
 
       {/* BIO */}
       <FormItem label="Bio">
-        <AppInput placeholder="Bio" value={values.bio} multiline={true} />
+        <AppInput
+          placeholder="Bio"
+          value={values.bio}
+          multiline={true}
+          onChangeText={(text) => updateForm({ name: 'bio', value: text })}
+        />
       </FormItem>
 
       {/* Residency city and town */}
@@ -123,7 +138,11 @@ const EditProfileForm: FC<EditProfileFormProps> = ({ setModalVisible }) => {
 
       {/* Contact information */}
       <FormItem label="Contact information">
-        <AppInput placeholder="Contact info" value={values.contactInfo} />
+        <AppInput
+          placeholder="Contact info"
+          value={values.contactInfo}
+          onChangeText={(text) => updateForm({ name: 'contactInfo', value: text })}
+        />
       </FormItem>
 
       {/* Buttons */}
