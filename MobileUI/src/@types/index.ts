@@ -1,5 +1,5 @@
 enum ContactMethod {
-  Mobile = 1,
+  Mobile = 0,
   Email,
   Facebook,
   Twitter,
@@ -64,10 +64,30 @@ interface Profile extends Folk {
   connections: Array<Connection>
 }
 
+type ReceivedRequest = {
+  senderId: number
+  dateReceived: Date
+}
+
 type Request = {
   senderId: number
   recipientId: number
   dateSent: Date
+}
+
+type SentRequest = {
+  recipientId: number
+  dateSent: Date
+}
+
+type User = {
+  userName: string
+  email: string
+}
+
+type UserRequests = {
+  sentRequests: Array<SentRequest>
+  receivedRequests: Array<ReceivedRequest>
 }
 
 export {
@@ -81,5 +101,9 @@ export {
   type Folk,
   type LoggedInUser,
   type Profile,
-  type Request
+  type ReceivedRequest,
+  type Request,
+  type SentRequest,
+  type User,
+  type UserRequests
 }

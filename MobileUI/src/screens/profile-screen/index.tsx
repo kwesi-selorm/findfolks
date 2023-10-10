@@ -6,6 +6,7 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 import AppButton from '../../components/AppButton'
 import AppModal from '../../components/AppModal'
 
+import { connections } from '../../mock-data/connections'
 import profile from '../../mock-data/profile'
 import { appColors, appFont } from '../../styles'
 import EditProfileForm from './EditProfileForm'
@@ -61,6 +62,7 @@ const ProfileScreen = () => {
         {/*Maybe a list of number of sent requests, received requests (Under requests),
       connected with 'n' folks, and with buttons to navigate to those screens
       Clicking on edit profile will either open a modal or a new edit screen*/}
+        <View>Connections: {connections.length}</View>
       </View>
     </SafeAreaView>
   )

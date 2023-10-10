@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { getDataFromStorage } from '../util/storage'
 import { LoggedInUser } from '../@types'
+import { getDataFromStorage } from '../util/storage'
 
 const API = axios.create({
   baseURL: 'http://localhost:5020/api/',
@@ -13,7 +13,8 @@ const API = axios.create({
 
 async function setAuthorizationHeader() {
   const user = (await getDataFromStorage('user')) as LoggedInUser | null
-  const token = user?.token
+  if (user == null) return
+  const token = user.token
   API.defaults.headers.common['Authorization'] = `Bearer ${token}`
 }
 setAuthorizationHeader().catch((err) => {
