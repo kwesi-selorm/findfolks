@@ -1,6 +1,6 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native'
 import { Connection, ContactMethod } from '../../@types'
-import { appFont, appColors, radius } from '../../styles'
+import { appFont, appColors, appBorderRadius } from '../../styles'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import React from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome5'
@@ -72,15 +72,15 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderWidth: 1,
     borderColor: appColors.darkBlue,
-    borderTopRightRadius: radius.cardRadius,
-    borderTopLeftRadius: radius.cardRadius,
+    borderTopRightRadius: appBorderRadius.cardRadius,
+    borderTopLeftRadius: appBorderRadius.cardRadius,
     borderBottomWidth: 0,
     borderBottomRightRadius: 0,
     borderBottomLeftRadius: 0
   },
   nameContainer: {
-    borderTopRightRadius: radius.cardRadius - 2,
-    borderTopLeftRadius: radius.cardRadius - 2,
+    borderTopRightRadius: appBorderRadius.cardRadius - 2,
+    borderTopLeftRadius: appBorderRadius.cardRadius - 2,
     width: '100%',
     backgroundColor: appColors.darkBlue,
     textAlign: 'center',
@@ -117,8 +117,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderTopWidth: 0,
     borderColor: appColors.darkBlue,
-    borderBottomEndRadius: radius.cardRadius,
-    borderBottomStartRadius: radius.cardRadius
+    borderBottomEndRadius: appBorderRadius.cardRadius,
+    borderBottomStartRadius: appBorderRadius.cardRadius
   },
   contactInfo: {
     fontSize: 12

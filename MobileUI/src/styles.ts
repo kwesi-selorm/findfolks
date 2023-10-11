@@ -26,7 +26,8 @@ const appColors = {
   red: '#C63D2F'
 }
 
-const radius = {
+const appBorderRadius = {
+  pressablePressedRadius: 8,
   cardRadius: 10
 }
 
@@ -34,4 +35,4 @@ const widths = {
   formWidth: 300
 }
 
-export { appColors, appFont, customFonts, radius, widths }
+export { appColors, appFont, customFonts, appBorderRadius, widths }
