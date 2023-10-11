@@ -3,6 +3,7 @@ import LoginScreen from './login-screen'
 import SignupScreen from './signup-screen'
 import { NavigationContainer } from '@react-navigation/native'
 import HomeScreen from './home-screen'
+import AppTabs from './AppTabs'
 
 const AuthNavigator = () => {
   const Stack = createNativeStackNavigator()
@@ -24,6 +25,7 @@ const AuthNavigator = () => {
             headerShown: false
           }}
         />
+        <Stack.Screen name="Tabs" component={AppTabs} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   )

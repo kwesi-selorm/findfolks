@@ -1,24 +1,27 @@
 import { useFonts } from 'expo-font'
 import { customFonts } from './src/styles'
-import TabNavigator from './src/screens/TabNavigator'
 import AuthProvider from './src/contexts/auth-context/AuthProvider'
 import FolkProvider from './src/contexts/folk-context/FolkProvider'
-import { useContext } from 'react'
-import AuthContext from './src/contexts/auth-context/AuthContext'
 import AuthNavigator from './src/screens/AuthNavigator'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 // expo install expo-font
 
 export default function App() {
   const [fontsLoaded] = useFonts(customFonts)
-  const { isAuthenticated } = useContext(AuthContext)
 
   if (!fontsLoaded) {
     return null
   }
 
+  const queryClient = new QueryClient()
+
   return (
-    <AuthProvider>
-      <FolkProvider>{isAuthenticated ? <TabNavigator /> : <AuthNavigator />}</FolkProvider>
-    </AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <FolkProvider>
+          <AuthNavigator />
+        </FolkProvider>
+      </AuthProvider>
+    </QueryClientProvider>
   )
 }

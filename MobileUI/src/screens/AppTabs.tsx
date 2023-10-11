@@ -4,12 +4,7 @@ import { appColors } from '../styles'
 import HeaderTitle from '../components/HeaderTitle'
 import HeaderPhotoButton from '../components/HeaderPhotoButton'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import {
-  NavigationContainer,
-  NavigationProp,
-  ParamListBase,
-  RouteProp
-} from '@react-navigation/native'
+import { NavigationProp, ParamListBase, RouteProp } from '@react-navigation/native'
 import DiscoverScreen from './discover-screen'
 import CommunityScreen from './community-screen'
 import RequestsScreen from './requests-screen'
@@ -77,43 +72,41 @@ function createHeaderRight(navigation: NavigationProp<ParamListBase>) {
   )
 }
 
-const TabNavigator = () => {
+const AppTabs = () => {
   const Tab = createBottomTabNavigator()
   return (
-    <NavigationContainer>
-      <Tab.Navigator initialRouteName="DiscoverScreen" screenOptions={getScreenOptions()}>
-        <Tab.Screen
-          name="Discover"
-          component={DiscoverScreen}
-          options={({ navigation }) => ({
-            headerTitle: createHeaderTitle('Discover'),
-            headerRight: createHeaderRight(navigation)
-          })}
-        />
-        <Tab.Screen
-          name="Community"
-          component={CommunityScreen}
-          options={{
-            headerTitle: createHeaderTitle('Community')
-          }}
-        />
-        <Tab.Screen
-          name="Requests"
-          component={RequestsScreen}
-          options={{
-            headerTitle: createHeaderTitle('Requests')
-          }}
-        />
-        <Tab.Screen
-          name="Profile"
-          component={ProfileScreen}
-          options={{
-            headerTitle: createHeaderTitle('Profile')
-          }}
-        />
-      </Tab.Navigator>
-    </NavigationContainer>
+    <Tab.Navigator initialRouteName="Discover" screenOptions={getScreenOptions()}>
+      <Tab.Screen
+        name="Discover"
+        component={DiscoverScreen}
+        options={({ navigation }) => ({
+          headerTitle: createHeaderTitle('Discover'),
+          headerRight: createHeaderRight(navigation)
+        })}
+      />
+      <Tab.Screen
+        name="Community"
+        component={CommunityScreen}
+        options={{
+          headerTitle: createHeaderTitle('Community')
+        }}
+      />
+      <Tab.Screen
+        name="Requests"
+        component={RequestsScreen}
+        options={{
+          headerTitle: createHeaderTitle('Requests')
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          headerTitle: createHeaderTitle('Profile')
+        }}
+      />
+    </Tab.Navigator>
   )
 }
 
-export default TabNavigator
+export default AppTabs
