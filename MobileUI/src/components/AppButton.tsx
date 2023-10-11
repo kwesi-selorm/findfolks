@@ -1,5 +1,13 @@
 import React from 'react'
-import { Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native'
+import {
+  DimensionValue,
+  Pressable,
+  StyleProp,
+  StyleSheet,
+  Text,
+  View,
+  ViewStyle
+} from 'react-native'
 import { appColors, appFont } from '../styles'
 
 interface AppButtonProps {
@@ -41,7 +49,7 @@ const AppButton = ({
       break
     default:
       fontSize = 16
-      width = 180
+      width = 'auto' as DimensionValue
   }
 
   const styles = StyleSheet.create({
@@ -63,7 +71,7 @@ const AppButton = ({
       gap: 10
     },
     text: {
-      color: color ?? '#fff',
+      color: outline ? color ?? appColors.black : color ?? appColors.white,
       fontFamily: appFont.regular,
       fontSize: fontSize
     }
