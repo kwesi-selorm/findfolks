@@ -1,3 +1,4 @@
+import { AxiosRequestConfig } from 'axios'
 import { CreateConnectionRequest, DeleteConnectionRequest } from '../@types/requests'
 import API from './config'
 
@@ -8,9 +9,12 @@ async function createConnection(data: CreateConnectionRequest) {
   return response.data
 }
 
-// async function deleteConnection(data: DeleteConnectionRequest) {
-//   const response = await API.delete("", data)
-//   return response.data
-// }
+async function deleteConnection(data: DeleteConnectionRequest) {
+  const config: AxiosRequestConfig<DeleteConnectionRequest> = {
+    data
+  }
+  const response = await API.delete('', config)
+  return response.data
+}
 
-export { createConnection }
+export { createConnection, deleteConnection }
