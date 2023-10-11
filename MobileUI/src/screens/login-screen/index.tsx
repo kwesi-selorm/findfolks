@@ -2,11 +2,13 @@ import { SafeAreaView, StyleSheet } from 'react-native'
 import Form from '../../components/form'
 import FormItem from '../../components/form/FormItem'
 import AppInput from '../../components/form/AppInput'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import AppButton from '../../components/AppButton'
 import { NavigationProp, ParamListBase, useNavigation } from '@react-navigation/native'
 import { appColors } from '../../styles'
 import ButtonGroup from '../../components/form/ButtonGroup'
+import AuthContext from '../../contexts/auth-context/AuthContext'
+import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 
 type LoginValues = {
   username: string
@@ -19,10 +21,15 @@ const initialValues: LoginValues = {
 
 const LoginScreen = () => {
   const [values, setValues] = useState(initialValues)
-  const navigation = useNavigation<NavigationProp<ParamListBase, 'Home'>>()
+  const { setIsAuthenticated } = useContext(AuthContext)
+  const navigation = useNavigation<NavigationProp<ParamListBase>>()
 
   function returnToHome() {
     navigation.navigate('Home')
+  }
+  function submitLoginRequest() {
+    setIsAuthenticated(true)
+    navigation.navigate('Tabs')
   }
 
   function updateValues(value: string, fieldName: string) {
@@ -57,10 +64,11 @@ const LoginScreen = () => {
             outline
           />
           <AppButton
-            text="Login"
+            text="Log in"
             backgroundColor={appColors.green}
             accessibilityLabel="Login button"
-            onPress={returnToHome}
+            onPress={submitLoginRequest}
+            icon={<AntDesignIcon name="login" size={20} color={appColors.white} />}
           />
         </ButtonGroup>
       </Form>

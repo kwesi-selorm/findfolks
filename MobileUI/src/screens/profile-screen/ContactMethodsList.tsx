@@ -64,6 +64,7 @@ const ContactMethodsList: FC<ContacMethodsListProps> = ({ initialValues, setValu
       )}
       keyExtractor={(item) => item.name}
       numColumns={3}
+      style={{ maxHeight: 70 }}
     />
   )
 }

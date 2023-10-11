@@ -1,6 +1,5 @@
 import { FC, ReactNode } from 'react'
 import { SafeAreaView, StyleSheet } from 'react-native'
-import { widths } from '../../styles'
 
 type FormProps = {
   children: ReactNode
@@ -12,13 +11,9 @@ const Form: FC<FormProps> = ({ children }) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: '70%',
-    textAlign: 'left',
-    marginTop: '50%',
-    height: '100%',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    minWidth: widths.formWidth
+    flex: 1,
+    alignItems: 'flex-start',
+    maxHeight: '60%'
   }
 })
 
