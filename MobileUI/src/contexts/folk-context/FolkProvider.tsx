@@ -1,25 +1,22 @@
-import { LoggedInUser, Profile } from '../../@types'
+import { Profile } from '../../@types'
 import { ReactNode, useMemo, useState } from 'react'
-import userContext from './UserContext'
+import userContext from './FolkContext'
 
 type UserProviderProps = {
   children: ReactNode
 }
 
-const UserProvider = ({ children }: UserProviderProps) => {
-  const [loggedInUser, setLoggedInUser] = useState<LoggedInUser | null>(null)
+const FolkProvider = ({ children }: UserProviderProps) => {
   const [folkProfile, setFolkProfile] = useState<Profile | null>(null)
 
   const value = useMemo(() => {
     return {
-      loggedInUser,
-      setLoggedInUser,
       folkProfile,
       setFolkProfile
     }
-  }, [loggedInUser, folkProfile])
+  }, [folkProfile])
 
   return <userContext.Provider value={value}>{children}</userContext.Provider>
 }
 
-export default UserProvider
+export default FolkProvider
