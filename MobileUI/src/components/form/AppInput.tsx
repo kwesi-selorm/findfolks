@@ -1,9 +1,9 @@
 import { FC } from 'react'
-import { StyleSheet, TextInput, View } from 'react-native'
-import { appColors, appFont, widths } from '../../styles'
+import { StyleSheet, TextInput, TextInputProps, View } from 'react-native'
+import { appBorderRadius, appColors, appFont, widths } from '../../styles'
 import InputErrorMessage from './InputErrorMessage'
 
-type AppInputProps = {
+interface AppInputProps extends TextInputProps {
   // eslint-disable-next-line no-unused-vars
   onChangeText: (text: string) => void
   keyboardType?: 'default' | 'decimal-pad' | 'url'
@@ -12,6 +12,7 @@ type AppInputProps = {
   multiline?: boolean
   hasError?: boolean
   errorMessage?: string
+  onPressIn?: () => void
 }
 
 const AppInput: FC<AppInputProps> = ({
@@ -21,7 +22,8 @@ const AppInput: FC<AppInputProps> = ({
   value,
   multiline,
   hasError,
-  errorMessage
+  errorMessage,
+  onPressIn
 }) => {
   return (
     <View>
@@ -37,6 +39,7 @@ const AppInput: FC<AppInputProps> = ({
         value={value}
         style={styles.textInput}
         multiline={multiline}
+        onPressIn={onPressIn}
       />
       {hasError ? <InputErrorMessage message={errorMessage} /> : null}
     </View>
@@ -48,9 +51,13 @@ const styles = StyleSheet.create({
     fontFamily: appFont.regular,
     borderWidth: 1,
     borderColor: appColors.grey,
-    padding: 5,
+    borderRadius: appBorderRadius.pressablePressedRadius,
+    padding: 10,
     maxWidth: '100%',
-    minWidth: widths.formWidth
+    minWidth: widths.formWidth,
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'row'
   }
 })
 

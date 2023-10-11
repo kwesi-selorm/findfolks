@@ -88,7 +88,7 @@ const ProfileScreen = () => {
       Clicking on edit profile will either open a modal or a new edit screen*/}
         {/*CONNECTIONS*/}
         <View style={styles.iconAndName}>
-          <Ionicons name="people-circle" size={20} color={appColors.darkBlue} />
+          <Ionicons name="people" size={20} color={appColors.darkBlue} />
           <Text>Connections: {connections.length}</Text>
         </View>
 

@@ -7,15 +7,17 @@ type CityItemProps = {
   item: City
   setValues: Dispatch<SetStateAction<EditProfileFormValues>>
   setCityItems: Dispatch<SetStateAction<City[]>>
+  setModalVisible: Dispatch<SetStateAction<boolean>>
 }
 
-const CityItem: React.FC<CityItemProps> = ({ item, setValues, setCityItems }) => {
+const CityItem: React.FC<CityItemProps> = ({ item, setValues, setCityItems, setModalVisible }) => {
   const city = item.value
   const country = item.label.split(', ')[1]
 
   function onSelectCity(cityItem: City) {
     setValues((prev) => ({ ...prev, cityOfResidence: cityItem.value }))
     setCityItems([])
+    setModalVisible(false)
   }
 
   return (

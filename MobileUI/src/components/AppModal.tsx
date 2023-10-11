@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, Pressable, StyleSheet, View } from 'react-native'
+import { Modal, StyleSheet, View } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { appColors } from '../styles'
 
@@ -21,10 +21,15 @@ const AppModal = ({
       <Modal animationType={animationType} visible={modalVisible} onRequestClose={onDismiss}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
+            <Ionicons
+              name="close"
+              color={appColors.black}
+              size={35}
+              onPress={onDismiss}
+              style={styles.closeIcon}
+            />
+
             {children}
-            <Pressable style={{ alignSelf: 'center', marginTop: 100 }} onPress={onDismiss}>
-              <Ionicons name="close-circle-outline" color={appColors.red} size={35} />
-            </Pressable>
           </View>
         </View>
       </Modal>
@@ -35,12 +40,15 @@ const AppModal = ({
 const styles = StyleSheet.create({
   centeredView: {
     display: 'flex',
-    justifyContent: 'center',
     alignItems: 'center',
     width: '100%'
   },
+  closeIcon: {
+    marginBottom: 20,
+    alignSelf: 'flex-end'
+  },
   modalView: {
-    marginTop: 150
+    marginTop: 80
   }
 })
 

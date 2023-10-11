@@ -7,12 +7,19 @@ type CountryItemProps = {
   item: Country
   setValues: Dispatch<SetStateAction<EditProfileFormValues>>
   setCountryItems: Dispatch<SetStateAction<Country[]>>
+  setModalVisible: Dispatch<SetStateAction<boolean>>
 }
 
-const CountryItem: React.FC<CountryItemProps> = ({ item, setValues, setCountryItems }) => {
+const CountryItem: React.FC<CountryItemProps> = ({
+  item,
+  setValues,
+  setCountryItems,
+  setModalVisible
+}) => {
   function onSelectCountry(countryItem: Country) {
     setValues((prev) => ({ ...prev, homeCountry: countryItem.value }))
     setCountryItems([])
+    setModalVisible(false)
   }
 
   return (
