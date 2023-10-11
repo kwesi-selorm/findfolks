@@ -12,10 +12,12 @@ const Form: FC<FormProps> = ({ children }) => {
 
 const styles = StyleSheet.create({
   container: {
-    // width: '100%'
+    width: '70%',
     textAlign: 'left',
-    marginTop: '30%',
+    marginTop: '50%',
     height: '100%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
     minWidth: widths.formWidth
   }
 })

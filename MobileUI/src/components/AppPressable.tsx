@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { Pressable, PressableProps, StyleProp, StyleSheet, ViewStyle } from 'react-native'
-import { appColors, radius } from '../styles'
+import { appColors, appBorderRadius } from '../styles'
 
 interface AppPressableProps extends PressableProps {
   children: React.ReactNode
@@ -13,7 +13,7 @@ const AppPressable: FC<AppPressableProps> = ({ children, style, onPress, accessi
   const styles = StyleSheet.create({
     container: {
       padding: 10,
-      borderRadius: radius.cardRadius - 2
+      borderRadius: appBorderRadius.pressablePressedRadius
     }
   })
   function createPressedStyles(pressed: boolean) {
