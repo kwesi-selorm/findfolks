@@ -1,14 +1,7 @@
 import React from 'react'
-import {
-  DimensionValue,
-  Pressable,
-  StyleProp,
-  StyleSheet,
-  Text,
-  View,
-  ViewStyle
-} from 'react-native'
+import { DimensionValue, StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native'
 import { appColors, appFont } from '../styles'
+import AppPressable from './AppPressable'
 
 interface AppButtonProps {
   icon?: React.ReactNode
@@ -79,10 +72,10 @@ const AppButton = ({
 
   return (
     <View style={style ? [styles.container, style] : [styles.container]}>
-      <Pressable accessibilityLabel={accessibilityLabel} onPress={onPress} style={styles.button}>
+      <AppPressable accessibilityLabel={accessibilityLabel} onPress={onPress} style={styles.button}>
         {icon ?? null}
         <Text style={styles.text}>{text}</Text>
-      </Pressable>
+      </AppPressable>
     </View>
   )
 }
