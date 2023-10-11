@@ -13,6 +13,7 @@ interface AppButtonProps {
   size?: 'small' | 'medium' | 'large'
   style?: StyleProp<ViewStyle>
   outline?: boolean
+  disabled?: boolean
 }
 
 const AppButton = ({
@@ -24,7 +25,8 @@ const AppButton = ({
   accessibilityLabel,
   size,
   style,
-  outline
+  outline,
+  disabled
 }: AppButtonProps) => {
   let fontSize, width
   switch (size) {
@@ -72,7 +74,12 @@ const AppButton = ({
 
   return (
     <View style={style ? [styles.container, style] : [styles.container]}>
-      <AppPressable accessibilityLabel={accessibilityLabel} onPress={onPress} style={styles.button}>
+      <AppPressable
+        accessibilityLabel={accessibilityLabel}
+        onPress={onPress}
+        style={styles.button}
+        disabled={disabled}
+      >
         {icon ?? null}
         <Text style={styles.text}>{text}</Text>
       </AppPressable>
