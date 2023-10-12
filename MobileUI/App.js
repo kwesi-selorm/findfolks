@@ -4,7 +4,7 @@ import AuthProvider from './src/contexts/auth-context/AuthProvider'
 import FolkProvider from './src/contexts/folk-context/FolkProvider'
 import AuthNavigator from './src/screens/AuthNavigator'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { RootSiblingParent } from 'react-native-root-siblings'
+import ToastProvider from './src/contexts/toast-context/ToastProvider'
 // expo install expo-font
 
 export default function App() {
@@ -20,9 +20,9 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <FolkProvider>
-          <RootSiblingParent>
+          <ToastProvider>
             <AuthNavigator />
-          </RootSiblingParent>
+          </ToastProvider>
         </FolkProvider>
       </AuthProvider>
     </QueryClientProvider>

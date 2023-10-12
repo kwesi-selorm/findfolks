@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
   formItem: {
     display: 'flex',
     flexDirection: 'column',
-    marginBottom: 30
+    marginBottom: 20
   },
   label: {
     marginBottom: 5,

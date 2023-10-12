@@ -14,8 +14,9 @@ const CityItem: React.FC<CityItemProps> = ({ item, setValues, setCityItems, setM
   const city = item.value
   const country = item.label.split(', ')[1]
 
-  function onSelectCity(cityItem: City) {
-    setValues((prev) => ({ ...prev, cityOfResidence: cityItem.value }))
+  function onSelectCity() {
+    setValues((prev) => ({ ...prev, cityOfResidence: city }))
+    setValues((prev) => ({ ...prev, countryOfResidence: country }))
     setCityItems([])
     setModalVisible(false)
   }
@@ -25,7 +26,7 @@ const CityItem: React.FC<CityItemProps> = ({ item, setValues, setCityItems, setM
       style={styles.container}
       key={item.id}
       onPress={() => {
-        onSelectCity(item)
+        onSelectCity()
       }}
     >
       <Text style={styles.text}>

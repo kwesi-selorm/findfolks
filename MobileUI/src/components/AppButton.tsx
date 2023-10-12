@@ -69,7 +69,6 @@ const AppButton = ({
       paddingVertical: 10,
       paddingHorizontal: 30,
       justifyContent: 'center',
-      // width: '100%',
       gap: 10
     },
     text: {
@@ -87,7 +86,7 @@ const AppButton = ({
         style={styles.button}
         disabled={disabled}
       >
-        {icon ?? null}
+        <View>{icon ?? null}</View>
         <Text style={styles.text}>{text}</Text>
       </Pressable>
     </View>

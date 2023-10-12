@@ -100,7 +100,8 @@ const styles = StyleSheet.create({
     color: appColors.blue,
     fontSize: 16,
     fontFamily: appFont.bold,
-    textAlign: 'center'
+    textAlign: 'center',
+    alignSelf: 'center'
   }
 })
 

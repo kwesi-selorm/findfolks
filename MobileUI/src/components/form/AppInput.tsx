@@ -5,7 +5,7 @@ import InputErrorMessage from './InputErrorMessage'
 
 interface AppInputProps extends TextInputProps {
   // eslint-disable-next-line no-unused-vars
-  onChangeText: (text: string) => void
+  onChangeText?: (text: string) => void
   keyboardType?: 'default' | 'decimal-pad' | 'url'
   placeholder: string
   value?: string

@@ -9,6 +9,8 @@ import { appColors } from '../../styles'
 import ButtonGroup from '../../components/form/ButtonGroup'
 import AuthContext from '../../contexts/auth-context/AuthContext'
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
+import AppToast from '../../components/AppToast'
+import ToastContext from '../../contexts/toast-context/ToastContext'
 
 type LoginValues = {
   username: string
@@ -23,6 +25,7 @@ const LoginScreen = () => {
   const [values, setValues] = useState(initialValues)
   const { setIsAuthenticated } = useContext(AuthContext)
   const navigation = useNavigation<NavigationProp<ParamListBase>>()
+  const { toast } = useContext(ToastContext)
 
   function returnToHome() {
     navigation.navigate('Home')
@@ -30,6 +33,11 @@ const LoginScreen = () => {
   function submitLoginRequest() {
     setIsAuthenticated(true)
     navigation.navigate('Tabs')
+    toast({
+      message: 'Logged in successfully',
+      type: 'success',
+      position: 0
+    })
   }
 
   function updateValues(value: string, fieldName: string) {
@@ -38,6 +46,7 @@ const LoginScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <AppToast />
       <Form>
         <FormItem label="Username">
           <AppInput

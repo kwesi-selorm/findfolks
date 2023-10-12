@@ -23,12 +23,11 @@ const AppModal = ({
           <View style={styles.modalView}>
             <Ionicons
               name="close"
-              color={appColors.black}
+              color={appColors.darkGrey}
               size={35}
               onPress={onDismiss}
               style={styles.closeIcon}
             />
-
             {children}
           </View>
         </View>

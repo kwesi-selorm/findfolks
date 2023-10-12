@@ -13,6 +13,7 @@ import EditProfileForm from './EditProfileForm'
 import AuthContext from '../../contexts/auth-context/AuthContext'
 import { NavigationProp, ParamListBase, useNavigation } from '@react-navigation/native'
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
+import AppToast from '../../components/AppToast'
 
 const ProfileScreen = () => {
   const [modalVisible, setModalVisible] = React.useState(false)
@@ -29,6 +30,8 @@ const ProfileScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <AppToast />
+
       {/*Edit profile modal and form*/}
       <AppModal modalVisible={modalVisible} onDismiss={handleModalDismiss}>
         <EditProfileForm setModalVisible={setModalVisible} />
@@ -100,7 +103,7 @@ const ProfileScreen = () => {
           backgroundColor={appColors.red}
           accessibilityLabel="Sign out button"
           size="small"
-          icon={<AntDesignIcon name="logout" size={20} color={appColors.black} />}
+          icon={<AntDesignIcon name="logout" size={20} color={appColors.red} />}
           outline
         />
       </View>

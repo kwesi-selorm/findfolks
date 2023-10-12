@@ -20,6 +20,7 @@ const appColors = {
   blue: '#3085C3',
   darkBlue: '#1D5D9B',
   grey: '#D1D1D1',
+  darkGrey: '#7D7C7C',
   green: '#539165',
   white: '#fff',
   black: '#000',

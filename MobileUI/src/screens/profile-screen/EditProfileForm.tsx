@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react'
+import React, { FC, useContext, useEffect, useMemo } from 'react'
 import { City, ContactMethod, Country, EditProfileFormValues } from '../../@types'
 import AppButton from '../../components/AppButton'
 import Form from '../../components/form'
@@ -12,10 +12,12 @@ import ContactMethodsList from './ContactMethodsList'
 import CountryItem from './CountryItem'
 import useDataAPI from '../../hooks/api/useDataAPI'
 import ButtonGroup from '../../components/form/ButtonGroup'
-import { FlatList, SafeAreaView, TextInput } from 'react-native'
+import { FlatList, SafeAreaView } from 'react-native'
 import AppModal from '../../components/AppModal'
-import FeatherIcons from 'react-native-vector-icons/Feather'
+import FontistoIcons from 'react-native-vector-icons/Fontisto'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import { getErrorMessage } from '../../util/error-parser'
+import ToastContext from '../../contexts/toast-context/ToastContext'
 
 type EditProfileFormProps = {
   setModalVisible: React.Dispatch<React.SetStateAction<boolean>>
@@ -38,6 +40,16 @@ const initialValues: EditProfileFormValues = {
   bio: profile.bio
 }
 
+function createCountryList(cities: City[]): Country[] {
+  const duplicateCountries = cities.map((city) => {
+    return city.label.split(', ')[1]
+  })
+  return Array.from(new Set(duplicateCountries)).map((country, i) => ({
+    id: i + 1,
+    value: country
+  }))
+}
+
 const EditProfileForm: FC<EditProfileFormProps> = ({ setModalVisible }) => {
   const [values, setValues] = React.useState<EditProfileFormValues>(initialValues)
   const [cityItems, setCityItems] = React.useState<City[]>([])
@@ -45,20 +57,22 @@ const EditProfileForm: FC<EditProfileFormProps> = ({ setModalVisible }) => {
   const [searchModalVisible, setSearchModalVisible] = React.useState(false)
   const [searchItems, setSearchItems] = React.useState<Array<City | Country>>([])
   const [searchGroup, setSearchGroup] = React.useState<'cities' | 'countries'>('countries')
+  const { toast } = useContext(ToastContext)
 
-  const { data, isLoading } = useDataAPI()
+  const { data, isError, error } = useDataAPI()
   const { cities, countries } = useMemo(() => {
     const cities = data ?? []
-    const countries = cities.map((city) => {
-      return city.label.split(', ')[1]
-    })
-    const uniqueCountries = Array.from(new Set(countries)).map((country, i) => ({
-      id: i + 1,
-      value: country
-    }))
-
-    return { cities, countries: uniqueCountries }
+    const countries = createCountryList(cities)
+    return { cities, countries }
   }, [data])
+
+  useEffect(() => {
+    if (isError) {
+      setModalVisible(false)
+      const errorMsg = getErrorMessage(error)
+      toast({ message: errorMsg, type: 'error', duration: 10000 })
+    }
+  }, [error, isError])
 
   function updateForm({ name, value }: { name: string; value: string | number }) {
     setValues((prev) => ({ ...prev, [name]: value }))
@@ -114,6 +128,7 @@ const EditProfileForm: FC<EditProfileFormProps> = ({ setModalVisible }) => {
             onChangeText={(text) => (text === '' ? handleCityReset() : handleCityChange(text))}
             placeholder="Search cities"
             value={values.cityOfResidence}
+            autoFocus={true}
           />
         ) : (
           <AppInput
@@ -122,6 +137,7 @@ const EditProfileForm: FC<EditProfileFormProps> = ({ setModalVisible }) => {
             }
             placeholder="Search countries"
             value={values.homeCountry}
+            autoFocus={true}
           />
         )}
         <FlatList
@@ -161,7 +177,7 @@ const EditProfileForm: FC<EditProfileFormProps> = ({ setModalVisible }) => {
 
         {/* Home country */}
         <FormItem label="Home country">
-          <TextInput
+          <AppInput
             placeholder="Home country"
             onPressIn={() => handleHomeCountryInputPressIn()}
             value={values.homeCountry}
@@ -179,11 +195,20 @@ const EditProfileForm: FC<EditProfileFormProps> = ({ setModalVisible }) => {
         </FormItem>
 
         {/* Residency city and town */}
-        <FormItem label="Residence city and town">
-          <TextInput
+        <FormItem label="City of residence">
+          <AppInput
             placeholder="City of residence"
             onPressIn={() => handleCityInputPressIn()}
             value={values.cityOfResidence}
+          />
+        </FormItem>
+
+        {/* Residency country */}
+        <FormItem label="Country of residence">
+          <AppInput
+            placeholder="Country of residence"
+            value={values.countryOfResidence}
+            editable={false}
           />
         </FormItem>
 
@@ -210,7 +235,7 @@ const EditProfileForm: FC<EditProfileFormProps> = ({ setModalVisible }) => {
             accessibilityLabel="Cancel button"
             color={appColors.black}
             outline
-            icon={<Ionicons name="close" size={20} color={appColors.black} />}
+            icon={<Ionicons name="close" size={20} color={appColors.red} />}
           />
           <AppButton
             text="Save"
@@ -219,7 +244,7 @@ const EditProfileForm: FC<EditProfileFormProps> = ({ setModalVisible }) => {
             }}
             backgroundColor={appColors.green}
             accessibilityLabel="Save button"
-            icon={<FeatherIcons name="check-circle" size={20} color={appColors.white} />}
+            icon={<FontistoIcons name="checkbox-active" size={20} color={appColors.white} />}
           />
         </ButtonGroup>
       </Form>
