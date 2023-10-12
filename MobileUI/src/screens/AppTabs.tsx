@@ -81,6 +81,7 @@ const AppTabs = () => {
         component={DiscoverScreen}
         options={({ navigation }) => ({
           headerTitle: createHeaderTitle('Discover'),
+          headerTitleAlign: 'left',
           headerRight: createHeaderRight(navigation)
         })}
       />
@@ -88,21 +89,24 @@ const AppTabs = () => {
         name="Community"
         component={CommunityScreen}
         options={{
-          headerTitle: createHeaderTitle('Community')
+          headerTitle: createHeaderTitle('Community'),
+          headerTitleAlign: 'left'
         }}
       />
       <Tab.Screen
         name="Requests"
         component={RequestsScreen}
         options={{
-          headerTitle: createHeaderTitle('Requests')
+          headerTitle: createHeaderTitle('Requests'),
+          headerTitleAlign: 'left'
         }}
       />
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}
         options={{
-          headerTitle: createHeaderTitle('Profile')
+          headerTitle: createHeaderTitle('Profile'),
+          headerTitleAlign: 'left'
         }}
       />
     </Tab.Navigator>
