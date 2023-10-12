@@ -11,6 +11,9 @@ import AuthContext from '../../contexts/auth-context/AuthContext'
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 import AppToast from '../../components/AppToast'
 import ToastContext from '../../contexts/toast-context/ToastContext'
+import { useMutation } from '@tanstack/react-query'
+import { logIn } from '../../api/auth-api'
+import { parseError } from '../../util/error-parser'
 
 type LoginValues = {
   username: string
@@ -23,25 +26,42 @@ const initialValues: LoginValues = {
 
 const LoginScreen = () => {
   const [values, setValues] = useState(initialValues)
-  const { setIsAuthenticated } = useContext(AuthContext)
+  const { setIsAuthenticated, setLoggedInUser } = useContext(AuthContext)
   const navigation = useNavigation<NavigationProp<ParamListBase>>()
   const { toast } = useContext(ToastContext)
+
+  const { mutateAsync, isLoading, error } = useMutation({
+    mutationFn: (credentials: LoginValues) => logIn(credentials)
+  })
+
+  function updateValues(value: string, fieldName: string) {
+    setValues((prev) => ({ ...prev, [fieldName]: value }))
+  }
 
   function returnToHome() {
     navigation.navigate('Home')
   }
-  function submitLoginRequest() {
-    setIsAuthenticated(true)
-    navigation.navigate('Tabs')
-    toast({
-      message: 'Logged in successfully',
-      type: 'success',
-      position: 0
-    })
-  }
-
-  function updateValues(value: string, fieldName: string) {
-    setValues((prev) => ({ ...prev, [fieldName]: value }))
+  async function submitLoginRequest() {
+    try {
+      const response = await mutateAsync(values)
+      if (response != null) {
+        setLoggedInUser(response)
+        setIsAuthenticated(true)
+        navigation.navigate('Tabs')
+        toast({
+          message: `Welcome back, ${response.username}`,
+          type: 'success',
+          position: 0
+        })
+      }
+    } catch (e) {
+      const errorData = parseError(error)
+      toast({
+        message: errorData.message,
+        type: 'error',
+        duration: 10000
+      })
+    }
   }
 
   return (
@@ -61,7 +81,7 @@ const LoginScreen = () => {
             onChangeText={(text) => {
               updateValues(text, 'password')
             }}
-            placeholder="What password did you choose?"
+            placeholder="What's your password?"
           />
         </FormItem>
         <ButtonGroup>
@@ -73,7 +93,7 @@ const LoginScreen = () => {
             outline
           />
           <AppButton
-            text="Log in"
+            text={isLoading ? 'Logging in...' : 'Log in'}
             backgroundColor={appColors.green}
             accessibilityLabel="Login button"
             onPress={submitLoginRequest}

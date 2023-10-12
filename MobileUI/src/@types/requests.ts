@@ -13,7 +13,7 @@ type CreateFolkRequest = {
   countryOfResidence: string
   homeCityOrTown?: string
   cityOrTownOfResidence: string
-  prefferredContactMethod: ContactMethod
+  preferredContactMethod: ContactMethod
   contactInfo: string
   bio?: string
 }
@@ -25,6 +25,11 @@ type CreateRequestRequest = {
 
 interface DeleteConnectionRequest extends CreateConnectionRequest {}
 
+type LogInRequest = {
+  username: string
+  password: string
+}
+
 type UpdateFolkRequest = Omit<CreateFolkRequest, 'email' | 'password'> & Partial<CreateFolkRequest>
 
 export {
@@ -32,5 +37,6 @@ export {
   type CreateFolkRequest,
   type CreateRequestRequest,
   type DeleteConnectionRequest,
+  type LogInRequest,
   type UpdateFolkRequest
 }

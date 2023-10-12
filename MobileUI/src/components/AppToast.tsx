@@ -1,10 +1,10 @@
-import { useContext, useEffect } from 'react'
+import { useContext } from 'react'
 import ToastContext from '../contexts/toast-context/ToastContext'
 import Toast from 'react-native-root-toast'
 import { appColors, appFont } from '../styles'
 
 const AppToast = () => {
-  const { message, type, visible, setVisible, duration, position } = useContext(ToastContext)
+  const { message, type, visible, position } = useContext(ToastContext)
 
   function setTextColor(): string {
     switch (type) {
@@ -18,12 +18,6 @@ const AppToast = () => {
         return appColors.grey
     }
   }
-
-  useEffect(() => {
-    setTimeout(() => {
-      setVisible(false)
-    }, duration)
-  }, [duration])
 
   return (
     <Toast

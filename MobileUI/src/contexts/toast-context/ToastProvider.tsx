@@ -24,7 +24,7 @@ const ToastProvider = ({ children }: { children: React.ReactNode }) => {
     setType(type)
     setMessage(message)
     setDuration(duration ?? 5000)
-    setPosition(position ?? 150)
+    setPosition(position ?? 100)
   }
 
   useEffect(() => {
