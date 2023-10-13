@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     borderColor: appColors.grey,
     borderRadius: appBorderRadius.pressablePressedRadius,
     padding: 10,
-    maxWidth: '100%',
+    maxWidth: '80%',
     minWidth: widths.formWidth,
     display: 'flex',
     alignItems: 'center',

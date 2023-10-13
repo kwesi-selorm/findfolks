@@ -55,14 +55,12 @@ const AppButton = ({
   }
 
   const styles = StyleSheet.create({
-    container: {
+    button: {
       backgroundColor: outline ? 'none' : backgroundColor,
       width: width,
       borderRadius: 10,
       borderWidth: outline ? 2 : 0,
-      borderColor: outline ? backgroundColor ?? appColors.darkBlue : 'none'
-    },
-    button: {
+      borderColor: outline ? backgroundColor ?? appColors.darkBlue : 'none',
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
@@ -79,17 +77,15 @@ const AppButton = ({
   })
 
   return (
-    <View style={style ? [styles.container, style] : [styles.container]}>
-      <Pressable
-        accessibilityLabel={accessibilityLabel}
-        onPress={onPress}
-        style={styles.button}
-        disabled={disabled}
-      >
-        <View>{icon ?? null}</View>
-        <Text style={styles.text}>{text}</Text>
-      </Pressable>
-    </View>
+    <Pressable
+      accessibilityLabel={accessibilityLabel}
+      onPress={onPress}
+      style={[styles.button, style]}
+      disabled={disabled}
+    >
+      <View>{icon ?? null}</View>
+      <Text style={styles.text}>{text}</Text>
+    </Pressable>
   )
 }
 
