@@ -21,6 +21,7 @@ interface AppButtonProps {
   style?: StyleProp<ViewStyle>
   outline?: boolean
   disabled?: boolean
+  boldText?: boolean
 }
 
 const AppButton = ({
@@ -33,7 +34,8 @@ const AppButton = ({
   size,
   style,
   outline,
-  disabled
+  disabled,
+  boldText
 }: AppButtonProps) => {
   let fontSize, width
   switch (size) {
@@ -71,7 +73,7 @@ const AppButton = ({
     },
     text: {
       color: outline ? color ?? appColors.black : color ?? appColors.white,
-      fontFamily: appFont.regular,
+      fontFamily: boldText ? appFont.bold : appFont.regular,
       fontSize: fontSize
     }
   })
