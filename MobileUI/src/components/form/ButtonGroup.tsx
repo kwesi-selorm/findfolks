@@ -13,7 +13,6 @@ const ButtonGroup: FC<ButtonsGroupProps> = ({ children, direction }) => {
       flexDirection: direction ?? 'row',
       gap: 10,
       justifyContent: 'center',
-      width: '50%',
       marginLeft: 'auto',
       marginRight: 'auto',
       marginVertical: 40

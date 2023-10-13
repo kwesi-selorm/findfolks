@@ -11,28 +11,52 @@ import AuthContext from '../../contexts/auth-context/AuthContext'
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 import AppToast from '../../components/AppToast'
 import ToastContext from '../../contexts/toast-context/ToastContext'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { logIn } from '../../api/auth-api'
 import { parseError } from '../../util/error-parser'
+import { getFolkProfile } from '../../api/folk-api'
+import FolkContext from '../../contexts/folk-context/FolkContext'
 
 type LoginValues = {
   username: string
   password: string
 }
 const initialValues: LoginValues = {
-  username: '',
-  password: ''
+  username: 'Jeffery',
+  password: 'Jeffery*7'
 }
 
 const LoginScreen = () => {
   const [values, setValues] = useState(initialValues)
-  const { setIsAuthenticated, setLoggedInUser } = useContext(AuthContext)
   const navigation = useNavigation<NavigationProp<ParamListBase>>()
   const { toast } = useContext(ToastContext)
+  const { setIsAuthenticated, loggedInUser, setLoggedInUser } = useContext(AuthContext)
+  const { setFolkProfile } = useContext(FolkContext)
 
-  const { mutateAsync, isLoading, error } = useMutation({
-    mutationFn: (credentials: LoginValues) => logIn(credentials)
+  const { mutateAsync, isLoading } = useMutation({
+    mutationFn: (credentials: LoginValues) => logIn(credentials),
+    retry: 1
   })
+  const { data, isError, error } = useQuery(
+    ['folk-profile', loggedInUser],
+    () => {
+      if (loggedInUser == null) return
+      return getFolkProfile(loggedInUser.id)
+    },
+    {
+      enabled: !!loggedInUser
+    }
+  )
+
+  if (isError) {
+    const errorData = parseError(error)
+    toast({
+      message: errorData.message,
+      type: 'error',
+      duration: 10000
+    })
+    return
+  }
 
   function updateValues(value: string, fieldName: string) {
     setValues((prev) => ({ ...prev, [fieldName]: value }))
@@ -46,16 +70,19 @@ const LoginScreen = () => {
       const response = await mutateAsync(values)
       if (response != null) {
         setLoggedInUser(response)
+        if (data != null) {
+          setFolkProfile(data)
+        }
         setIsAuthenticated(true)
         navigation.navigate('Tabs')
         toast({
           message: `Welcome back, ${response.username}`,
-          type: 'success',
+          type: 'info',
           position: 0
         })
       }
     } catch (e) {
-      const errorData = parseError(error)
+      const errorData = parseError(e)
       toast({
         message: errorData.message,
         type: 'error',
@@ -74,6 +101,7 @@ const LoginScreen = () => {
               updateValues(text, 'username')
             }}
             placeholder="What do your folks know you by?"
+            value={values.username}
           />
         </FormItem>
         <FormItem label="Password">
@@ -82,6 +110,7 @@ const LoginScreen = () => {
               updateValues(text, 'password')
             }}
             placeholder="What's your password?"
+            value={values.password}
           />
         </FormItem>
         <ButtonGroup>

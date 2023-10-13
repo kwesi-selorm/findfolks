@@ -42,9 +42,9 @@ const ToastProvider = ({ children }: { children: React.ReactNode }) => {
       case 'error':
         return appColors.red
       case 'info':
-        return appColors.blue
+        return appColors.black
       default:
-        return appColors.grey
+        return appColors.darkBlue
     }
   }
 

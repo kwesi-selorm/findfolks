@@ -31,7 +31,6 @@ const FolkList = ({ data }: FolkListProps) => {
     <View>
       <AppModal
         modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
         onDismiss={() => {
           setModalVisible((prevState) => !prevState)
         }}

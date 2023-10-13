@@ -69,8 +69,8 @@ const EditProfileForm: FC<EditProfileFormProps> = ({ setModalVisible }) => {
   useEffect(() => {
     if (isError) {
       setModalVisible(false)
-      const errorMsg = parseError(error)
-      toast({ message: errorMsg, type: 'error', duration: 10000 })
+      const { message } = parseError(error)
+      toast({ message, type: 'error', duration: 10000 })
     }
   }, [error, isError])
 

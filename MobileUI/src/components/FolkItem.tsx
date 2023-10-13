@@ -53,7 +53,7 @@ const FolkItem = ({ item, setModalVisible, setSelectedFolk }: FolkItemProps) => 
               source={{ uri: `data:image/png;base64,${item.profilePhoto}` }}
             />
           ) : (
-            <Ionicons name="person-circle-outline" size={35} color="gray" />
+            <Ionicons name="person-circle-outline" size={35} color={appColors.darkGrey} />
           )}
         </View>
         <View style={styles.detailsContainer}>

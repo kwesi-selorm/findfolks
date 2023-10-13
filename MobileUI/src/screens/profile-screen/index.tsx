@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Image, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -7,18 +7,19 @@ import AppButton from '../../components/AppButton'
 import AppModal from '../../components/AppModal'
 
 import { connections } from '../../mock-data/connections'
-import profile from '../../mock-data/profile'
 import { appColors, appFont } from '../../styles'
 import EditProfileForm from './EditProfileForm'
 import AuthContext from '../../contexts/auth-context/AuthContext'
 import { NavigationProp, ParamListBase, useNavigation } from '@react-navigation/native'
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 import AppToast from '../../components/AppToast'
+import FolkContext from '../../contexts/folk-context/FolkContext'
 
 const ProfileScreen = () => {
   const [modalVisible, setModalVisible] = React.useState(false)
-  const { setIsAuthenticated } = React.useContext(AuthContext)
   const navigation = useNavigation<NavigationProp<ParamListBase>>()
+  const { setIsAuthenticated } = React.useContext(AuthContext)
+  const { folkProfile } = useContext(FolkContext)
 
   function handleModalDismiss() {
     setModalVisible(false)
@@ -32,7 +33,7 @@ const ProfileScreen = () => {
     <SafeAreaView style={styles.container}>
       <AppToast />
 
-      {/*Edit profile modal and form*/}
+      {/*Edit folkProfile? modal and form*/}
       <AppModal modalVisible={modalVisible} onDismiss={handleModalDismiss}>
         <EditProfileForm setModalVisible={setModalVisible} />
       </AppModal>
@@ -41,7 +42,7 @@ const ProfileScreen = () => {
       <AppButton
         text="Edit profile"
         backgroundColor={appColors.darkBlue}
-        accessibilityLabel="Edit profile"
+        accessibilityLabel="Edit profile button"
         onPress={() => {
           setModalVisible(true)
         }}
@@ -55,44 +56,45 @@ const ProfileScreen = () => {
       {/*Main body*/}
       <View style={styles.body}>
         <View style={styles.photoAndName}>
-          <Image
-            source={{ uri: `data:image/png;base64,${profile.profilePhoto}` }}
-            style={styles.profilePhoto}
-          />
-          <Text style={styles.name}>{profile.name}</Text>
+          {folkProfile?.profilePhoto ? (
+            <Image
+              source={{ uri: `data:image/png;base64,${folkProfile?.profilePhoto}` }}
+              style={styles.profilePhoto}
+            />
+          ) : (
+            <Ionicons name="person-circle-outline" size={100} color={appColors.darkGrey} />
+          )}
+          <Text style={styles.name}>{folkProfile?.name}</Text>
         </View>
 
         {/* BIO */}
         <View style={styles.iconAndName}>
           <Ionicons name="chatbubble" size={20} color={appColors.darkBlue} />
-          <Text style={styles.bioText}>{profile.bio}</Text>
+          <Text style={styles.texts}>{folkProfile?.bio ? folkProfile?.bio : '...'}</Text>
         </View>
 
         {/*HOME COUNTRY*/}
         <View style={styles.iconAndName}>
           <Ionicons name="home" size={20} color={appColors.darkBlue} />
-          <Text>
-            {profile.homeCityOrTown
-              ? `${profile.homeCityOrTown}, ${profile.homeCountry}`
-              : `${profile.homeCountry}`}
+          <Text style={styles.texts}>
+            {folkProfile?.homeCityOrTown
+              ? `${folkProfile?.homeCityOrTown}, ${folkProfile?.homeCountry}`
+              : `${folkProfile?.homeCountry}`}
           </Text>
         </View>
 
         {/* LOCATION */}
         <View style={styles.iconAndName}>
           <Ionicons name="location" size={20} color={appColors.darkBlue} />
-          <Text>
-            {profile.cityOrTownOfResidence}, {profile.countryOfResidence}
+          <Text style={styles.texts}>
+            {folkProfile?.cityOrTownOfResidence}, {folkProfile?.countryOfResidence}
           </Text>
         </View>
 
-        {/*Maybe a list of number of sent requests, received requests (Under requests),
-      connected with 'n' folks, and with buttons to navigate to those screens
-      Clicking on edit profile will either open a modal or a new edit screen*/}
         {/*CONNECTIONS*/}
         <View style={styles.iconAndName}>
           <Ionicons name="people" size={20} color={appColors.darkBlue} />
-          <Text>Connections: {connections.length}</Text>
+          <Text style={styles.texts}>{connections.length}</Text>
         </View>
 
         {/*SIGN OUT BUTTON*/}
@@ -116,6 +118,9 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 20
   },
+  texts: {
+    fontFamily: appFont.regular
+  },
   editButton: {
     alignSelf: 'flex-end',
     marginHorizontal: 10,
@@ -128,7 +133,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     gap: 10,
     flexDirection: 'row',
-    alignItems: 'flex-end',
+    alignItems: 'center',
     width: '100%',
     marginBottom: 20
   },
@@ -139,7 +144,7 @@ const styles = StyleSheet.create({
   },
   name: {
     fontFamily: appFont.extraBold,
-    fontSize: 30
+    fontSize: 40
   },
   iconAndName: {
     display: 'flex',
@@ -148,12 +153,9 @@ const styles = StyleSheet.create({
     gap: 10,
     marginBottom: 10
   },
-
   bio: {
     marginBottom: 5
   },
-  bioText: { fontFamily: appFont.regular },
-
   cityInput: {},
   signOutButton: {
     alignSelf: 'center',
