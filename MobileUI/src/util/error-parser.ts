@@ -22,6 +22,12 @@ function trimPeriod(str: string): string {
 
 function parseError(error: unknown): ErrorData {
   if (error instanceof AxiosError && error.response) {
+    if (!error.response.data) {
+      return {
+        message: error.message,
+        status: error.response.status
+      }
+    }
     if (error.response.data.errors) {
       const { errors, title, status } = error.response.data
       const errorMsgs = Object.values(errors)
