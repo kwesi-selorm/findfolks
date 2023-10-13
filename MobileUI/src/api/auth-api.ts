@@ -2,10 +2,10 @@ import { LoggedInUser, User } from '../@types'
 import API from './config'
 import { LogInRequest } from '../@types/requests'
 
-API.defaults.baseURL = API.defaults.baseURL + 'auth'
+const URL = API.defaults.baseURL + 'auth/'
 
 async function logIn(credentials: LogInRequest) {
-  const response = await API.post<LoggedInUser | null>('/token', credentials)
+  const response = await API.post<LoggedInUser | null>(URL + 'token', credentials)
   return response.data
 }
 
