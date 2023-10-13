@@ -13,7 +13,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'flex-start',
-    maxHeight: '60%'
+    maxHeight: '60%',
+    marginLeft: 'auto',
+    marginRight: 'auto'
   }
 })
 
