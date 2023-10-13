@@ -4,6 +4,7 @@ import AppButton from '../../components/AppButton'
 import { appColors, appFont } from '../../styles'
 import { NavigationProp, ParamListBase, useNavigation } from '@react-navigation/native'
 import AppPressable from '../../components/AppPressable'
+import React from 'react'
 
 const HomeScreen = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>()
@@ -23,12 +24,12 @@ const HomeScreen = () => {
       {/*Buttons*/}
       <ButtonGroup direction="column">
         <AppButton
-          text="Log in"
-          backgroundColor={appColors.green}
-          accessibilityLabel="Log in button"
+          text="Start"
+          backgroundColor={appColors.darkBlue}
+          color={appColors.white}
+          accessibilityLabel="Enter button"
           onPress={navigateToLoginScreen}
           size="large"
-          outline
         />
       </ButtonGroup>
       <Text style={styles.prompt}>New to Findfolks? </Text>
@@ -43,7 +44,7 @@ const styles = StyleSheet.create({
   logo: {
     fontFamily: appFont.extraBold,
     fontSize: 50,
-    color: appColors.darkBlue,
+    color: appColors.black,
     marginBottom: '50%'
   },
   container: {

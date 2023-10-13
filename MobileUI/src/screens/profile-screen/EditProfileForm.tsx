@@ -5,7 +5,7 @@ import Form from '../../components/form'
 import AppInput from '../../components/form/AppInput'
 import FormItem from '../../components/form/FormItem'
 // import cities from '../../mock-data/cities'
-import profile from '../../mock-data/profile'
+// import profile from '../../mock-data/profile'
 import { appColors } from '../../styles'
 import CityItem from './CityItem'
 import ContactMethodsList from './ContactMethodsList'
@@ -18,6 +18,7 @@ import FontistoIcons from 'react-native-vector-icons/Fontisto'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { parseError } from '../../util/error-parser'
 import ToastContext from '../../contexts/toast-context/ToastContext'
+import FolkContext from '../../contexts/folk-context/FolkContext'
 
 type EditProfileFormProps = {
   setModalVisible: React.Dispatch<React.SetStateAction<boolean>>
@@ -27,17 +28,6 @@ export type Contact = {
   icon: React.JSX.Element
   name: string
   index: ContactMethod
-}
-
-const initialValues: EditProfileFormValues = {
-  name: profile.name,
-  homeCountry: profile.homeCountry,
-  homeCityOrTown: profile.homeCityOrTown ?? '',
-  cityOfResidence: profile.cityOrTownOfResidence,
-  countryOfResidence: profile.countryOfResidence,
-  preferredContactMethod: profile.preferredContactMethod,
-  contactInfo: profile.contactInfo,
-  bio: profile.bio
 }
 
 function createCountryList(cities: City[]): Country[] {
@@ -51,13 +41,26 @@ function createCountryList(cities: City[]): Country[] {
 }
 
 const EditProfileForm: FC<EditProfileFormProps> = ({ setModalVisible }) => {
-  const [values, setValues] = React.useState<EditProfileFormValues>(initialValues)
   const [cityItems, setCityItems] = React.useState<City[]>([])
   const [countryItems, setCountryItems] = React.useState<Country[]>([])
   const [searchModalVisible, setSearchModalVisible] = React.useState(false)
   const [searchItems, setSearchItems] = React.useState<Array<City | Country>>([])
   const [searchGroup, setSearchGroup] = React.useState<'cities' | 'countries'>('countries')
   const { toast } = useContext(ToastContext)
+  const { folkProfile } = useContext(FolkContext)
+  const profile = folkProfile ?? null
+
+  const initialValues: EditProfileFormValues = {
+    name: profile?.name ?? '',
+    homeCountry: profile?.homeCountry ?? '',
+    homeCityOrTown: profile?.homeCityOrTown,
+    cityOfResidence: profile?.cityOrTownOfResidence ?? '',
+    countryOfResidence: profile?.countryOfResidence ?? '',
+    preferredContactMethod: profile?.preferredContactMethod ?? ContactMethod.Facebook,
+    contactInfo: profile?.contactInfo ?? '',
+    bio: profile?.bio
+  }
+  const [values, setValues] = React.useState<EditProfileFormValues>(initialValues)
 
   const { data, isError, error } = useDataAPI()
   const { cities, countries } = useMemo(() => {

@@ -11,11 +11,10 @@ import AuthContext from '../../contexts/auth-context/AuthContext'
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 import AppToast from '../../components/AppToast'
 import ToastContext from '../../contexts/toast-context/ToastContext'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { logIn } from '../../api/auth-api'
 import { parseError } from '../../util/error-parser'
-import { getFolkProfile } from '../../api/folk-api'
-import FolkContext from '../../contexts/folk-context/FolkContext'
+import LoadingIcon from '../../components/LoadingIcon'
 
 type LoginValues = {
   username: string
@@ -30,33 +29,12 @@ const LoginScreen = () => {
   const [values, setValues] = useState(initialValues)
   const navigation = useNavigation<NavigationProp<ParamListBase>>()
   const { toast } = useContext(ToastContext)
-  const { setIsAuthenticated, loggedInUser, setLoggedInUser } = useContext(AuthContext)
-  const { setFolkProfile } = useContext(FolkContext)
+  const { isAuthenticated, setIsAuthenticated, setLoggedInUser } = useContext(AuthContext)
 
   const { mutateAsync, isLoading } = useMutation({
     mutationFn: (credentials: LoginValues) => logIn(credentials),
     retry: 1
   })
-  const { data, isError, error } = useQuery(
-    ['folk-profile', loggedInUser],
-    () => {
-      if (loggedInUser == null) return
-      return getFolkProfile(loggedInUser.id)
-    },
-    {
-      enabled: !!loggedInUser
-    }
-  )
-
-  if (isError) {
-    const errorData = parseError(error)
-    toast({
-      message: errorData.message,
-      type: 'error',
-      duration: 10000
-    })
-    return
-  }
 
   function updateValues(value: string, fieldName: string) {
     setValues((prev) => ({ ...prev, [fieldName]: value }))
@@ -66,13 +44,15 @@ const LoginScreen = () => {
     navigation.navigate('Home')
   }
   async function submitLoginRequest() {
+    if (isAuthenticated) {
+      navigation.navigate('Tabs')
+      return
+    }
+
     try {
       const response = await mutateAsync(values)
       if (response != null) {
         setLoggedInUser(response)
-        if (data != null) {
-          setFolkProfile(data)
-        }
         setIsAuthenticated(true)
         navigation.navigate('Tabs')
         toast({
@@ -88,6 +68,10 @@ const LoginScreen = () => {
         type: 'error',
         duration: 10000
       })
+      if (errorData.status === 401) {
+        setIsAuthenticated(false)
+        navigation.navigate('Login')
+      }
     }
   }
 
@@ -126,7 +110,14 @@ const LoginScreen = () => {
             backgroundColor={appColors.green}
             accessibilityLabel="Login button"
             onPress={submitLoginRequest}
-            icon={<AntDesignIcon name="login" size={20} color={appColors.white} />}
+            icon={
+              isLoading ? (
+                <LoadingIcon size={20} color={appColors.white} />
+              ) : (
+                <AntDesignIcon name="login" size={20} color={appColors.white} />
+              )
+            }
+            disabled={isLoading}
           />
         </ButtonGroup>
       </Form>
