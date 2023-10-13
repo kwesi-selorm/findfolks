@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Image, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -14,12 +14,53 @@ import { NavigationProp, ParamListBase, useNavigation } from '@react-navigation/
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 import AppToast from '../../components/AppToast'
 import FolkContext from '../../contexts/folk-context/FolkContext'
+import { useQuery } from '@tanstack/react-query'
+import { getFolkProfile } from '../../api/folk-api'
+import { parseError } from '../../util/error-parser'
+import ToastContext from '../../contexts/toast-context/ToastContext'
+import { Profile } from '../../@types'
+import ListSeparator from '../../components/ListSeparator'
+import LoadingIcon from '../../components/LoadingIcon'
 
 const ProfileScreen = () => {
+  const [profile, setProfile] = React.useState<Profile | null>(null)
   const [modalVisible, setModalVisible] = React.useState(false)
   const navigation = useNavigation<NavigationProp<ParamListBase>>()
-  const { setIsAuthenticated } = React.useContext(AuthContext)
-  const { folkProfile } = useContext(FolkContext)
+  const { toast } = useContext(ToastContext)
+  const { setIsAuthenticated, loggedInUser } = React.useContext(AuthContext)
+  const { setFolkProfile } = useContext(FolkContext)
+
+  const { data, isLoading, isError, error } = useQuery(
+    ['folk-profile', loggedInUser],
+    () => {
+      if (loggedInUser == null) return
+      return getFolkProfile(loggedInUser.id)
+    },
+    {
+      enabled: !!loggedInUser
+    }
+  )
+
+  useEffect(() => {
+    if (data == null) {
+      return
+    }
+    setProfile(data)
+    setFolkProfile(data)
+  }, [data])
+
+  if (isLoading) {
+    return <LoadingIcon />
+  }
+
+  if (isError) {
+    const errorData = parseError(error)
+    toast({
+      message: errorData.message,
+      type: 'error',
+      duration: 10000
+    })
+  }
 
   function handleModalDismiss() {
     setModalVisible(false)
@@ -46,55 +87,68 @@ const ProfileScreen = () => {
         onPress={() => {
           setModalVisible(true)
         }}
-        outline
         size="small"
-        color={appColors.black}
         style={styles.editButton}
-        icon={<MaterialCommunityIcon name="account-edit" size={20} color={appColors.darkBlue} />}
+        icon={<MaterialCommunityIcon name="account-edit" size={20} color={appColors.white} />}
       />
 
-      {/*Main body*/}
+      {/*MAIN BODY*/}
       <View style={styles.body}>
+        {/*PROFILE PHOTO AND NAME*/}
         <View style={styles.photoAndName}>
-          {folkProfile?.profilePhoto ? (
+          {profile?.profilePhoto ? (
             <Image
-              source={{ uri: `data:image/png;base64,${folkProfile?.profilePhoto}` }}
+              source={{ uri: `data:image/png;base64,${profile?.profilePhoto}` }}
               style={styles.profilePhoto}
             />
           ) : (
             <Ionicons name="person-circle-outline" size={100} color={appColors.darkGrey} />
           )}
-          <Text style={styles.name}>{folkProfile?.name}</Text>
+          <Text style={styles.name}>{profile?.name}</Text>
         </View>
 
         {/* BIO */}
         <View style={styles.iconAndName}>
-          <Ionicons name="chatbubble" size={20} color={appColors.darkBlue} />
-          <Text style={styles.texts}>{folkProfile?.bio ? folkProfile?.bio : '...'}</Text>
+          <Ionicons name="chatbubble-outline" size={20} color={appColors.darkBlue} />
+          <Text style={styles.texts}>
+            <Text style={styles.boldText}>Bio</Text>
+            {profile?.bio ? `${'\t'}${profile?.bio}` : `${'\t'}...`}
+          </Text>
         </View>
+        <ListSeparator />
 
         {/*HOME COUNTRY*/}
         <View style={styles.iconAndName}>
-          <Ionicons name="home" size={20} color={appColors.darkBlue} />
+          <Ionicons name="home-outline" size={20} color={appColors.darkBlue} />
           <Text style={styles.texts}>
-            {folkProfile?.homeCityOrTown
-              ? `${folkProfile?.homeCityOrTown}, ${folkProfile?.homeCountry}`
-              : `${folkProfile?.homeCountry}`}
+            <Text style={styles.boldText}>Home</Text>
+            {'\t'}
+            {profile?.homeCityOrTown
+              ? `${profile?.homeCityOrTown}, ${profile?.homeCountry}`
+              : `${profile?.homeCountry}`}
           </Text>
         </View>
+        <ListSeparator />
 
         {/* LOCATION */}
         <View style={styles.iconAndName}>
-          <Ionicons name="location" size={20} color={appColors.darkBlue} />
+          <Ionicons name="location-outline" size={20} color={appColors.darkBlue} />
           <Text style={styles.texts}>
-            {folkProfile?.cityOrTownOfResidence}, {folkProfile?.countryOfResidence}
+            <Text style={styles.boldText}>Residence</Text>
+            {'\t'}
+            {profile?.cityOrTownOfResidence}, {profile?.countryOfResidence}
           </Text>
         </View>
+        <ListSeparator />
 
         {/*CONNECTIONS*/}
         <View style={styles.iconAndName}>
-          <Ionicons name="people" size={20} color={appColors.darkBlue} />
-          <Text style={styles.texts}>{connections.length}</Text>
+          <Ionicons name="people-outline" size={20} color={appColors.darkBlue} />
+          <Text style={styles.texts}>
+            <Text style={styles.boldText}>Connections</Text>
+            {'\t'}
+            {connections.length}
+          </Text>
         </View>
 
         {/*SIGN OUT BUTTON*/}
@@ -120,6 +174,9 @@ const styles = StyleSheet.create({
   },
   texts: {
     fontFamily: appFont.regular
+  },
+  boldText: {
+    fontFamily: appFont.extraBold
   },
   editButton: {
     alignSelf: 'flex-end',
