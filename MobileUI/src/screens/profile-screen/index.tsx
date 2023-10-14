@@ -16,7 +16,7 @@ import AppToast from '../../components/AppToast'
 import FolkContext from '../../contexts/folk-context/FolkContext'
 import { useQuery } from '@tanstack/react-query'
 import { getFolkProfile } from '../../api/folk-api'
-import { parseError } from '../../util/error-parser'
+import { parseAPIError } from '../../util/error-parsers'
 import ToastContext from '../../contexts/toast-context/ToastContext'
 import { Profile } from '../../@types'
 import ListSeparator from '../../components/ListSeparator'
@@ -54,7 +54,7 @@ const ProfileScreen = () => {
   }
 
   if (isError) {
-    const errorData = parseError(error)
+    const errorData = parseAPIError(error)
     toast({
       message: errorData.message,
       type: 'error',

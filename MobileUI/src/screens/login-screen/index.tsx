@@ -13,7 +13,7 @@ import AppToast from '../../components/AppToast'
 import ToastContext from '../../contexts/toast-context/ToastContext'
 import { useMutation } from '@tanstack/react-query'
 import { logIn } from '../../api/auth-api'
-import { parseError } from '../../util/error-parser'
+import { parseAPIError } from '../../util/error-parsers'
 import LoadingIcon from '../../components/LoadingIcon'
 
 type LoginValues = {
@@ -62,7 +62,7 @@ const LoginScreen = () => {
         })
       }
     } catch (e) {
-      const errorData = parseError(e)
+      const errorData = parseAPIError(e)
       toast({
         message: errorData.message,
         type: 'error',

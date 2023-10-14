@@ -16,7 +16,7 @@ import { FlatList, SafeAreaView } from 'react-native'
 import AppModal from '../../components/AppModal'
 import FontistoIcons from 'react-native-vector-icons/Fontisto'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { parseError } from '../../util/error-parser'
+import { parseAPIError } from '../../util/error-parsers'
 import ToastContext from '../../contexts/toast-context/ToastContext'
 import FolkContext from '../../contexts/folk-context/FolkContext'
 
@@ -72,7 +72,7 @@ const EditProfileForm: FC<EditProfileFormProps> = ({ setModalVisible }) => {
   useEffect(() => {
     if (isError) {
       setModalVisible(false)
-      const { message } = parseError(error)
+      const { message } = parseAPIError(error)
       toast({ message, type: 'error', duration: 10000 })
     }
   }, [error, isError])
