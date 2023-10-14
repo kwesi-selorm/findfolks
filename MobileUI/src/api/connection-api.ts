@@ -1,5 +1,5 @@
 import { AxiosRequestConfig } from 'axios'
-import { CreateConnectionRequest, DeleteConnectionRequest } from '../@types/requests'
+import { CreateConnectionRequest, DeleteConnectionRequest } from '../@types/request-types'
 import API from './config'
 
 API.defaults.baseURL = API.defaults.baseURL + 'connections/'

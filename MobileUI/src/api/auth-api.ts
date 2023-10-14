@@ -1,6 +1,6 @@
 import { LoggedInUser, User } from '../@types'
 import API from './config'
-import { LogInRequest } from '../@types/requests'
+import { LogInRequest } from '../@types/request-types'
 
 const URL = API.defaults.baseURL + 'auth/'
 

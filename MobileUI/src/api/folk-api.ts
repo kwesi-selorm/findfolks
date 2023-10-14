@@ -1,5 +1,5 @@
 import { Folk, Profile } from '../@types'
-import { CreateFolkRequest, UpdateFolkRequest } from '../@types/requests'
+import { CreateFolkRequest, UpdateFolkRequest } from '../@types/request-types'
 import API from './config'
 
 const URL = API.defaults.baseURL + 'folks/'

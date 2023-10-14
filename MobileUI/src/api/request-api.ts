@@ -1,5 +1,5 @@
 import { UserRequests } from '../@types'
-import { CreateRequestRequest } from '../@types/requests'
+import { CreateRequestRequest } from '../@types/request-types'
 import API from './config'
 
 API.defaults.baseURL = API.defaults.baseURL + 'requests'
