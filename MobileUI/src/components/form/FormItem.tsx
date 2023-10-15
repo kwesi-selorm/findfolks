@@ -15,10 +15,11 @@ const styles = StyleSheet.create({
   formItem: {
     display: 'flex',
     flexDirection: 'column',
-    marginBottom: 20
+    marginBottom: 10,
+    width: '100%'
   },
   label: {
-    marginBottom: 5,
+    // marginBottom: 5,
     fontFamily: appFont.bold,
     color: appColors.darkBlue
   }

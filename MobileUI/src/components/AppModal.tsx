@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end'
   },
   modalView: {
-    marginTop: 80
+    marginTop: 70
   }
 })
 
