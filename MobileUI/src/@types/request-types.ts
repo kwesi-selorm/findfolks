@@ -25,6 +25,17 @@ type CreateRequestRequest = {
 
 interface DeleteConnectionRequest extends CreateConnectionRequest {}
 
+type EditProfileRequest = {
+  name?: string
+  homeCountry?: string
+  countryOfResidence?: string
+  homeCityOrTown?: string
+  cityOrTownOfResidence?: string
+  preferredContactMethod?: ContactMethod
+  contactInfo?: string
+  bio?: string
+}
+
 type LogInRequest = {
   username: string
   password: string
@@ -37,6 +48,7 @@ export {
   type CreateFolkRequest,
   type CreateRequestRequest,
   type DeleteConnectionRequest,
+  type EditProfileRequest,
   type LogInRequest,
   type UpdateFolkRequest
 }
