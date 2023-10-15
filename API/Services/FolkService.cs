@@ -1,6 +1,7 @@
 using API.DTOs;
 using API.Models;
 using API.Models.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
@@ -12,18 +13,21 @@ namespace API.Services
         private readonly ILogger<FolkService> logger;
         private readonly ImageService imageService;
         private readonly ProfilePhotoService profilePhotoService;
+        private readonly UserManager<IdentityUser> userManager;
 
         public FolkService(
             AppDbContext appDbContext,
             ILogger<FolkService> logger,
             ImageService imageService,
-            ProfilePhotoService profilePhotoService
+            ProfilePhotoService profilePhotoService,
+            UserManager<IdentityUser> userManager
         )
         {
             dbContext = appDbContext;
             this.logger = logger;
             this.imageService = imageService;
             this.profilePhotoService = profilePhotoService;
+            this.userManager = userManager;
         }
 
         // GET FOLKS TO DISCOVER
@@ -232,6 +236,18 @@ namespace API.Services
             Folk? folkRecord =
                 await dbContext.Folks.FindAsync(folkId)
                 ?? throw new NullReferenceException($"No folks found with the id {folkId}");
+
+            //Update the user before updating the folk's values
+            if (updateDict.ContainsKey("Name") && updateDict["Name"] != null)
+            {
+                IdentityUser? userRecord = await userManager.FindByNameAsync(folkRecord.Name);
+                Console.WriteLine($"User found: {0}", userRecord);
+                if (userRecord != null)
+                {
+                    userRecord.UserName = (string)updateDict["Name"];
+                    await userManager.UpdateAsync(userRecord);
+                }
+            }
 
             foreach (KeyValuePair<string, object> kvp in updateDict)
             {
