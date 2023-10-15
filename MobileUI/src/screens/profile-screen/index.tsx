@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react'
-import { Image, SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, Image, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 
@@ -20,7 +20,6 @@ import { parseAPIError } from '../../util/error-fns'
 import ToastContext from '../../contexts/toast-context/ToastContext'
 import { Profile } from '../../@types'
 import ListSeparator from '../../components/ListSeparator'
-import LoadingIcon from '../../components/LoadingIcon'
 
 const ProfileScreen = () => {
   const [profile, setProfile] = React.useState<Profile | null>(null)
@@ -50,7 +49,7 @@ const ProfileScreen = () => {
   }, [data])
 
   if (isLoading) {
-    return <LoadingIcon />
+    return <ActivityIndicator />
   }
 
   if (isError) {

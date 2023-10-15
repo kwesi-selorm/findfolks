@@ -159,6 +159,7 @@ const EditProfileForm: FC<EditProfileFormProps> = ({ setModalVisible }) => {
       setUpdatedValues(input)
       try {
         await mutateAsync()
+        setModalVisible(false)
         toast({ message: 'Profile updated successfully', type: 'success', duration: 5000 })
       } catch (error) {
         console.log(error)
