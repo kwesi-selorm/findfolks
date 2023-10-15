@@ -5,7 +5,7 @@ import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { ContactMethod, EditProfileFormValues } from '../../@types'
 import profile from '../../mock-data/profile'
 import { appColors, appFont } from '../../styles'
-import { contactMethodNames } from '../../util/constants'
+import { contactMethodNames } from '../../constants'
 import { Contact } from './EditProfileForm'
 
 type ContactMethodsListProps = {
