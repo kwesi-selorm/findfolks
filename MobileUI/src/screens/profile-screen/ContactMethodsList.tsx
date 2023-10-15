@@ -1,5 +1,5 @@
 import { Dispatch, FC, MutableRefObject, SetStateAction, useRef } from 'react'
-import { FlatList, Pressable, StyleSheet, Text } from 'react-native'
+import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { ContactMethod, EditProfileFormValues } from '../../@types'
@@ -8,7 +8,7 @@ import { appColors, appFont } from '../../styles'
 import { contactMethodNames } from '../../util/constants'
 import { Contact } from './EditProfileForm'
 
-type ContacMethodsListProps = {
+type ContactMethodsListProps = {
   initialValues: EditProfileFormValues
   setValues: Dispatch<SetStateAction<EditProfileFormValues>>
 }
@@ -48,24 +48,27 @@ export const contactMethods: Contact[] = [
   }
 ]
 
-const ContactMethodsList: FC<ContacMethodsListProps> = ({ initialValues, setValues }) => {
+const ContactMethodsList: FC<ContactMethodsListProps> = ({ initialValues, setValues }) => {
   const contactMethodRef = useRef<number>(initialValues.preferredContactMethod)
 
   return (
-    <FlatList
-      data={contactMethods}
-      renderItem={({ item }) => (
-        <ContactMethodItem
-          item={item}
-          preferredContactMethod={profile.preferredContactMethod}
-          contactMethodRef={contactMethodRef}
-          setValues={setValues}
-        />
-      )}
-      keyExtractor={(item) => item.name}
-      numColumns={3}
-      style={{ maxHeight: 70 }}
-    />
+    <View>
+      <FlatList
+        data={contactMethods}
+        renderItem={({ item }) => (
+          <ContactMethodItem
+            item={item}
+            preferredContactMethod={profile.preferredContactMethod}
+            contactMethodRef={contactMethodRef}
+            setValues={setValues}
+          />
+        )}
+        keyExtractor={(item) => item.name}
+        numColumns={3}
+        style={{ maxHeight: 70 }}
+        nestedScrollEnabled={true} // Allow the FlatList to handle its own scrolling and not conflict with the ScrollView
+      />
+    </View>
   )
 }
 

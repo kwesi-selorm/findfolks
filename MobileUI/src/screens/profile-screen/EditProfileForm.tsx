@@ -12,13 +12,15 @@ import ContactMethodsList from './ContactMethodsList'
 import CountryItem from './CountryItem'
 import useDataAPI from '../../hooks/api/useDataAPI'
 import ButtonGroup from '../../components/form/ButtonGroup'
-import { FlatList, SafeAreaView } from 'react-native'
+import { FlatList, SafeAreaView, ScrollView, StyleSheet } from 'react-native'
 import AppModal from '../../components/AppModal'
 import FontistoIcons from 'react-native-vector-icons/Fontisto'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { parseAPIError } from '../../util/error-parsers'
+import { parseAPIError, ParsedZodError, parseZodError } from '../../util/error-parsers'
 import ToastContext from '../../contexts/toast-context/ToastContext'
 import FolkContext from '../../contexts/folk-context/FolkContext'
+import { EditProfileValuesSchema, EditProfileValuesType } from '../../@types/zod-types'
+import ValidationErrorList from '../../components/form/ValidationErrorList'
 
 type EditProfileFormProps = {
   setModalVisible: React.Dispatch<React.SetStateAction<boolean>>
@@ -46,15 +48,19 @@ const EditProfileForm: FC<EditProfileFormProps> = ({ setModalVisible }) => {
   const [searchModalVisible, setSearchModalVisible] = React.useState(false)
   const [searchItems, setSearchItems] = React.useState<Array<City | Country>>([])
   const [searchGroup, setSearchGroup] = React.useState<'cities' | 'countries'>('countries')
+  const [validationErrors, setValidationErrors] = React.useState<ParsedZodError | undefined>(
+    undefined
+  )
+
   const { toast } = useContext(ToastContext)
   const { folkProfile } = useContext(FolkContext)
   const profile = folkProfile ?? null
 
-  const initialValues: EditProfileFormValues = {
+  const initialValues: EditProfileValuesType = {
     name: profile?.name ?? '',
     homeCountry: profile?.homeCountry ?? '',
     homeCityOrTown: profile?.homeCityOrTown,
-    cityOfResidence: profile?.cityOrTownOfResidence ?? '',
+    cityOrTownOfResidence: profile?.cityOrTownOfResidence ?? 'Stavanger',
     countryOfResidence: profile?.countryOfResidence ?? '',
     preferredContactMethod: profile?.preferredContactMethod ?? ContactMethod.Facebook,
     contactInfo: profile?.contactInfo ?? '',
@@ -87,11 +93,11 @@ const EditProfileForm: FC<EditProfileFormProps> = ({ setModalVisible }) => {
     )
     setCityItems(matches)
     setSearchItems(matches)
-    updateForm({ name: 'cityOfResidence', value: searchText })
+    updateForm({ name: 'cityOrTownOfResidence', value: searchText })
   }
   function handleCityReset() {
     setCityItems([])
-    updateForm({ name: 'cityOfResidence', value: '' })
+    updateForm({ name: 'cityOrTownOfResidence', value: '' })
   }
 
   function handleHomeCountryChange(searchText: string) {
@@ -123,14 +129,26 @@ const EditProfileForm: FC<EditProfileFormProps> = ({ setModalVisible }) => {
     setSearchItems(cityItems)
   }
 
+  async function handleSave() {
+    const result = EditProfileValuesSchema.safeParse(values)
+    if (!result.success) {
+      const errors = parseZodError(result.error)
+      setValidationErrors(errors)
+      console.log({ errors: result.error })
+    } else {
+      setValidationErrors(undefined)
+      console.log(result.data)
+    }
+  }
+
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
       <AppModal modalVisible={searchModalVisible} onDismiss={() => setSearchModalVisible(false)}>
         {searchGroup === 'cities' ? (
           <AppInput
             onChangeText={(text) => (text === '' ? handleCityReset() : handleCityChange(text))}
             placeholder="Search cities"
-            value={values.cityOfResidence}
+            value={values.cityOrTownOfResidence}
             autoFocus={true}
           />
         ) : (
@@ -166,93 +184,103 @@ const EditProfileForm: FC<EditProfileFormProps> = ({ setModalVisible }) => {
           }
         />
       </AppModal>
-      <Form>
-        {/* Name */}
-        <FormItem label="Name">
-          <AppInput
-            placeholder="Username"
-            value={values.name}
-            onChangeText={(text) => {
-              updateForm({ name: 'name', value: text })
-            }}
-          />
-        </FormItem>
+      <ScrollView>
+        <Form>
+          {/* Name */}
+          <FormItem label="Name">
+            <AppInput
+              placeholder="Username"
+              value={values.name}
+              onChangeText={(text) => {
+                updateForm({ name: 'name', value: text })
+              }}
+            />
+          </FormItem>
 
-        {/* Home country */}
-        <FormItem label="Home country">
-          <AppInput
-            placeholder="Home country"
-            onPressIn={() => handleHomeCountryInputPressIn()}
-            value={values.homeCountry}
-          />
-        </FormItem>
+          {/* Home country */}
+          <FormItem label="Home country">
+            <AppInput
+              placeholder="Home country"
+              onPressIn={() => handleHomeCountryInputPressIn()}
+              value={values.homeCountry}
+            />
+          </FormItem>
 
-        {/* BIO */}
-        <FormItem label="Bio">
-          <AppInput
-            placeholder="Bio"
-            value={values.bio}
-            multiline={true}
-            onChangeText={(text) => updateForm({ name: 'bio', value: text })}
-          />
-        </FormItem>
+          {/* BIO */}
+          <FormItem label="Bio">
+            <AppInput
+              placeholder="Bio"
+              value={values.bio}
+              multiline={true}
+              onChangeText={(text) => updateForm({ name: 'bio', value: text })}
+            />
+          </FormItem>
 
-        {/* Residency city and town */}
-        <FormItem label="City of residence">
-          <AppInput
-            placeholder="City of residence"
-            onPressIn={() => handleCityInputPressIn()}
-            value={values.cityOfResidence}
-          />
-        </FormItem>
+          {/* Residency city and town */}
+          <FormItem label="City of residence">
+            <AppInput
+              placeholder="City of residence"
+              onPressIn={() => handleCityInputPressIn()}
+              value={values.cityOrTownOfResidence}
+            />
+          </FormItem>
 
-        {/* Residency country */}
-        <FormItem label="Country of residence">
-          <AppInput
-            placeholder="Country of residence"
-            value={values.countryOfResidence}
-            editable={false}
-          />
-        </FormItem>
+          {/* Residency country */}
+          <FormItem label="Country of residence">
+            <AppInput
+              placeholder="Country of residence"
+              value={values.countryOfResidence}
+              editable={false}
+            />
+          </FormItem>
 
-        {/* Contact method */}
-        <FormItem label="Contact method">
-          <ContactMethodsList initialValues={initialValues} setValues={setValues} />
-        </FormItem>
+          {/* Contact method */}
+          <FormItem label="Contact method">
+            <ContactMethodsList initialValues={initialValues} setValues={setValues} />
+          </FormItem>
 
-        {/* Contact information */}
-        <FormItem label="Contact information">
-          <AppInput
-            placeholder="Contact info"
-            value={values.contactInfo}
-            onChangeText={(text) => updateForm({ name: 'contactInfo', value: text })}
-          />
-        </FormItem>
+          {/* Contact information */}
+          <FormItem label="Contact information">
+            <AppInput
+              placeholder="Contact info"
+              value={values.contactInfo}
+              onChangeText={(text) => updateForm({ name: 'contactInfo', value: text })}
+            />
+          </FormItem>
 
-        {/* Buttons */}
-        <ButtonGroup>
-          <AppButton
-            text="Cancel"
-            onPress={handleOnCancel}
-            backgroundColor={appColors.red}
-            accessibilityLabel="Cancel button"
-            color={appColors.black}
-            outline
-            icon={<Ionicons name="close" size={20} color={appColors.red} />}
-          />
-          <AppButton
-            text="Save"
-            onPress={() => {
-              console.log({ values })
-            }}
-            backgroundColor={appColors.green}
-            accessibilityLabel="Save button"
-            icon={<FontistoIcons name="checkbox-active" size={20} color={appColors.white} />}
-          />
-        </ButtonGroup>
-      </Form>
+          {/*Validation errors */}
+          <ValidationErrorList parsedError={validationErrors} />
+
+          {/* Buttons */}
+          <ButtonGroup>
+            <AppButton
+              text="Cancel"
+              onPress={handleOnCancel}
+              backgroundColor={appColors.darkGrey}
+              accessibilityLabel="Cancel button"
+              color={appColors.black}
+              outline
+              icon={<Ionicons name="close" size={20} color={appColors.darkGrey} />}
+            />
+            <AppButton
+              text="Save"
+              onPress={handleSave}
+              backgroundColor={appColors.green}
+              accessibilityLabel="Save button"
+              icon={<FontistoIcons name="checkbox-active" size={20} color={appColors.white} />}
+            />
+          </ButtonGroup>
+        </Form>
+      </ScrollView>
     </SafeAreaView>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column'
+  }
+})
 
 export default EditProfileForm
