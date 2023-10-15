@@ -1,24 +1,24 @@
+import { ZodError } from 'zod'
+
 interface ErrorData {
   message: string
   status: number
 }
-type Errors = {
-  [key: string]: string[]
-}
 
-class APIError {
-  errors: Errors = {}
-  status: number = 500
-  title: string = ''
-  traceId: string = ''
-  type: string = ''
+export type ZodErrorData = {
+  path: string | number
+  pathMessage: string
+}
+export type ParsedZodError = {
+  message: string
+  data: Array<ZodErrorData>
 }
 
 function trimPeriod(str: string): string {
   return str.replace(/\.$/, '')
 }
 
-function parseError(error: any): ErrorData {
+function parseAPIError(error: any): ErrorData {
   if (error == null) {
     return {
       message: 'Unknown error',
@@ -60,4 +60,10 @@ function parseError(error: any): ErrorData {
   return { message: JSON.stringify(error), status: 500 }
 }
 
-export { parseError }
+function parseZodError(error: ZodError): ParsedZodError {
+  const { message, errors } = error
+  const data = errors.map((e) => ({ path: e.path[0], pathMessage: e.message }))
+  return { message, data }
+}
+
+export { parseAPIError, parseZodError }
