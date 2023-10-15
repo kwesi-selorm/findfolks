@@ -27,13 +27,11 @@ type Country = {
   value: string
 }
 
-type EditProfileRequest = Partial<EditProfileFormValues>
-
 type EditProfileFormValues = {
   name: string
   homeCountry: string
   homeCityOrTown?: string
-  cityOfResidence: string
+  cityOrTownOfResidence: string
   countryOfResidence: string
   preferredContactMethod: number
   contactInfo: string
@@ -90,6 +88,12 @@ type UserRequests = {
   receivedRequests: Array<ReceivedRequest>
 }
 
+type ValidationError = {
+  message: string
+  path: string
+  pathMessage: string
+}
+
 export {
   ContactMethod,
   RequestType,
@@ -97,7 +101,6 @@ export {
   type Connection,
   type Country,
   type EditProfileFormValues,
-  type EditProfileRequest,
   type Folk,
   type LoggedInUser,
   type Profile,
@@ -105,5 +108,6 @@ export {
   type Request,
   type SentRequest,
   type User,
-  type UserRequests
+  type UserRequests,
+  type ValidationError
 }
