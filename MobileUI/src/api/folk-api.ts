@@ -1,5 +1,5 @@
 import { Folk, Profile } from '../@types'
-import { CreateFolkRequest, UpdateFolkRequest } from '../@types/request-types'
+import { CreateFolkRequest, EditProfileRequest } from '../@types/request-types'
 import API from './config'
 
 const URL = API.defaults.baseURL + 'folks/'
@@ -19,7 +19,7 @@ async function getFolkProfile(id: number) {
   return response.data
 }
 
-async function updateFolk(id: number, data: UpdateFolkRequest) {
+async function updateFolk(id: number, data: EditProfileRequest) {
   const response = await API.patch(URL + `${id}`, data)
   return response.data
 }

@@ -4,15 +4,13 @@ import AppButton from '../../components/AppButton'
 import Form from '../../components/form'
 import AppInput from '../../components/form/AppInput'
 import FormItem from '../../components/form/FormItem'
-// import cities from '../../mock-data/cities'
-// import profile from '../../mock-data/profile'
 import { appColors } from '../../styles'
 import CityItem from './CityItem'
 import ContactMethodsList from './ContactMethodsList'
 import CountryItem from './CountryItem'
 import useDataAPI from '../../hooks/api/useDataAPI'
 import ButtonGroup from '../../components/form/ButtonGroup'
-import { FlatList, SafeAreaView, ScrollView, StyleSheet } from 'react-native'
+import { ActivityIndicator, FlatList, SafeAreaView, ScrollView, StyleSheet } from 'react-native'
 import AppModal from '../../components/AppModal'
 import FontistoIcons from 'react-native-vector-icons/Fontisto'
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -21,6 +19,9 @@ import ToastContext from '../../contexts/toast-context/ToastContext'
 import FolkContext from '../../contexts/folk-context/FolkContext'
 import { EditProfileValuesSchema, EditProfileValuesType } from '../../@types/zod-types'
 import ValidationErrorList from '../../components/form/ValidationErrorList'
+import { getUpdatedValues } from '../../util/data-fns'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { updateFolk } from '../../api/folk-api'
 
 type EditProfileFormProps = {
   setModalVisible: React.Dispatch<React.SetStateAction<boolean>>
@@ -67,13 +68,29 @@ const EditProfileForm: FC<EditProfileFormProps> = ({ setModalVisible }) => {
     bio: profile?.bio
   }
   const [values, setValues] = React.useState<EditProfileFormValues>(initialValues)
+  const [updatedValues, setUpdatedValues] =
+    React.useState<Partial<EditProfileFormValues>>(initialValues)
 
+  const queryClient = useQueryClient()
+
+  // CITIES DATA QUERY
   const { data, isError, error } = useDataAPI()
   const { cities, countries } = useMemo(() => {
     const cities = data ?? []
     const countries = createCountryList(cities)
     return { cities, countries }
   }, [data])
+
+  // UPDATE FOLK MUTATION
+  const { mutateAsync, isLoading } = useMutation({
+    mutationFn: async () => {
+      if (profile == null) return
+      return updateFolk(profile.id, updatedValues)
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['folk-profile'] })
+    }
+  })
 
   useEffect(() => {
     if (isError) {
@@ -134,10 +151,20 @@ const EditProfileForm: FC<EditProfileFormProps> = ({ setModalVisible }) => {
     if (!result.success) {
       const errors = parseZodError(result.error)
       setValidationErrors(errors)
-      console.log({ errors: result.error })
     } else {
       setValidationErrors(undefined)
-      console.log(result.data)
+      if (profile == null) return
+      const { id, profilePhoto, connections, ...original } = profile
+      const input = getUpdatedValues(original, values)
+      setUpdatedValues(input)
+      try {
+        await mutateAsync()
+        toast({ message: 'Profile updated successfully', type: 'success', duration: 5000 })
+      } catch (error) {
+        console.log(error)
+        const errorMsg = parseAPIError(error)
+        toast({ message: errorMsg.message, type: 'error', duration: 10000 })
+      }
     }
   }
 
@@ -263,11 +290,18 @@ const EditProfileForm: FC<EditProfileFormProps> = ({ setModalVisible }) => {
               icon={<Ionicons name="close" size={20} color={appColors.darkGrey} />}
             />
             <AppButton
-              text="Save"
+              text={isLoading ? 'Saving...' : 'Save'}
               onPress={handleSave}
               backgroundColor={appColors.green}
               accessibilityLabel="Save button"
-              icon={<FontistoIcons name="checkbox-active" size={20} color={appColors.white} />}
+              icon={
+                isLoading ? (
+                  <ActivityIndicator size={20} color={appColors.white} />
+                ) : (
+                  <FontistoIcons name="checkbox-active" size={20} color={appColors.white} />
+                )
+              }
+              disabled={isLoading}
             />
           </ButtonGroup>
         </Form>

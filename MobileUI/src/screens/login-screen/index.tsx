@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet } from 'react-native'
+import { ActivityIndicator, SafeAreaView, StyleSheet } from 'react-native'
 import Form from '../../components/form'
 import FormItem from '../../components/form/FormItem'
 import AppInput from '../../components/form/AppInput'
@@ -14,7 +14,6 @@ import ToastContext from '../../contexts/toast-context/ToastContext'
 import { useMutation } from '@tanstack/react-query'
 import { logIn } from '../../api/auth-api'
 import { parseAPIError } from '../../util/error-fns'
-import LoadingIcon from '../../components/LoadingIcon'
 
 type LoginValues = {
   username: string
@@ -112,7 +111,7 @@ const LoginScreen = () => {
             onPress={submitLoginRequest}
             icon={
               isLoading ? (
-                <LoadingIcon size={20} color={appColors.white} />
+                <ActivityIndicator size={20} color={appColors.white} />
               ) : (
                 <AntDesignIcon name="login" size={20} color={appColors.white} />
               )

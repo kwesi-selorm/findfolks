@@ -41,14 +41,11 @@ type LogInRequest = {
   password: string
 }
 
-type UpdateFolkRequest = Omit<CreateFolkRequest, 'email' | 'password'> & Partial<CreateFolkRequest>
-
 export {
   type CreateConnectionRequest,
   type CreateFolkRequest,
   type CreateRequestRequest,
   type DeleteConnectionRequest,
   type EditProfileRequest,
-  type LogInRequest,
-  type UpdateFolkRequest
+  type LogInRequest
 }
