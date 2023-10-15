@@ -1,8 +1,8 @@
 import { FC } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { appBorderRadius, appColors, appFont } from '../../styles'
-import { ParsedZodError, ZodErrorData } from '../../util/error-parsers'
-import { toSentenceCase } from '../../util/data-formatter'
+import { ParsedZodError, ZodErrorData } from '../../util/error-fns'
+import { toSentenceCase } from '../../util/data-fns'
 
 type ValidationErrorListProps = {
   parsedError?: ParsedZodError

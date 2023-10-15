@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { LoggedInUser } from '../@types'
-import { getDataFromStorage } from '../util/storage'
+import { getDataFromStorage } from '../util/storage-fns'
 
 const API = axios.create({
   baseURL: 'http://localhost:5020/api/',

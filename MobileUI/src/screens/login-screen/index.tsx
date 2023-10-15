@@ -13,7 +13,7 @@ import AppToast from '../../components/AppToast'
 import ToastContext from '../../contexts/toast-context/ToastContext'
 import { useMutation } from '@tanstack/react-query'
 import { logIn } from '../../api/auth-api'
-import { parseAPIError } from '../../util/error-parsers'
+import { parseAPIError } from '../../util/error-fns'
 import LoadingIcon from '../../components/LoadingIcon'
 
 type LoginValues = {
