@@ -9,8 +9,8 @@ import { contactMethodNames } from '../../constants'
 import { Contact } from './EditProfileForm'
 
 type ContactMethodsListProps = {
-  initialValues: EditProfileFormValues
-  setValues: Dispatch<SetStateAction<EditProfileFormValues>>
+  initialValues: any
+  setValues: Dispatch<SetStateAction<any>>
 }
 
 type ContactMethodItemProps = {
