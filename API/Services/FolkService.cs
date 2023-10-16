@@ -4,6 +4,7 @@ using API.Models.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using static API.Utils.Constants;
 
 namespace API.Services
 {
@@ -204,7 +205,8 @@ namespace API.Services
                     CountryOfResidence = input.CountryOfResidence,
                     HomeCityOrTown = input.HomeCityOrTown,
                     CityOrTownOfResidence = input.CityOrTownOfResidence,
-                    PreferredContactMethod = input.PreferredContactMethod,
+                    PreferredContactMethod = (ContactMethods)
+                        Convert.ToInt32(input.PreferredContactMethod),
                     ContactInfo = input.ContactInfo,
                     Bio = input.Bio
                 };
@@ -241,7 +243,6 @@ namespace API.Services
             if (updateDict.ContainsKey("Name") && updateDict["Name"] != null)
             {
                 IdentityUser? userRecord = await userManager.FindByNameAsync(folkRecord.Name);
-                Console.WriteLine($"User found: {0}", userRecord);
                 if (userRecord != null)
                 {
                     userRecord.UserName = (string)updateDict["Name"];
@@ -252,9 +253,19 @@ namespace API.Services
             foreach (KeyValuePair<string, object> kvp in updateDict)
             {
                 if (kvp.Value != null)
+                {
+                    if (kvp.Key == "PreferredContactMethod")
+                    {
+                        int contactMethodInt = Convert.ToInt32(kvp.Value);
+                        dbContext
+                            .Entry(folkRecord)
+                            .Property("PreferredContactMethod")
+                            .CurrentValue = (ContactMethods)contactMethodInt;
+                        continue;
+                    }
                     dbContext.Entry(folkRecord).Property(kvp.Key).CurrentValue = kvp.Value;
+                }
             }
-
             dbContext.SaveChanges();
 
             return new FolkDTO

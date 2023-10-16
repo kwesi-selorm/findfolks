@@ -17,7 +17,7 @@ namespace API.DTOs
 
         public string? CityOrTownOfResidence { get; set; }
 
-        public ContactMethods? PreferredContactMethod { get; set; }
+        public int? PreferredContactMethod { get; set; }
 
         [Display(Name = "Contact information")]
         public string? ContactInfo { get; set; }
