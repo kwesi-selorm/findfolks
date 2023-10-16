@@ -14,6 +14,7 @@ import ToastContext from '../../contexts/toast-context/ToastContext'
 import { useMutation } from '@tanstack/react-query'
 import { logIn } from '../../api/auth-api'
 import { parseAPIError } from '../../util/error-fns'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
 type LoginValues = {
   username: string
@@ -99,7 +100,8 @@ const LoginScreen = () => {
         <ButtonGroup>
           <AppButton
             text="Cancel"
-            backgroundColor={appColors.grey}
+            icon={<Ionicons name="ios-close" size={20} color={appColors.darkGrey} />}
+            backgroundColor={appColors.darkGrey}
             accessibilityLabel="Cancel button"
             onPress={returnToHome}
             outline

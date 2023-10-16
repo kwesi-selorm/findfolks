@@ -27,11 +27,12 @@ const HomeScreen = () => {
         <AppButton
           text="Get started"
           icon={<Ionicons name="ios-play" size={25} color={appColors.white} />}
-          backgroundColor={appColors.darkBlue}
+          backgroundColor={appColors.green}
           color={appColors.white}
           accessibilityLabel="Register button"
           onPress={navigateToSignupScreen}
           size="large"
+          boldText
         />
       </ButtonGroup>
       <Text style={styles.prompt}>Already a folk?</Text>
@@ -46,7 +47,7 @@ const styles = StyleSheet.create({
   logo: {
     fontFamily: appFont.extraBold,
     fontSize: 50,
-    color: appColors.black,
+    color: appColors.darkBlue,
     marginBottom: '50%'
   },
   container: {
@@ -61,7 +62,6 @@ const styles = StyleSheet.create({
     fontFamily: appFont.regular
   },
   signUpText: {
-    color: appColors.blue,
     fontSize: 17,
     fontFamily: appFont.bold,
     textAlign: 'center'

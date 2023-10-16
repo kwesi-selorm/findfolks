@@ -8,6 +8,7 @@ import { NavigationProp, ParamListBase, useNavigation } from '@react-navigation/
 import { appColors, appFont } from '../../styles'
 import ButtonGroup from '../../components/form/ButtonGroup'
 import AppPressable from '../../components/AppPressable'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
 type LoginValues = {
   username: string
@@ -60,7 +61,8 @@ const SignupScreen = () => {
         <ButtonGroup>
           <AppButton
             text="Cancel"
-            backgroundColor={appColors.grey}
+            backgroundColor={appColors.darkGrey}
+            icon={<Ionicons name="ios-close" size={25} color={appColors.darkGrey} />}
             accessibilityLabel="Cancel button"
             onPress={navigateToHome}
             outline
@@ -72,13 +74,13 @@ const SignupScreen = () => {
             onPress={navigateToLoginScreen}
           />
         </ButtonGroup>
-
-        {/*Prompt*/}
-        <Text style={styles.prompt}>Already have a folk account? </Text>
-        <AppPressable onPress={navigateToLoginScreen} accessibilityLabel="Return to login screen">
-          <Text style={styles.loginText}>Return to Login</Text>
-        </AppPressable>
       </Form>
+
+      {/*Prompt*/}
+      <Text style={styles.prompt}>Already have a folk account? </Text>
+      <AppPressable onPress={navigateToLoginScreen} accessibilityLabel="Return to login screen">
+        <Text style={styles.loginText}>Return to Login</Text>
+      </AppPressable>
     </SafeAreaView>
   )
 }
@@ -87,8 +89,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-    gap: 20
+    justifyContent: 'center'
   },
   prompt: {
     alignSelf: 'center',
