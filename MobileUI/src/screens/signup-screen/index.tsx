@@ -9,6 +9,7 @@ import { appColors, appFont } from '../../styles'
 import ButtonGroup from '../../components/form/ButtonGroup'
 import AppPressable from '../../components/AppPressable'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import FeatherIcon from 'react-native-vector-icons/Feather'
 
 type LoginValues = {
   username: string
@@ -68,7 +69,8 @@ const SignupScreen = () => {
             outline
           />
           <AppButton
-            text="Sign me up!"
+            text="Sign up!"
+            icon={<FeatherIcon name="user-check" size={25} color={appColors.white} />}
             backgroundColor={appColors.green}
             accessibilityLabel="Return to login screen"
             onPress={navigateToLoginScreen}
