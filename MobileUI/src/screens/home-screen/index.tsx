@@ -5,6 +5,7 @@ import { appColors, appFont } from '../../styles'
 import { NavigationProp, ParamListBase, useNavigation } from '@react-navigation/native'
 import AppPressable from '../../components/AppPressable'
 import React from 'react'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
 const HomeScreen = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>()
@@ -24,17 +25,18 @@ const HomeScreen = () => {
       {/*Buttons*/}
       <ButtonGroup direction="column">
         <AppButton
-          text="Start"
+          text="Get started"
+          icon={<Ionicons name="ios-play" size={25} color={appColors.white} />}
           backgroundColor={appColors.darkBlue}
           color={appColors.white}
-          accessibilityLabel="Enter button"
-          onPress={navigateToLoginScreen}
+          accessibilityLabel="Register button"
+          onPress={navigateToSignupScreen}
           size="large"
         />
       </ButtonGroup>
-      <Text style={styles.prompt}>New to Findfolks? </Text>
-      <AppPressable onPress={navigateToSignupScreen} accessibilityLabel="Sign up button">
-        <Text style={styles.signUpText}>Create a profile</Text>
+      <Text style={styles.prompt}>Already a folk?</Text>
+      <AppPressable onPress={navigateToLoginScreen} accessibilityLabel="Go to login button">
+        <Text style={styles.signUpText}>Continue exploring</Text>
       </AppPressable>
     </SafeAreaView>
   )
