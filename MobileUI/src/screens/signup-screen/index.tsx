@@ -98,6 +98,30 @@ const SignupScreen = () => {
             />
           </FormItem>
 
+          {/* Password */}
+          <FormItem label="Password">
+            <AppInput
+              placeholder="Password"
+              secureTextEntry={true}
+              value={values.password}
+              onChangeText={(text) => {
+                updateForm({ name: 'password', value: text })
+              }}
+            />
+          </FormItem>
+
+          {/* Confirm password */}
+          <FormItem label="Confirm password">
+            <AppInput
+              placeholder="Confirm password"
+              secureTextEntry={true}
+              value={values.confirmPassword}
+              onChangeText={(text) => {
+                updateForm({ name: 'confirmPassword', value: text })
+              }}
+            />
+          </FormItem>
+
           {/* Home country */}
           <FormItem label="Home country">
             <AppInput
