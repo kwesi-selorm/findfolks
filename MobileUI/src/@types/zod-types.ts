@@ -15,9 +15,10 @@ const EditProfileValuesSchema = z.object({
 })
 type EditProfileValuesType = z.infer<typeof EditProfileValuesSchema>
 
-const SignUpValuesSchema = z
+const CreateFolkValuesSchema = z
   .object({
     name: z.string().min(3, { message: 'Your username must be at least 3 characters' }),
+    email: z.string().email({ message: 'Invalid email' }),
     password: z.string().regex(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/, {
       message:
         'Your password must be at least 8 characters and contain at least one letter, one number, and one special character'
@@ -37,6 +38,11 @@ const SignUpValuesSchema = z
     message: 'Passwords do not match',
     path: ['confirmPassword']
   })
-type SignUpValuesType = z.infer<typeof SignUpValuesSchema>
+type CreateFolkValuesType = z.infer<typeof CreateFolkValuesSchema>
 
-export { EditProfileValuesSchema, type EditProfileValuesType, type SignUpValuesType }
+export {
+  EditProfileValuesSchema,
+  type EditProfileValuesType,
+  CreateFolkValuesSchema,
+  type CreateFolkValuesType
+}

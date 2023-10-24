@@ -13,12 +13,13 @@ import FeatherIcon from 'react-native-vector-icons/Feather'
 import { City, ContactMethod, Country } from '../../@types'
 import ContactMethodsList from '../profile-screen/ContactMethodsList'
 import ValidationErrorList from '../../components/form/ValidationErrorList'
-import { SignUpValuesType } from '../../@types/zod-types'
-import { ParsedZodError } from '../../util/error-fns'
+import { CreateFolkValuesSchema, CreateFolkValuesType } from '../../@types/zod-types'
+import { ParsedZodError, parseZodError } from '../../util/error-fns'
 import CityAndCountrySearchModal from '../../components/CityAndCountrySearchModal'
 
-const initialValues: SignUpValuesType = {
+const initialValues: CreateFolkValuesType = {
   name: '',
+  email: '',
   password: '',
   confirmPassword: '',
   homeCountry: '',
@@ -50,8 +51,8 @@ const SignupScreen = () => {
   }
 
   //FORM ACTIONS
-  function updateForm({ name, value }: { name: string; value: string | number }) {
-    setValues((prev) => ({ ...prev, [name]: value }))
+  function updateForm(update: Partial<CreateFolkValuesType>) {
+    setValues((prev) => ({ ...prev, ...update }))
   }
 
   function handleHomeCountryInputPressIn() {
@@ -67,6 +68,17 @@ const SignupScreen = () => {
 
   function handleOnCancel() {
     setValues(initialValues)
+  }
+
+  async function handleSubmit() {
+    console.log({ values })
+
+    const result = CreateFolkValuesSchema.safeParse(values)
+    if (!result.success) {
+      const errorMsgs = parseZodError(result.error)
+      setValidationErrors(errorMsgs)
+      return
+    }
   }
 
   return (
@@ -93,7 +105,18 @@ const SignupScreen = () => {
               placeholder="Username"
               value={values.name}
               onChangeText={(text) => {
-                updateForm({ name: 'name', value: text })
+                updateForm({ name: text })
+              }}
+            />
+          </FormItem>
+
+          {/*Email*/}
+          <FormItem label="Email">
+            <AppInput
+              placeholder="Email"
+              value={values.email}
+              onChangeText={(text) => {
+                updateForm({ email: text })
               }}
             />
           </FormItem>
@@ -105,7 +128,7 @@ const SignupScreen = () => {
               secureTextEntry={true}
               value={values.password}
               onChangeText={(text) => {
-                updateForm({ name: 'password', value: text })
+                updateForm({ password: text })
               }}
             />
           </FormItem>
@@ -117,7 +140,7 @@ const SignupScreen = () => {
               secureTextEntry={true}
               value={values.confirmPassword}
               onChangeText={(text) => {
-                updateForm({ name: 'confirmPassword', value: text })
+                updateForm({ confirmPassword: text })
               }}
             />
           </FormItem>
@@ -137,7 +160,7 @@ const SignupScreen = () => {
               placeholder="Bio"
               value={values.bio}
               multiline={true}
-              onChangeText={(text) => updateForm({ name: 'bio', value: text })}
+              onChangeText={(text) => updateForm({ bio: text })}
             />
           </FormItem>
 
@@ -169,7 +192,7 @@ const SignupScreen = () => {
             <AppInput
               placeholder="Contact info"
               value={values.contactInfo}
-              onChangeText={(text) => updateForm({ name: 'contactInfo', value: text })}
+              onChangeText={(text) => updateForm({ contactInfo: text })}
             />
           </FormItem>
 
@@ -190,7 +213,7 @@ const SignupScreen = () => {
               text="Sign up!"
               icon={<FeatherIcon name="user-check" size={25} color={appColors.white} />}
               backgroundColor={appColors.green}
-              accessibilityLabel="Return to login screen"
+              accessibilityLabel="Sign up button"
               onPress={navigateToLoginScreen}
             />
           </ButtonGroup>
