@@ -204,17 +204,18 @@ const SignupScreen = () => {
             <AppButton
               text="Cancel"
               backgroundColor={appColors.darkGrey}
-              icon={<Ionicons name="ios-close" size={25} color={appColors.darkGrey} />}
+              icon={<Ionicons name="ios-close" size={20} color={appColors.darkGrey} />}
               accessibilityLabel="Cancel button"
               onPress={navigateToHome}
               outline
             />
             <AppButton
               text="Sign up!"
-              icon={<FeatherIcon name="user-check" size={25} color={appColors.white} />}
+              icon={<FeatherIcon name="user-check" size={20} color={appColors.white} />}
               backgroundColor={appColors.green}
               accessibilityLabel="Sign up button"
               onPress={navigateToLoginScreen}
+              size="small"
             />
           </ButtonGroup>
         </Form>
@@ -245,7 +246,7 @@ const styles = StyleSheet.create({
     marginTop: 20
   },
   promptContainer: {
-    marginTop: 'auto'
+    marginTop: 10
   },
   prompt: {
     alignSelf: 'center',
