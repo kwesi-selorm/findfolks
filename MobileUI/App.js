@@ -6,15 +6,14 @@ import AuthNavigator from './src/screens/AuthNavigator'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import ToastProvider from './src/contexts/toast-context/ToastProvider'
 // expo install expo-font
-import * as SplashScreen from 'expo-splash-screen'
 
-SplashScreen.preventAutoHideAsync().then()
+// TODO: Add splash screen
 
 export default function App() {
   const [fontsLoaded] = useFonts(customFonts)
 
-  if (fontsLoaded) {
-    return SplashScreen.hideAsync()
+  if (!fontsLoaded) {
+    return null
   }
 
   const queryClient = new QueryClient()
