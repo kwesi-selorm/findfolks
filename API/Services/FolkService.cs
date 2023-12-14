@@ -1,3 +1,4 @@
+using System.Data;
 using API.DTOs;
 using API.Models;
 using API.Models.Data;
@@ -11,21 +12,18 @@ namespace API.Services
     public class FolkService
     {
         private readonly AppDbContext dbContext;
-        private readonly ILogger<FolkService> logger;
         private readonly ImageService imageService;
         private readonly ProfilePhotoService profilePhotoService;
         private readonly UserManager<IdentityUser> userManager;
 
         public FolkService(
             AppDbContext appDbContext,
-            ILogger<FolkService> logger,
             ImageService imageService,
             ProfilePhotoService profilePhotoService,
             UserManager<IdentityUser> userManager
         )
         {
             dbContext = appDbContext;
-            this.logger = logger;
             this.imageService = imageService;
             this.profilePhotoService = profilePhotoService;
             this.userManager = userManager;
@@ -36,7 +34,7 @@ namespace API.Services
         {
             Folk? folkRecord =
                 await dbContext.Folks.Where(f => f.Id == id).FirstOrDefaultAsync()
-                ?? throw new Exception("Folk not found");
+                ?? throw new DataException($"Folk with id {id} not found");
             List<Folk> connections = folkRecord.Connections;
             List<Folk> allFolks = await dbContext.Folks.ToListAsync();
 
@@ -237,7 +235,7 @@ namespace API.Services
 
             Folk? folkRecord =
                 await dbContext.Folks.FindAsync(folkId)
-                ?? throw new NullReferenceException($"No folks found with the id {folkId}");
+                ?? throw new DataException($"No folks found with the id {folkId}");
 
             //Update the user before updating the folk's values
             if (updateDict.ContainsKey("Name") && updateDict["Name"] != null)
@@ -284,7 +282,7 @@ namespace API.Services
         {
             Folk? folkRecord = await dbContext.Folks.FirstOrDefaultAsync(f => f.Id == folkId);
             if (folkRecord == null)
-                throw new NullReferenceException($"No folk found with the id {folkId}");
+                throw new DataException($"No folk found with the id {folkId}");
 
             dbContext.Folks.Remove(folkRecord);
             await dbContext.SaveChangesAsync();
@@ -295,10 +293,10 @@ namespace API.Services
         {
             Folk folk1Record =
                 await dbContext.Folks.FindAsync(folk1Id)
-                ?? throw new Exception("No folk found with the id " + folk1Id);
+                ?? throw new DataException("No folk found with the id " + folk1Id);
             Folk folk2Record =
                 await dbContext.Folks.FindAsync(folk2Id)
-                ?? throw new Exception("No folk found with the id " + folk2Id);
+                ?? throw new DataException("No folk found with the id " + folk2Id);
             folk1Record.Connections.Add(folk2Record);
             await dbContext.SaveChangesAsync();
             folk2Record.Connections.Add(folk1Record);
@@ -310,10 +308,10 @@ namespace API.Services
         {
             Folk folk1Record =
                 await dbContext.Folks.FindAsync(folk1Id)
-                ?? throw new Exception("No folk found with the id " + folk1Id);
+                ?? throw new DataException("No folk found with the id " + folk1Id);
             Folk folk2Record =
                 await dbContext.Folks.FindAsync(folk2Id)
-                ?? throw new Exception("No folk found with the id " + folk2Id);
+                ?? throw new DataException("No folk found with the id " + folk2Id);
             folk1Record.Connections.Remove(folk2Record);
             await dbContext.SaveChangesAsync();
             folk1Record.Connections.Remove(folk2Record);
